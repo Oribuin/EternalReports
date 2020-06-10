@@ -1,0 +1,7 @@
+name: EternalReports
+main: xyz.oribuin.eternalreports.EternalReports
+version: '@version@'
+author: Oribuin
+api-version: "1.13"
+description: Report plugin lol
+website: https://oribuin.xyz/

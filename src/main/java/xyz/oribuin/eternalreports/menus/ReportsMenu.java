@@ -21,8 +21,8 @@ public class ReportsMenu {
     private GuiFramework guiFramework;
     private GuiContainer guiContainer;
 
-    public ReportsMenu(Player player) {
-        this.plugin = EternalReports.getInstance();
+    public ReportsMenu(EternalReports plugin, Player player) {
+        this.plugin = plugin;
         this.guiContainer = null;
         this.player = player;
     }
@@ -34,7 +34,7 @@ public class ReportsMenu {
         this.guiContainer.openFor(player);
     }
 
-    public void buildGui() {
+    private void buildGui() {
         this.guiContainer = GuiFactory.createContainer();
 
         List<Integer> BORDER_SLOTS = new ArrayList<>();
@@ -66,7 +66,7 @@ public class ReportsMenu {
         // TODO: make stuff show in the GUI
     }
 
-    public boolean isInvalid() {
+    private boolean isInvalid() {
         return this.guiContainer == null || !this.guiFramework.getGuiManager().getActiveGuis().contains(this.guiContainer);
     }
 

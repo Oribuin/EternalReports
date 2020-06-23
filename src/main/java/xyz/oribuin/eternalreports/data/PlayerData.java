@@ -48,6 +48,7 @@ public class PlayerData {
 
         return reported;
     }
+
     private String getTablePrefix() {
         return plugin.getDescription().getName().toLowerCase() + "_";
     }

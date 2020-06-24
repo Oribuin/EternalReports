@@ -26,7 +26,7 @@ public class DataManager extends Manager {
     private void createTables() {
 
         String[] queries = {
-                "CREATE TABLE IF NOT EXISTS " + this.getTablePrefix() + "reports (reported TXT, sender TXT, title TXT, description TXT, resolved BOOLEAN, PRIMARY KEY(reported, sender))",
+                "CREATE TABLE IF NOT EXISTS " + this.getTablePrefix() + "reports (reported TXT, sender TXT, reason TXT, resolved BOOLEAN, PRIMARY KEY(reported, sender))",
                 "CREATE TABLE IF NOT EXISTS " + this.getTablePrefix() + "players (uuid TXT, reports INT, reported INT, PRIMARY KEY (uuid))"
         };
 
@@ -40,15 +40,14 @@ public class DataManager extends Manager {
         }));
     }
 
-    public void updateReports(Player reported, Player sender, String title, String description, boolean resolved) {
+    public void updateReports(Player reported, Player sender, String reason, boolean resolved) {
         this.async(() -> this.plugin.getConnector().connect(connection -> {
-            String updateUser = "REPLACE INTO " + this.getTablePrefix() + "reports (reported, sender, title, description, resolved) VALUES (?, ?, ?, ?, ?)";
+            String updateUser = "REPLACE INTO " + this.getTablePrefix() + "reports (reported, sender, reason, resolved) VALUES (?, ?, ?, ?, ?)";
             try (PreparedStatement statement = connection.prepareStatement(updateUser)) {
                 statement.setString(1, reported.getUniqueId().toString());
                 statement.setString(2, sender.getUniqueId().toString());
-                statement.setString(3, title);
-                statement.setString(4, description);
-                statement.setBoolean(5, resolved);
+                statement.setString(3, reason);
+                statement.setBoolean(4, resolved);
                 statement.executeUpdate();
             }
         }));

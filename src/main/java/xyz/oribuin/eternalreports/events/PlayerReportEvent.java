@@ -4,20 +4,25 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
+import xyz.oribuin.eternalreports.EternalReports;
 
 public class PlayerReportEvent extends PlayerEvent implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled = false;
     private final Player sender;
-    private final String title;
-    private final String description;
+    private final Player reported;
+    private final String reason;
 
-    public PlayerReportEvent(Player sender, Player reported, String title, String description) {
+    private boolean resolved;
+
+    public PlayerReportEvent(Player sender, Player reported, String reason, boolean resolved) {
         super(reported);
 
         this.sender = sender;
-        this.title = title;
-        this.description = description;
+        this.reported = reported;
+        this.reason = reason;
+        this.resolved = resolved;
+
     }
 
     @Override
@@ -33,15 +38,39 @@ public class PlayerReportEvent extends PlayerEvent implements Cancellable {
         return cancelled;
     }
 
+    /**
+     * This returns the player who reported the other player
+     *
+     * @return Command Sender
+     */
+
     public Player getSender() {
         return sender;
     }
 
-    public String getTitle() {
-        return title;
+
+    /**
+     * The reason on why the player was reported
+     *
+     * @return Report Reason
+     */
+
+    public String getReason() {
+        return reason;
     }
 
-    public String getDescription() {
-        return description;
+    /**
+     * Check if report was resolved.
+     *
+     * @return true if reported is resolved
+     */
+
+    public boolean isResolved() {
+        return resolved;
+    }
+
+    public void setResolved(boolean resolved) {
+        this.resolved = resolved;
+        EternalReports.getInstance().getDataManager().updateReports(this.getSender(), this.getPlayer(), this.getReason(), resolved);
     }
 }

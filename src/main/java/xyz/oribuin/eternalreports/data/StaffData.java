@@ -1,0 +1,30 @@
+package xyz.oribuin.eternalreports.data;
+
+import org.bukkit.entity.Player;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+public class StaffData {
+
+    private final Player player;
+    private final Map<UUID, Boolean> toggleMap;
+
+    public StaffData(Player player) {
+        this.player = player;
+        this.toggleMap = new HashMap<>();
+    }
+
+    public Map<UUID, Boolean> getToggleMap() {
+        return toggleMap;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public boolean hasNotifications() {
+        return toggleMap.get(player.getUniqueId());
+    }
+}

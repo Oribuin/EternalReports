@@ -15,7 +15,7 @@ public class ReportEvent implements Listener {
 
     @EventHandler
     public void onPlayerReport(PlayerReportEvent event) {
-        plugin.getDataManager().updateReports(event.getPlayer(), event.getSender(), event.getTitle(), event.getDescription(), false);
+        plugin.getDataManager().updateReports(event.getPlayer(), event.getSender(), event.getReason(), false);
     }
 
 }

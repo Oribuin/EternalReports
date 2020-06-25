@@ -1,2 +1,17 @@
 # Default Prefix
 prefix: '&cReports &f» '
+
+# » Command Messages «
+commands:
+  user-reported: '&bYou have reported &f%player% &bfor &f&n%reason%&b!'
+
+# » Alert Messages «
+alerts:
+  user-reported: '&f%sender% &bhas reported &f%player&b for &f&n%reason%&b!'
+
+# » Misc Messages «
+invalid-permission: '&cYou do not have permission for this command.'
+invalid-player: '&cThat is not a valid player.'
+invalid-arguments: '&cPlease include valid arguments.'
+has-bypass: '&cYou cannot report this player'
+player-only: '&cOnly a player can execute this command.'

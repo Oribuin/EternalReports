@@ -3,19 +3,21 @@ package xyz.oribuin.eternalreports.commands;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import xyz.oribuin.eternalreports.EternalReports;
+import xyz.oribuin.eternalreports.data.StaffData;
 import xyz.oribuin.eternalreports.events.PlayerReportEvent;
 import xyz.oribuin.eternalreports.managers.MessageManager;
+import xyz.oribuin.eternalreports.utils.OriCommand;
 import xyz.oribuin.eternalreports.utils.StringPlaceholders;
 
 import java.util.List;
 
-public class CmdReport implements TabExecutor {
+public class CmdReport extends OriCommand {
     private final EternalReports plugin;
 
     public CmdReport(EternalReports plugin) {
+        super("report");
         this.plugin = plugin;
     }
 
@@ -32,7 +34,7 @@ public class CmdReport implements TabExecutor {
         Player player = (Player) sender;
 
         // Check arguments
-        if (args.length == 0 || args.length == 2) {
+        if (args.length <= 1) {
             msg.sendMessage(player, "invalid-arguments");
             return true;
         }
@@ -58,12 +60,22 @@ public class CmdReport implements TabExecutor {
 
         // Create Placeholders
         StringPlaceholders placeholders = StringPlaceholders.builder()
+                .addPlaceholder("sender", player.getName())
                 .addPlaceholder("player", reported.getName())
                 .addPlaceholder("reason", reason)
                 .build();
 
+
+        // Send the command sender the report message
         msg.sendMessage(player, "commands.reported-user", placeholders);
-        Bukkit.getOnlinePlayers().forEach(player -> player.);
+
+        // Message staff members with alerts
+        Bukkit.getOnlinePlayers().stream()
+                .filter(staffMember -> staffMember.hasPermission("eternalreports.alerts") && new StaffData(staffMember).hasNotifications())
+                .forEach(staffMember -> msg.sendMessage(staffMember, "alerts.user-reported", placeholders));
+
+
+        // Call PlayerReportEvent
         Bukkit.getPluginManager().callEvent(new PlayerReportEvent(player, reported, reason, false));
         return true;
     }

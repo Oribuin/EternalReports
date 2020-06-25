@@ -5,3 +5,7 @@ author: Oribuin
 api-version: "1.13"
 description: Report plugin lol
 website: https://oribuin.xyz/
+commands:
+  report:
+    description: Report a user
+    usage: /<usage>

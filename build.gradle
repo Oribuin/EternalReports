@@ -27,7 +27,7 @@ dependencies {
 shadowJar {
     mergeServiceFiles()
     relocate('dev.esophose.guiframework', 'xyz.oribuin.eternalreports.libs.guiframework')
-    archiveName 'EternalEco-' + project.property("version") + ".jar"
+    archiveName 'EternalReports-' + project.property("version") + ".jar"
 }
 
 processResources {

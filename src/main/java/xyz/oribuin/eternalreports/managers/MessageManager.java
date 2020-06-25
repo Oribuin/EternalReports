@@ -31,6 +31,6 @@ public class MessageManager extends Manager {
     }
 
     public void sendMessage(CommandSender sender, String messageId, StringPlaceholders placeholders) {
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', placeholders.apply(this.messageConfig.getString(messageId))));
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', this.messageConfig.getString("prefix") + placeholders.apply(this.messageConfig.getString(messageId))));
     }
 }

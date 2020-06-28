@@ -5,7 +5,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.oribuin.eternalreports.EternalReports;
-import xyz.oribuin.eternalreports.data.StaffData;
+import xyz.oribuin.eternalreports.data.StaffPlayer;
 import xyz.oribuin.eternalreports.events.PlayerReportEvent;
 import xyz.oribuin.eternalreports.managers.MessageManager;
 import xyz.oribuin.eternalreports.utils.OriCommand;
@@ -71,7 +71,7 @@ public class CmdReport extends OriCommand {
 
         // Message staff members with alerts
         Bukkit.getOnlinePlayers().stream()
-                .filter(staffMember -> staffMember.hasPermission("eternalreports.alerts") && new StaffData(staffMember).hasNotifications())
+                .filter(staffMember -> staffMember.hasPermission("eternalreports.alerts") && new StaffPlayer(staffMember).hasNotifications())
                 .forEach(staffMember -> msg.sendMessage(staffMember, "alerts.user-reported", placeholders));
 
 

@@ -6,11 +6,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class StaffData {
+public class StaffPlayer {
     private final Player player;
     private final Map<UUID, Boolean> toggleMap;
 
-    public StaffData(Player player) {
+    public StaffPlayer(Player player) {
         this.player = player;
         this.toggleMap = new HashMap<>();
     }

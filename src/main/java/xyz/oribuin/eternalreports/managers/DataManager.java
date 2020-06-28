@@ -7,6 +7,7 @@ import xyz.oribuin.eternalreports.database.DatabaseConnector;
 import xyz.oribuin.eternalreports.database.SQLiteConnector;
 
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public class DataManager extends Manager {
 
@@ -33,6 +34,18 @@ public class DataManager extends Manager {
         return null;
     }
 
+    public void getReportPlayer(UUID uuid, Consumer<ReportPlayer> callback) {
+
+        ReportPlayer cache = this.getReportedPlayer(uuid);
+        if (cache != null) {
+            callback.accept(cache);
+            return;
+        }
+
+        this.async(() -> this.plugin.getConnector().connect(connection -> {
+            // TODO: Create Report Data
+        }));
+    }
     /**
      * Asynchronizes the callback with it's own thread unless it is already not on the main thread
      *

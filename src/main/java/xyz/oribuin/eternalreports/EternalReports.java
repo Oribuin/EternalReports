@@ -2,6 +2,8 @@ package xyz.oribuin.eternalreports;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.oribuin.eternalreports.commands.CmdReport;
+import xyz.oribuin.eternalreports.database.DatabaseConnector;
+import xyz.oribuin.eternalreports.database.SQLiteConnector;
 import xyz.oribuin.eternalreports.managers.ConfigManager;
 import xyz.oribuin.eternalreports.managers.DataManager;
 import xyz.oribuin.eternalreports.managers.MessageManager;
@@ -12,6 +14,7 @@ public class EternalReports extends JavaPlugin {
 
     private static EternalReports instance;
     private ConfigManager configManager;
+    private DatabaseConnector connector;
     private DataManager dataManager;
     private MessageManager messageManager;
     private ReportManager reportManager;
@@ -23,6 +26,7 @@ public class EternalReports extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+        connector = new SQLiteConnector(this);
 
         // Register all the commands
         this.registerCommands(new CmdReport(this));
@@ -46,6 +50,10 @@ public class EternalReports extends JavaPlugin {
         for (OriCommand cmd : commands) {
             cmd.registerCommand();
         }
+    }
+
+    public DatabaseConnector getConnector() {
+        return connector;
     }
 
     public DataManager getDataManager() {

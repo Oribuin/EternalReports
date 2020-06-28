@@ -51,7 +51,7 @@ public class ReportsMenu {
     private GuiScreen mainScreen() {
         // Define the GUIScreen
         GuiScreen screen =  GuiFactory.createScreen(this.guiContainer, GuiSize.ROWS_SIX)
-                .setTitle("User Reports: " + this.plugin.getDataManager().getReportSize());
+                .setTitle("User Reports: " + 0); // Todo create report size | this.plugin.getDataManager().getReportSize()
 
         // Add all the border items
         this.borderList().forEach(integer -> screen.addItemStackAt(integer, borderItem()));

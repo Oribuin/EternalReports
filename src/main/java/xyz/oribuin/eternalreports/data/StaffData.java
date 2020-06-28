@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.UUID;
 
 public class StaffData {
-
     private final Player player;
     private final Map<UUID, Boolean> toggleMap;
 
@@ -16,15 +15,15 @@ public class StaffData {
         this.toggleMap = new HashMap<>();
     }
 
-    public Map<UUID, Boolean> getToggleMap() {
-        return toggleMap;
-    }
-
     public Player getPlayer() {
         return player;
     }
 
+    public Map<UUID, Boolean> getToggleMap() {
+        return toggleMap;
+    }
+
     public boolean hasNotifications() {
-        return toggleMap.get(player.getUniqueId());
+        return  toggleMap.get(player.getUniqueId());
     }
 }

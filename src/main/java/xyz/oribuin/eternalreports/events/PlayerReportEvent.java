@@ -4,13 +4,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
-import xyz.oribuin.eternalreports.EternalReports;
 
 public class PlayerReportEvent extends PlayerEvent implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled = false;
     private final Player sender;
-    private final Player reported;
     private final String reason;
 
     private boolean resolved;
@@ -19,7 +17,6 @@ public class PlayerReportEvent extends PlayerEvent implements Cancellable {
         super(reported);
 
         this.sender = sender;
-        this.reported = reported;
         this.reason = reason;
         this.resolved = resolved;
 
@@ -71,6 +68,6 @@ public class PlayerReportEvent extends PlayerEvent implements Cancellable {
 
     public void setResolved(boolean resolved) {
         this.resolved = resolved;
-        EternalReports.getInstance().getDataManager().updateReports(this.getSender(), this.getPlayer(), this.getReason(), resolved);
+        // TODO: Set report as resolved
     }
 }

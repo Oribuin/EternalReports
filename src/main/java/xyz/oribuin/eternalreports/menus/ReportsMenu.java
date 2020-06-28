@@ -11,7 +11,6 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import xyz.oribuin.eternalreports.EternalReports;
-import xyz.oribuin.eternalreports.data.PlayerData;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -65,11 +64,11 @@ public class ReportsMenu {
     // The "MyReports" menu that shows all the player's reports
     private GuiScreen myReports() {
         // Define PlayerDAta
-        PlayerData playerData = new PlayerData(plugin, player);
+
 
         // Define the GUIScreen
         GuiScreen screen =  GuiFactory.createScreen(this.guiContainer, GuiSize.ROWS_SIX)
-                .setTitle("Report Size: " + playerData.getReports());
+                .setTitle("Report Size: " + 0); // TODO: Get report total
 
         this.borderList().forEach(integer -> screen.addItemStackAt(integer, borderItem()));
 

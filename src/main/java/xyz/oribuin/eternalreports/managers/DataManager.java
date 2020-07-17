@@ -24,6 +24,11 @@ public class DataManager extends Manager {
         }
 
         this.connector = new SQLiteConnector(this.plugin);
+        this.createTables();
+    }
+
+    private void createTables() {
+
     }
 
     public ReportPlayer getReportedPlayer(UUID uuid) {
@@ -46,6 +51,7 @@ public class DataManager extends Manager {
             // TODO: Create Report Data
         }));
     }
+
     /**
      * Asynchronizes the callback with it's own thread unless it is already not on the main thread
      *

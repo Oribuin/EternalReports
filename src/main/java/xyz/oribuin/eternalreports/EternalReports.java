@@ -26,7 +26,6 @@ public class EternalReports extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-        connector = new SQLiteConnector(this);
 
         // Register all the commands
         this.registerCommands(new CmdReport(this));

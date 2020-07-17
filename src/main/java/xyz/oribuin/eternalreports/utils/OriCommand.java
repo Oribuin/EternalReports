@@ -1,7 +1,10 @@
 package xyz.oribuin.eternalreports.utils;
 
 import org.bukkit.Bukkit;
-import org.bukkit.command.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.PluginCommand;
+import org.bukkit.command.TabExecutor;
 
 import java.util.List;
 

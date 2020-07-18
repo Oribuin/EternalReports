@@ -83,7 +83,7 @@ class ReportsMenu(private val player: Player?) : Menu("report-menu") {
 
                 val lore = mutableListOf<String>()
                 for (string in menuConfig.getStringList("report-item.lore"))
-                    lore.add(this.format(string, StringPlaceholders.empty()))
+                    lore.add(this.format(string, placeholders))
 
                 val guiButton = GuiFactory.createButton()
                         .setName(this.getValue("report-item.name", placeholders))
@@ -112,7 +112,7 @@ class ReportsMenu(private val player: Player?) : Menu("report-menu") {
                             }
 
                             if (menuConfig.getStringList("report-item.console-commands").isNotEmpty()) {
-                                menuConfig.getStringList("report-item.consoler-commands").forEach { c: String -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), this.format(c, placeholders)) }
+                                menuConfig.getStringList("report-item.console-commands").forEach { c: String -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), this.format(c, placeholders)) }
                             }
 
                             ClickAction.CLOSE

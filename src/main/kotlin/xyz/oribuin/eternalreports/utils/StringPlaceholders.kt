@@ -15,10 +15,10 @@ class StringPlaceholders {
     }
 
     fun apply(string: String): String {
-        var string = string
+        var s = string
 
         for (key in placeholders.keys)
-            string = string.replace(Pattern.quote("%$key%").toRegex(), Matcher.quoteReplacement(placeholders[key]))
+            s = s.replace(Pattern.quote("%$key%").toRegex(), Matcher.quoteReplacement(placeholders[key]))
 
         return string
     }

@@ -85,14 +85,14 @@ class ReportsMenu(private val player: Player) : Menu("report-menu") {
                         .addPlaceholder("sender", report.sender.name)
                         .addPlaceholder("reported", report.reported.name)
                         .addPlaceholder("reason", report.reason)
-                        .addPlaceholder("resolved", resolvedFormatted(report.isResolved)).build()
+                        .addPlaceholder("resolved", resolvedFormatted(report.isResolved))
 
                 val lore = mutableListOf<String>()
                 for (string in menuConfig.getStringList("report-item.lore"))
-                    lore.add(this.format(string, placeholders))
+                    lore.add(this.format(string, placeholders.build()))
 
                 val guiButton = GuiFactory.createButton()
-                        .setName(this.getValue("report-item.name", placeholders))
+                        .setName(this.getValue("report-item.name", placeholders.build()))
                         .setLore(lore)
                         .setIcon(Material.PLAYER_HEAD) { itemMeta: ItemMeta ->
                             val meta = itemMeta as SkullMeta
@@ -101,24 +101,18 @@ class ReportsMenu(private val player: Player) : Menu("report-menu") {
                         .setGlowing(menuConfig.getBoolean("report-item.glowing"))
                         .setClickAction(Function { event: InventoryClickEvent ->
                             val pplayer = event.whoClicked as Player
-
-                            val pl = StringPlaceholders.builder()
-                                    .addPlaceholder("sender", report.sender.name)
-                                    .addPlaceholder("reported", report.reported.name)
-                                    .addPlaceholder("reason", report.reason)
-                                    .addPlaceholder("resolved", resolvedFormatted(report.isResolved))
-                                    .addPlaceholder("player", event.whoClicked.name).build()
-
                             if (menuConfig.getBoolean("use-sound")) {
                                 menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }
                             }
 
                             if (menuConfig.getStringList("report-item.player-commands").isNotEmpty()) {
-                                menuConfig.getStringList("report-item.player-commands").forEach { c: String -> pplayer.performCommand(this.format(c, pl)) }
+                                menuConfig.getStringList("report-item.player-commands").forEach { c: String -> pplayer.performCommand(
+                                        this.format(c, placeholders.addPlaceholder("player", event.whoClicked.name).build())) }
                             }
 
                             if (menuConfig.getStringList("report-item.console-commands").isNotEmpty()) {
-                                menuConfig.getStringList("report-item.console-commands").forEach { c: String -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), this.format(c, pl)) }
+                                menuConfig.getStringList("report-item.console-commands").forEach { c: String -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+                                        this.format(c, placeholders.addPlaceholder("player", event.whoClicked.name).build())) }
                             }
 
                             ClickAction.CLOSE

@@ -12,4 +12,4 @@ commands:
     usage: /report <user> <reason>
   reports:
     description: Manage reports
-    usage: /reports <menu/delete/resolve/mute/unmute>
+    usage: /reports <menu/delete/resolve>

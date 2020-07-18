@@ -75,6 +75,15 @@ class ReportsMenu(private val player: Player) : Menu("report-menu") {
 
         }
 
+        if (menuConfig.getString("forward-page") != mull) {
+          val lore = mutableListOf<String>()
+          for (string in menuConfig.getStringList("forward-page.lore")
+              lore.add(this.format(string, StringPlaceholders.empty())
+          
+          val guiButton = GuiFactory.CreateButton()
+               .setName(this.getValue("forward-item", StringPlaceholders.empty())
+        }
+
         guiScreen.setPaginatedSection(GuiFactory.createScreenSection(reportSlots()), reports.size) { _: Int, startIndex: Int, endIndex: Int ->
             val results = GuiFactory.createPageContentsResult()
             for (i in startIndex until endIndex.coerceAtMost(reports.size)) {

@@ -13,7 +13,6 @@ object PlaceholderAPIHook {
     }
 
     // Apply PlaceholderAPI Placeholders
-    // Unused
     fun apply(player: Player?, text: String): String {
         return if (enabled()) PlaceholderAPI.setPlaceholders(player, text) else text
     }

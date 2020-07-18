@@ -7,7 +7,7 @@ use-sound: true
 # https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
 click-sound: 'ENTITY_ARROW_HIT_PLAYER'
 
-resolved-settings:
+resolved-formatting:
   is-resolved: '&aResolved'
   isnt-resolved: '&cUnresolved'
 

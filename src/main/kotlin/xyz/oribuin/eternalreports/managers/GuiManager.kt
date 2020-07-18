@@ -9,8 +9,9 @@ import java.util.function.Consumer
 class GuiManager(plugin: EternalReports) : Manager(plugin) {
     private val menus = LinkedList<Menu>()
 
+
     fun registerMenus() {
-        menus.add(ReportsMenu(null))
+        ReportsMenu.instance?.let { menus.add(it) }
     }
 
     override fun reload() {

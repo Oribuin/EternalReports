@@ -1,6 +1,7 @@
 package xyz.oribuin.eternalreports.managers
 
 import org.bukkit.Bukkit
+import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 import xyz.oribuin.eternalreports.EternalReports
 import xyz.oribuin.eternalreports.data.ReportPlayer
@@ -30,7 +31,7 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
         })
     }
 
-    fun createReport(sender: Player, reported: Player, reason: String) {
+    fun createReport(sender: Player, reported: OfflinePlayer, reason: String) {
 
         async(Runnable {
             plugin.connector.connect { connection: Connection ->
@@ -45,21 +46,6 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
 
             }
         })
-    }
-
-    fun getReportedPlayer(uuid: UUID): ReportPlayer? {
-        for (pl in plugin.reportManager.getReportPlayers())
-            if (pl.uuid == uuid) return pl
-        return null
-    }
-
-    fun getReportPlayer(uuid: UUID, callback: Consumer<ReportPlayer>) {
-        val cache = getReportedPlayer(uuid)
-        if (cache != null) {
-            callback.accept(cache)
-            return
-        }
-        async(Runnable { plugin.connector.connect { } })
     }
 
     /**

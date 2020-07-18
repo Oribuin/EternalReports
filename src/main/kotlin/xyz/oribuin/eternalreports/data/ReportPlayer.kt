@@ -1,18 +1,19 @@
 package xyz.oribuin.eternalreports.data
 
 import org.bukkit.Bukkit
+import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 import java.util.*
 
 class ReportPlayer(val uuid: UUID) {
-    private var player: Player? = null
+    private var player: OfflinePlayer? = null
     private val reports: MutableList<Report>
     var usersReported: Int
     var reportedAmount: Int
 
-    fun getPlayer(): Player? {
+    fun getPlayer(): OfflinePlayer? {
         if (player == null)
-            player = Bukkit.getPlayer(uuid)
+            player = Bukkit.getOfflinePlayer(uuid)
         return player
     }
 

@@ -1,6 +1,7 @@
 package xyz.oribuin.eternalreports.commands
 
 import org.bukkit.Bukkit
+import org.bukkit.OfflinePlayer
 import org.bukkit.Sound
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -30,7 +31,7 @@ class CmdReport(override val plugin: EternalReports) : OriCommand(plugin, "repor
 
 
         // Reported user
-        val reported = Bukkit.getPlayerExact(args[0])
+        val reported = Bukkit.getPlayer(args[0])?.uniqueId?.let { Bukkit.getOfflinePlayer(it) }
 
         // Check if reported user is null
         if (reported == null) {

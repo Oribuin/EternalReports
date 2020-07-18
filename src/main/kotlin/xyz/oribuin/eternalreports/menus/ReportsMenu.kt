@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.inventory.meta.SkullMeta
+import xyz.oribuin.eternalreports.EternalReports
 import xyz.oribuin.eternalreports.data.Report
 import xyz.oribuin.eternalreports.hooks.PlaceholderAPIHook
 import xyz.oribuin.eternalreports.utils.HexUtils
@@ -24,18 +25,23 @@ import java.util.*
 import java.util.function.Function
 import kotlin.collections.ArrayList
 
-class ReportsMenu(private val player: Player?) : Menu("report-menu") {
+class ReportsMenu(private val player: Player) : Menu("report-menu") {
     private val guiFramework: GuiFramework = GuiFramework.instantiate(plugin)
     private val guiContainer = GuiFactory.createContainer()
 
+    companion object {
+        var instance: ReportsMenu? = null
+            private set
+    }
+
+
     fun openGui() {
         if (isInvalid) buildGui()
-        if (player != null) {
-            guiContainer.openFor(player)
-        }
+        guiContainer.openFor(player)
     }
 
     private fun buildGui() {
+        instance = this
         guiContainer.addScreen(globalReports())
         guiFramework.guiManager.registerGui(guiContainer)
     }
@@ -96,7 +102,7 @@ class ReportsMenu(private val player: Player?) : Menu("report-menu") {
                         .setClickAction(Function { event: InventoryClickEvent ->
                             val pplayer = event.whoClicked as Player
 
-                            val placeholders = StringPlaceholders.builder()
+                            val pl = StringPlaceholders.builder()
                                     .addPlaceholder("sender", report.sender.name)
                                     .addPlaceholder("reported", report.reported.name)
                                     .addPlaceholder("reason", report.reason)
@@ -108,11 +114,11 @@ class ReportsMenu(private val player: Player?) : Menu("report-menu") {
                             }
 
                             if (menuConfig.getStringList("report-item.player-commands").isNotEmpty()) {
-                                menuConfig.getStringList("report-item.player-commands").forEach { c: String -> pplayer.performCommand(this.format(c, placeholders)) }
+                                menuConfig.getStringList("report-item.player-commands").forEach { c: String -> pplayer.performCommand(this.format(c, pl)) }
                             }
 
                             if (menuConfig.getStringList("report-item.console-commands").isNotEmpty()) {
-                                menuConfig.getStringList("report-item.console-commands").forEach { c: String -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), this.format(c, placeholders)) }
+                                menuConfig.getStringList("report-item.console-commands").forEach { c: String -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), this.format(c, pl)) }
                             }
 
                             ClickAction.CLOSE

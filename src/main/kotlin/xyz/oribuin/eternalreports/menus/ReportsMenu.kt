@@ -80,8 +80,17 @@ class ReportsMenu(private val player: Player) : Menu("report-menu") {
           for (string in menuConfig.getStringList("forward-page.lore")
               lore.add(this.format(string, StringPlaceholders.empty())
           
-          val guiButton = GuiFactory.CreateButton()
+          guiScreen.addButtonAt(menuConfig.getInt("foward-page.slot"), GuiFactory.CreateButton()
                .setName(this.getValue("forward-item", StringPlaceholders.empty())
+               .setLore(lore)
+               .setIcon(Material.valueOf(menuConfig.getString("forward-page.material"))
+               .setGlowing(menuConfig.getBoolean("forward-page.glowing"))
+               .setHiddenReplacement(this.getItem("border-item"))
+               .setClickAction(Function { event: InventoryClickEvent ->
+                 // TODO: Click sounds
+                 return ClickAction.PAGE_FOWARD
+               })
+           )
         }
 
         guiScreen.setPaginatedSection(GuiFactory.createScreenSection(reportSlots()), reports.size) { _: Int, startIndex: Int, endIndex: Int ->

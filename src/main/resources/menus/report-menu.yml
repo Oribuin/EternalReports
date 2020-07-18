@@ -25,9 +25,17 @@ report-item:
 
   # Use %player% for the user who clicked the menu
   player-commands:
-    - 'say Hello!'
+    left_click_commands:
+      - 'tp %reported%'
+    right_click_commands: [] # TODO: Add /reports resolve <report>
+    shift_left_click_commands: [] # TODO: Add /reports delete <report>
+    shift_right_click_commands: [] # Unused
   console-commands:
-    - 'say Hello, %player%!'
+    left_click_commands:
+      - 'tp %sender% %reported%'
+    right_click_commands: [] # TODO: Add /reports resolve <report>
+    shift_left_click_commands: [] # TODO: Add /reports delete <report>
+    shift_right_click_commands: [] # Unused
 
 no-reports:
   name: '&cSorry! There are no reports here!'

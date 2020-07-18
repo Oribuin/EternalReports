@@ -21,9 +21,9 @@ import java.sql.Connection
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ReportsMenu(private val player: Player?) : Menu("report-menu.yml") {
+class ReportsMenu(private val player: Player?) : Menu("report-menu") {
     private val guiFramework: GuiFramework = GuiFramework.instantiate(plugin)
-    private lateinit var guiContainer: GuiContainer
+    private val guiContainer = GuiFactory.createContainer()
 
     fun openGui() {
         if (isInvalid) buildGui()
@@ -33,8 +33,6 @@ class ReportsMenu(private val player: Player?) : Menu("report-menu.yml") {
     }
 
     private fun buildGui() {
-        guiContainer = GuiFactory.createContainer()
-
         guiContainer.addScreen(globalReports())
         guiFramework.guiManager.registerGui(guiContainer)
     }
@@ -64,7 +62,7 @@ class ReportsMenu(private val player: Player?) : Menu("report-menu.yml") {
 
         }
 
-        guiScreen.setPaginatedSection(GuiFactory.createScreenSection(reportSlots()), reports.size) { pageNumber: Int, startIndex: Int, endIndex: Int ->
+        guiScreen.setPaginatedSection(GuiFactory.createScreenSection(reportSlots()), reports.size) { _: Int, startIndex: Int, endIndex: Int ->
             val results = GuiFactory.createPageContentsResult()
             for (i in startIndex until endIndex.coerceAtMost(reports.size)) {
                 val report = reports[i]

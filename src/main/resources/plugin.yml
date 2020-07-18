@@ -3,8 +3,7 @@ main: xyz.oribuin.eternalreports.EternalReports
 version: '@version@'
 author: Oribuin
 api-version: "1.16"
-description: Report plugin lol
-website: https://oribuin.xyz/
+description: Simple 1.16 Report Plugin made with functionality in mind.
 softdepend:
   - PlaceholderAPI
 commands:
@@ -13,4 +12,4 @@ commands:
     usage: /report <user> <reason>
   reports:
     description: Manage reports
-    usage: /reports
+    usage: /reports <menu/delete/resolve/mute/unmute>

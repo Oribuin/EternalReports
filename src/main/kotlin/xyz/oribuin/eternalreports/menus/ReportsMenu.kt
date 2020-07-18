@@ -2,13 +2,15 @@ package xyz.oribuin.eternalreports.menus
 
 import dev.rosewood.guiframework.GuiFactory
 import dev.rosewood.guiframework.GuiFramework
-import dev.rosewood.guiframework.gui.GuiContainer
+import dev.rosewood.guiframework.gui.ClickAction
 import dev.rosewood.guiframework.gui.GuiSize
 import dev.rosewood.guiframework.gui.screen.GuiScreen
 import org.bukkit.Bukkit
 import org.bukkit.Material
+import org.bukkit.Sound
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
+import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
@@ -19,6 +21,7 @@ import xyz.oribuin.eternalreports.utils.HexUtils
 import xyz.oribuin.eternalreports.utils.StringPlaceholders
 import java.sql.Connection
 import java.util.*
+import java.util.function.Function
 import kotlin.collections.ArrayList
 
 class ReportsMenu(private val player: Player?) : Menu("report-menu") {
@@ -42,6 +45,10 @@ class ReportsMenu(private val player: Player?) : Menu("report-menu") {
                 .setTitle(HexUtils.colorify(this.getValue("menu-name")))
 
         this.borderSlots().forEach { slot: Int -> guiScreen.addItemStackAt(slot, getItem("border-item")) }
+
+        if (plugin.reportManager.globalReportCount == 0) {
+            guiScreen.addItemStackAt(menuConfig.getInt("no-reports.slot"), getItem("no-reports"))
+        }
 
         val reports = mutableListOf<Report>()
 
@@ -74,17 +81,42 @@ class ReportsMenu(private val player: Player?) : Menu("report-menu") {
                         .addPlaceholder("reason", report.reason)
                         .addPlaceholder("resolved", resolvedFormatted(report.isResolved)).build()
 
+                val lore = mutableListOf<String>()
+                for (string in menuConfig.getStringList("report-item.lore"))
+                    lore.add(this.format(string, StringPlaceholders.empty()))
 
                 val guiButton = GuiFactory.createButton()
-                        .setName(this.format("#C0ffeeReported User: %reported", placeholders))
-                        .setLore(this.format("&cReported By: &f%sender%", placeholders),
-                                this.format("&cReason: &f%reason%", placeholders),
-                                " ",
-                                this.format("Resolved: %resolved", placeholders))
+                        .setName(this.getValue("report-item.name", placeholders))
+                        .setLore(lore)
                         .setIcon(Material.PLAYER_HEAD) { itemMeta: ItemMeta ->
                             val meta = itemMeta as SkullMeta
                             meta.owningPlayer = report.reported
                         }
+                        .setGlowing(menuConfig.getBoolean("report-item.glowing"))
+                        .setClickAction(Function { event: InventoryClickEvent ->
+                            val pplayer = event.whoClicked as Player
+
+                            val placeholders = StringPlaceholders.builder()
+                                    .addPlaceholder("sender", report.sender.name)
+                                    .addPlaceholder("reported", report.reported.name)
+                                    .addPlaceholder("reason", report.reason)
+                                    .addPlaceholder("resolved", resolvedFormatted(report.isResolved))
+                                    .addPlaceholder("player", event.whoClicked.name).build()
+
+                            if (menuConfig.getBoolean("use-sound")) {
+                                menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }
+                            }
+
+                            if (menuConfig.getStringList("report-item.player-commands").isNotEmpty()) {
+                                menuConfig.getStringList("report-item.player-commands").forEach { c: String -> pplayer.performCommand(this.format(c, placeholders)) }
+                            }
+
+                            if (menuConfig.getStringList("report-item.console-commands").isNotEmpty()) {
+                                menuConfig.getStringList("report-item.consoler-commands").forEach { c: String -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), this.format(c, placeholders)) }
+                            }
+
+                            ClickAction.CLOSE
+                        })
 
                 results.addPageContent(guiButton)
             }
@@ -135,6 +167,10 @@ class ReportsMenu(private val player: Player?) : Menu("report-menu") {
         return menuConfig.getString(configPath)?.let { HexUtils.colorify(it) }?.let { PlaceholderAPIHook.apply(player, it) }!!
     }
 
+    private fun getValue(configPath: String, placeholders: StringPlaceholders): String {
+        return menuConfig.getString(configPath)?.let { HexUtils.colorify(placeholders.apply(it)) }?.let { PlaceholderAPIHook.apply(player, it) }!!
+    }
+
     private fun format(string: String, placeholders: StringPlaceholders): String {
         return HexUtils.colorify(PlaceholderAPIHook.apply(player, placeholders.apply(string)))
     }
@@ -145,7 +181,7 @@ class ReportsMenu(private val player: Player?) : Menu("report-menu") {
 
         itemMeta.setDisplayName(this.getValue("$configPath.name"))
 
-        val lore: MutableList<String> = ArrayList()
+        val lore = mutableListOf<String>()
         for (string in menuConfig.getStringList("$configPath.lore"))
             lore.add(this.format(string, StringPlaceholders.empty()))
         itemMeta.lore = lore

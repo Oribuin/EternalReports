@@ -34,7 +34,7 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
 
         async(Runnable {
             plugin.connector.connect { connection: Connection ->
-                val createReport = "INSERT INTO ${this.tablePrefix}reports (sender, reported, reason, resolved) VALUES (?, ?, ?, ?)"
+                val createReport = "REPLACE INTO ${this.tablePrefix}reports (sender, reported, reason, resolved) VALUES (?, ?, ?, ?)"
                 connection.prepareStatement(createReport).use { statement ->
                     statement.setString(1, sender.uniqueId.toString())
                     statement.setString(2, reported.uniqueId.toString())
@@ -48,7 +48,8 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
     }
 
     fun getReportedPlayer(uuid: UUID): ReportPlayer? {
-        for (pl in plugin.reportManager.getReportPlayers()) if (pl.uuid == uuid) return pl
+        for (pl in plugin.reportManager.getReportPlayers())
+            if (pl.uuid == uuid) return pl
         return null
     }
 

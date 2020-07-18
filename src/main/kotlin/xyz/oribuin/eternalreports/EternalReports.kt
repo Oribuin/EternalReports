@@ -55,7 +55,7 @@ class EternalReports : JavaPlugin() {
         this.reportManager = ReportManager(this)
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            PlaceholderExp(this)
+            PlaceholderExp(this).register()
         }
 
         // Register other stuff

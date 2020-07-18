@@ -1,0 +1,7 @@
+- Added SQLite support
+- Added menus
+- Fixed /report command and added tab complete
+- Added menus folders
+- Added alerts notifications (Can be toggled)
+- Updated to use 1.16+ Explicitly
+- Converted plugin to kotlin

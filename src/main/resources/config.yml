@@ -1,0 +1,8 @@
+
+# Alert Settings
+alert-settings:
+  sound:
+    enabled: true
+    # Find all sounds from https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
+    sound: 'ENTITY_ARROW_HIT_PLAYER'
+    volume: 50

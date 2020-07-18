@@ -1,0 +1,72 @@
+# Configure the Reports Menu with all the emojis listed in it in this file
+
+# Supports PlaceholderAPI
+menu-name: 'EternalReports | %eternalreports_total%'
+# Should there be click sounds?
+use-sound: true
+# https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
+click-sound: 'ENTITY_ARROW_HIT_PLAYER'
+
+resolved-settings:
+  is-resolved: '&aResolved'
+  isnt-resolved: '&cUnresolved'
+
+report-item:
+  name: '&e%emoji_name%'
+  material: 'NAME_TAG'
+  glowing: true
+  lore:
+    - ' &e» &bKeyword: &e%emoji_check%'
+    - ' &e» &bEmoji: &e%emoji_replacement%'
+    - ' '
+    - ' &e» &bCreator: &e%emoji_creator%'
+  # https://hub.spigotmc.org/javadocs/spigot/org/bukkit/inventory/ItemFlag.html
+  item-flags:
+    - 'HIDE_ATTRIBUTES'
+
+  # Use %player% for the user who clicked the menu
+  player-commands:
+    - 'say Hello!'
+  console-commands:
+    - 'say Hello, %player%!'
+
+my-emojis:
+  # Should the 'My Emojis' Menu be enabled
+  enabled: true
+  name: '&e« &bMy Emojis »'
+  material: 'DIAMOND'
+  slot: 49
+  glowing: true
+  lore: []
+  item-flags: []
+
+no-emojis:
+  name: '&cSorry! There are no emojis defined!'
+  material: 'BARRIER'
+  slot: 22
+  glowing: false
+  lore: []
+  item-flags: []
+
+back-page:
+  name: '&e« &bBack Page'
+  material: 'PAPER'
+  slot: 47
+  glowing: false
+  lore: []
+  item-flags: []
+
+forward-page:
+  name: '&bForward Page &e»'
+  material: 'PAPER'
+  slot: 51
+  glowing: false
+  lore: []
+  item-flags: []
+
+border-item:
+  name: ' '
+  material: 'LIGHT_BLUE_STAINED_GLASS_PANE'
+  glowing: false
+  lore: []
+  item-flags: []

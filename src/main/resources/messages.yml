@@ -1,13 +1,13 @@
 # Default Prefix
-prefix: '&cReports &f» '
+prefix: '<rainbow:0.7>Reports &f» '
 
 # » Command Messages «
 commands:
-  user-reported: '&bYou have reported &f%player% &bfor &f&n%reason%&b!'
+  reported-user: '&bYou have reported &f%player% &bfor &f&n%reason%&b!'
 
 # » Alert Messages «
 alerts:
-  user-reported: '&f%sender% &bhas reported &f%player&b for &f&n%reason%&b!'
+  user-reported: '&f%sender% &bhas reported &f%player%&b for &f&n%reason%&b!'
 
 # » Misc Messages «
 invalid-permission: '&cYou do not have permission for this command.'

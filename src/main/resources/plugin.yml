@@ -2,10 +2,15 @@ name: EternalReports
 main: xyz.oribuin.eternalreports.EternalReports
 version: '@version@'
 author: Oribuin
-api-version: "1.13"
+api-version: "1.16"
 description: Report plugin lol
 website: https://oribuin.xyz/
+softdepend:
+  - PlaceholderAPI
 commands:
   report:
     description: Report a user
-    usage: /<usage>
+    usage: /report <user> <reason>
+  reports:
+    description: Manage reports
+    usage: /reports

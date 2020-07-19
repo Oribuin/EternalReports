@@ -10,12 +10,12 @@ import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
+import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.inventory.meta.SkullMeta
-import xyz.oribuin.eternalreports.EternalReports
 import xyz.oribuin.eternalreports.data.Report
 import xyz.oribuin.eternalreports.hooks.PlaceholderAPIHook
 import xyz.oribuin.eternalreports.utils.HexUtils
@@ -75,40 +75,48 @@ class ReportsMenu(private val player: Player) : Menu("report-menu") {
 
         }
 
+        // TODO: Add Filter Button (Requires other GuiScreens)
+
+        // Add forward page
         if (menuConfig.getString("forward-page") != null) {
-          val lore = mutableListOf<String>()
-          for (string in menuConfig.getStringList("forward-page.lore")
-              lore.add(this.format(string, StringPlaceholders.empty())
-          
-          guiScreen.addButtonAt(menuConfig.getInt("foward-page.slot"), GuiFactory.CreateButton()
-               .setName(this.getValue("forward-page.name", StringPlaceholders.empty())
-               .setLore(lore)
-               .setIcon(Material.valueOf(menuConfig.getString("forward-page.material"))
-               .setGlowing(menuConfig.getBoolean("forward-page.glowing"))
-               .setHiddenReplacement(this.getItem("border-item"))
-               .setClickAction(Function { event: InventoryClickEvent ->
-                 // TODO: Click sounds
-                 return ClickAction.PAGE_FOWARD
-               })
-           )
+            val lore = mutableListOf<String>()
+            for (string in menuConfig.getStringList("forward-page.lore"))
+                lore.add(this.format(string, StringPlaceholders.empty()))
+
+            guiScreen.addButtonAt(menuConfig.getInt("forward-page.slot"), GuiFactory.createButton()
+                    .setName(this.getValue("forward-page.name", StringPlaceholders.empty()))
+                    .setLore(lore)
+                    .setIcon(Material.valueOf(this.getValue("forward-page.material")))
+                    .setGlowing(menuConfig.getBoolean("forward-page.glowing"))
+                    .setClickAction(Function { event: InventoryClickEvent ->
+                        val pplayer = event.whoClicked as Player
+                        if (menuConfig.getBoolean("use-sound")) {
+                            menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }
+                        }
+
+                        ClickAction.PAGE_FORWARDS
+                    }))
         }
 
+        // Add back page
         if (menuConfig.getString("back-page") != null) {
-          val lore = mutableListOf<String>()
-          for (string in menuConfig.getStringList("back-page.lore")
-              lore.add(this.format(string, StringPlaceholders.empty())
-          
-          guiScreen.addButtonAt(menuConfig.getInt("back-page.slot"), GuiFactory.CreateButton()
-               .setName(this.getValue("back-page.name", StringPlaceholders.empty())
-               .setLore(lore)
-               .setIcon(Material.valueOf(menuConfig.getString("back-page.material"))
-               .setGlowing(menuConfig.getBoolean("back-page.glowing"))
-               .setHiddenReplacement(this.getItem("border-item"))
-               .setClickAction(Function { event: InventoryClickEvent ->
-                 // TODO: Click sounds
-                 return ClickAction.PAGE_BACKWARDS
-               })
-           )
+            val lore = mutableListOf<String>()
+            for (string in menuConfig.getStringList("back-page.lore"))
+                lore.add(this.format(string, StringPlaceholders.empty()))
+
+            guiScreen.addButtonAt(menuConfig.getInt("back-page.slot"), GuiFactory.createButton()
+                    .setName(this.getValue("back-page.name", StringPlaceholders.empty()))
+                    .setLore(lore)
+                    .setIcon(Material.valueOf(this.getValue("back-page.material")))
+                    .setGlowing(menuConfig.getBoolean("back-page.glowing"))
+                    .setClickAction(Function { event: InventoryClickEvent ->
+                        val pplayer = event.whoClicked as Player
+                        if (menuConfig.getBoolean("use-sound")) {
+                            menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }
+                        }
+
+                        ClickAction.PAGE_FORWARDS
+                    }))
         }
 
         guiScreen.setPaginatedSection(GuiFactory.createScreenSection(reportSlots()), reports.size) { _: Int, startIndex: Int, endIndex: Int ->
@@ -141,14 +149,25 @@ class ReportsMenu(private val player: Player) : Menu("report-menu") {
                                 menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }
                             }
 
-                            if (menuConfig.getStringList("report-item.player-commands").isNotEmpty()) {
-                                menuConfig.getStringList("report-item.player-commands").forEach { c: String -> pplayer.performCommand(
-                                        this.format(c, placeholders.addPlaceholder("player", event.whoClicked.name).build())) }
-                            }
-
-                            if (menuConfig.getStringList("report-item.console-commands").isNotEmpty()) {
-                                menuConfig.getStringList("report-item.console-commands").forEach { c: String -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                                        this.format(c, placeholders.addPlaceholder("player", event.whoClicked.name).build())) }
+                            when (event.click) {
+                                ClickType.LEFT -> {
+                                    this.executeCommands("left-click", event, placeholders, pplayer)
+                                }
+                                ClickType.RIGHT -> {
+                                    this.executeCommands("right-click", event, placeholders, pplayer)
+                                }
+                                ClickType.SHIFT_LEFT -> {
+                                    this.executeCommands("shift-left-click", event, placeholders, pplayer)
+                                }
+                                ClickType.SHIFT_RIGHT -> {
+                                    this.executeCommands("shift-right-click", event, placeholders, pplayer)
+                                }
+                                ClickType.MIDDLE -> {
+                                    this.executeCommands("middle-click", event, placeholders, pplayer)
+                                }
+                                else -> {
+                                    // Unused
+                                }
                             }
 
                             ClickAction.CLOSE
@@ -239,6 +258,16 @@ class ReportsMenu(private val player: Player) : Menu("report-menu") {
             return this.getValue("resolved-formatting.is-resolved")
         } else {
             return this.getValue("resolved-formatting.isnt-resolved")
+        }
+    }
+
+    private fun executeCommands(path: String, event: InventoryClickEvent, placeholders: StringPlaceholders.Builder, pplayer: Player) {
+        menuConfig.getStringList("report-item.player-commands.$path-commands").forEach { c: String ->
+            pplayer.performCommand(this.format(c, placeholders.addPlaceholder("player", event.whoClicked.name).build()))
+        }
+
+        menuConfig.getStringList("report-item.console-commands.$path-commands").forEach { c: String ->
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), this.format(c, placeholders.addPlaceholder("player", event.whoClicked.name).build()))
         }
     }
 }

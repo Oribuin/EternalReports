@@ -75,6 +75,42 @@ class ReportsMenu(private val player: Player) : Menu("report-menu") {
 
         }
 
+        if (menuConfig.getString("forward-page") != null) {
+          val lore = mutableListOf<String>()
+          for (string in menuConfig.getStringList("forward-page.lore")
+              lore.add(this.format(string, StringPlaceholders.empty())
+          
+          guiScreen.addButtonAt(menuConfig.getInt("foward-page.slot"), GuiFactory.CreateButton()
+               .setName(this.getValue("forward-page.name", StringPlaceholders.empty())
+               .setLore(lore)
+               .setIcon(Material.valueOf(menuConfig.getString("forward-page.material"))
+               .setGlowing(menuConfig.getBoolean("forward-page.glowing"))
+               .setHiddenReplacement(this.getItem("border-item"))
+               .setClickAction(Function { event: InventoryClickEvent ->
+                 // TODO: Click sounds
+                 return ClickAction.PAGE_FOWARD
+               })
+           )
+        }
+
+        if (menuConfig.getString("back-page") != null) {
+          val lore = mutableListOf<String>()
+          for (string in menuConfig.getStringList("back-page.lore")
+              lore.add(this.format(string, StringPlaceholders.empty())
+          
+          guiScreen.addButtonAt(menuConfig.getInt("back-page.slot"), GuiFactory.CreateButton()
+               .setName(this.getValue("back-page.name", StringPlaceholders.empty())
+               .setLore(lore)
+               .setIcon(Material.valueOf(menuConfig.getString("back-page.material"))
+               .setGlowing(menuConfig.getBoolean("back-page.glowing"))
+               .setHiddenReplacement(this.getItem("border-item"))
+               .setClickAction(Function { event: InventoryClickEvent ->
+                 // TODO: Click sounds
+                 return ClickAction.PAGE_BACKWARDS
+               })
+           )
+        }
+
         guiScreen.setPaginatedSection(GuiFactory.createScreenSection(reportSlots()), reports.size) { _: Int, startIndex: Int, endIndex: Int ->
             val results = GuiFactory.createPageContentsResult()
             for (i in startIndex until endIndex.coerceAtMost(reports.size)) {

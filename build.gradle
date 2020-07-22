@@ -34,7 +34,6 @@ dependencies {
 
 shadowJar {
     mergeServiceFiles()
-    // Relocate GUI Framework to avoid *e*r*r*o*r*s
     relocate('dev.esophose.guiframework', 'xyz.oribuin.eternalreports.libs.guiframework')
     archiveName('EternalReports-' + project.property("version") + '.jar')
 }

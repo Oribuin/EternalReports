@@ -56,26 +56,44 @@ class ReportsMenu(private val player: Player) : Menu("report-menu") {
             guiScreen.addItemStackAt(menuConfig.getInt("no-reports.slot"), getItem("no-reports"))
         }
 
-        val reports = mutableListOf<Report>()
-
-        this.plugin.connector.connect { connection: Connection ->
-            val query = "SELECT * FROM ${plugin.dataManager.tablePrefix}reports"
-
-            connection.prepareStatement(query).use { statement ->
-                val result = statement.executeQuery()
-                while (result.next()) {
-
-                    reports.add(Report(
-                            Bukkit.getOfflinePlayer(UUID.fromString(result.getString("sender"))), // Sender
-                            Bukkit.getOfflinePlayer(UUID.fromString(result.getString("reported"))), // Reported
-                            result.getString("reason"), // Reason
-                            result.getBoolean("resolved"))) // Is resolved
-                }
-            }
-
-        }
+        val reports = plugin.reportManager.reports
 
         // TODO: Add Filter Button (Requires other GuiScreens)
+        /*
+        if (menuConfig.getString("filter-button") != null && menuConfig.getBoolean("filter-button.enabled")) {
+
+            val placeholders = StringPlaceholders.builder()
+                    .addPlaceholder("filter", resolveFilter(guiScreen))
+                    .addPlaceholder("next_filter", resolveNextFilter(guiScreen))
+                    .addPlaceholder("last_filter", resolveLastFilter(guiScreen))
+                    .build()
+
+            val lore = mutableListOf<String>()
+            for (string in menuConfig.getStringList("filter-button.lore"))
+                lore.add(this.format(string, placeholders))
+
+            guiScreen.addButtonAt(menuConfig.getInt("filter-button.slot"), GuiFactory.createButton()
+                    .setName(this.getValue("filter-button.name", placeholders))
+                    .setLore(lore)
+                    .setIcon(Material.valueOf(this.getValue("filter-button.material")))
+                    .setGlowing(menuConfig.getBoolean("filter-button.glowing"))
+                    .setClickAction(Function { event: InventoryClickEvent ->
+                        val pplayer = event.whoClicked as Player
+                        if (menuConfig.getBoolean("use-sound")) {
+                            menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }
+                        }
+
+                        if (event.isLeftClick) {
+                            ClickAction.TRANSITION_FORWARDS
+                        } else if (event.isRightClick) {
+                            ClickAction.TRANSITION_BACKWARDS
+                        }
+
+                        ClickAction.REFRESH
+                    }))
+        }
+
+         */
 
         // Add forward page
         if (menuConfig.getString("forward-page") != null) {
@@ -126,6 +144,7 @@ class ReportsMenu(private val player: Player) : Menu("report-menu") {
 
 
                 val placeholders = StringPlaceholders.builder()
+                        .addPlaceholder("id", report.id)
                         .addPlaceholder("sender", report.sender.name)
                         .addPlaceholder("reported", report.reported.name)
                         .addPlaceholder("reason", report.reason)

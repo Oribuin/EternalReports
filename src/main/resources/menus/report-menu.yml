@@ -11,6 +11,15 @@ resolved-formatting:
   is-resolved: '&fResolved'
   isnt-resolved: '&fUnresolved'
 
+# The spelling is colours, anything different is wrong
+
+filter-names:
+  global: 'Global Reports'
+  resolved: 'Resolved Reports'
+  unresolved: 'Unresolved Reports'
+  my-resolved: 'My Resolved Reports'
+  my-unresolved: 'My Unresolved Reports'
+
 report-item:
   name: '&cReported User: &f%reported%'
   glowing: true

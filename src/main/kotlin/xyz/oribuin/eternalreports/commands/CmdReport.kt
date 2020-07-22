@@ -1,13 +1,14 @@
 package xyz.oribuin.eternalreports.commands
 
 import org.bukkit.Bukkit
-import org.bukkit.OfflinePlayer
 import org.bukkit.Sound
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.util.StringUtil
 import xyz.oribuin.eternalreports.EternalReports
+import xyz.oribuin.eternalreports.data.Report
 import xyz.oribuin.eternalreports.data.StaffPlayer
+import xyz.oribuin.eternalreports.events.PlayerReportEvent
 import xyz.oribuin.eternalreports.managers.ConfigManager
 import xyz.oribuin.eternalreports.utils.StringPlaceholders
 import java.util.*
@@ -75,7 +76,8 @@ class CmdReport(override val plugin: EternalReports) : OriCommand(plugin, "repor
 
         plugin.dataManager.createReport(sender, reported, reason)
 
-        // TODO: Make PlayerReportEvent
+        val event = PlayerReportEvent(Report(this.plugin.reportManager.globalReportCount, sender, reported, reason, false))
+        Bukkit.getPluginManager().callEvent(event)
     }
 
     override fun tabComplete(sender: CommandSender, args: Array<String>): MutableList<String>? {

@@ -1,51 +1,26 @@
 package xyz.oribuin.eternalreports.events
 
-import org.bukkit.entity.Player
 import org.bukkit.event.Cancellable
+import org.bukkit.event.Event
 import org.bukkit.event.HandlerList
-import org.bukkit.event.player.PlayerEvent
+import xyz.oribuin.eternalreports.data.Report
 
-class PlayerReportEvent(
-        /**
-         * This returns the player who reported the other player
-         *
-         * @return Command Sender
-         */
-        val sender: Player, reported: Player,
+class PlayerReportEvent(val report: Report) : Event(), Cancellable {
+    private var isCancelled = false
 
-        /**
-         * The reason on why the player was reported
-         *
-         * @return Report Reason
-         */
-        val reason: String,
-
-        /**
-         * Check if report was resolved.
-         *
-         * @return true if reported is resolved
-         */
-
-        var isResolved: Boolean) : PlayerEvent(reported), Cancellable {
-
-    private var cancelled = false
-
-
-    override fun setCancelled(cancelled: Boolean) {
-        this.cancelled = cancelled
+    override fun getHandlers(): HandlerList {
+        return handlerList
     }
 
     override fun isCancelled(): Boolean {
-        return cancelled
+        return isCancelled
+    }
+
+    override fun setCancelled(b: Boolean) {
+        isCancelled = b
     }
 
     companion object {
-        @JvmStatic
-        private val handlers = HandlerList()
+        val handlerList = HandlerList()
     }
-
-    override fun getHandlers(): HandlerList {
-        return handlers
-    }
-
 }

@@ -4,6 +4,7 @@ import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 import xyz.oribuin.eternalreports.EternalReports
+import xyz.oribuin.eternalreports.data.Report
 import xyz.oribuin.eternalreports.data.ReportPlayer
 import xyz.oribuin.eternalreports.utils.FileUtils.createFile
 import java.sql.Connection
@@ -19,7 +20,7 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
 
     private fun createTables() {
         val queries = arrayOf(
-                "CREATE TABLE IF NOT EXISTS " + tablePrefix + "reports (sender TXT, reported TXT, reason TXT, resolved BOOLEAN, PRIMARY KEY(sender, reported, reason))",
+                "CREATE TABLE IF NOT EXISTS " + tablePrefix + "reports (id INT, sender TXT, reported TXT, reason TXT, resolved BOOLEAN, PRIMARY KEY(sender, reported, reason))",
                 "CREATE TABLE IF NOT EXISTS " + tablePrefix + "users (user TXT, reports, reported, PRIMARY KEY(user))"
         )
         async(Runnable {
@@ -35,15 +36,45 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
 
         async(Runnable {
             plugin.connector.connect { connection: Connection ->
-                val createReport = "REPLACE INTO ${this.tablePrefix}reports (sender, reported, reason, resolved) VALUES (?, ?, ?, ?)"
+                val createReport = "REPLACE INTO ${this.tablePrefix}reports (id, sender, reported, reason, resolved) VALUES (?, ?, ?, ?, ?)"
                 connection.prepareStatement(createReport).use { statement ->
-                    statement.setString(1, sender.uniqueId.toString())
-                    statement.setString(2, reported.uniqueId.toString())
-                    statement.setString(3, reason)
-                    statement.setBoolean(4, false)
+                    statement.setInt(1, this.plugin.reportManager.globalReportCount)
+                    statement.setString(2, sender.uniqueId.toString())
+                    statement.setString(3, reported.uniqueId.toString())
+                    statement.setString(4, reason)
+                    statement.setBoolean(5, false)
                     statement.executeUpdate()
                 }
 
+            }
+        })
+    }
+
+    fun deleteReport(report: Report) {
+        async(Runnable {
+            plugin.connector.connect { connection: Connection ->
+                val removeReport = "DELETE FROM ${tablePrefix}reports WHERE id = ? AND sender = ? AND reported = ? AND reason = ?"
+                connection.prepareStatement(removeReport).use { statement ->
+                    statement.setInt(1, report.id)
+                    statement.setString(2, report.sender.uniqueId.toString())
+                    statement.setString(3, report.reported.uniqueId.toString())
+                    statement.setString(4, report.reason)
+                }
+            }
+        })
+    }
+
+    fun resolveReport(report: Report, resolved: Boolean) {
+        async(Runnable {
+            plugin.connector.connect { connection: Connection ->
+                val removeReport = "REPLACE INTO ${tablePrefix}reports (id, sender, reported, reason, resolved) VALUES (?, ?, ?, ?, ?)"
+                connection.prepareStatement(removeReport).use { statement ->
+                    statement.setInt(1, report.id)
+                    statement.setString(2, report.sender.uniqueId.toString())
+                    statement.setString(3, report.reported.uniqueId.toString())
+                    statement.setString(4, report.reason)
+                    statement.setBoolean(5, resolved)
+                }
             }
         })
     }
@@ -53,7 +84,7 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
      *
      * @param asyncCallback The callback to run on a separate thread
      */
-    private fun async(asyncCallback: Runnable) {
+    fun async(asyncCallback: Runnable) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, asyncCallback)
     }
 

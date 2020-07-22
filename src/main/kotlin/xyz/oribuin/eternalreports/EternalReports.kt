@@ -60,11 +60,11 @@ class EternalReports : JavaPlugin() {
 
         // Register other stuff
         this.guiManager.registerMenus()
-        this.saveDefaultConfig()
         this.reload()
+        this.saveDefaultConfig()
     }
 
-    private fun reload() {
+    fun reload() {
         this.configManager.reload()
         this.dataManager.reload()
         this.messageManager.reload()

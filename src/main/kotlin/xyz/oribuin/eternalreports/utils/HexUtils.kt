@@ -141,6 +141,8 @@ object HexUtils {
             hex.substring(1, hex.length - 1)
         } else if (hex.startsWith("&")) {
             hex.substring(1)
+        } else if (hex.startsWith("{")) {
+            hex.substring(1, hex.length - 1)
         } else {
             hex
         }

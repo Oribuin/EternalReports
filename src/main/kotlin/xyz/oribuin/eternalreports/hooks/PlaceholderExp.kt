@@ -12,10 +12,10 @@ class PlaceholderExp(private val plugin: EternalReports) : PlaceholderExpansion(
             return plugin.reportManager.globalReportCount.toString()
 
         if (placeholders.toLowerCase() == "resolved")
-            return plugin.reportManager.resolvedReportCount.toString()
+            return plugin.reportManager.resolvedReports.toString()
 
         if (placeholders.toLowerCase() == "unresolved")
-            return plugin.reportManager.unresolvedReportCount.toString()
+            return plugin.reportManager.unresolvedReports.toString()
 
         if (placeholders.toLowerCase() == "player_total")
             return plugin.reportManager.getReportTotal(player).toString()

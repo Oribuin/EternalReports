@@ -16,14 +16,10 @@ import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.inventory.meta.SkullMeta
-import xyz.oribuin.eternalreports.data.Report
 import xyz.oribuin.eternalreports.hooks.PlaceholderAPIHook
 import xyz.oribuin.eternalreports.utils.HexUtils
 import xyz.oribuin.eternalreports.utils.StringPlaceholders
-import java.sql.Connection
-import java.util.*
 import java.util.function.Function
-import kotlin.collections.ArrayList
 
 class ReportsMenu(private val player: Player) : Menu("report-menu") {
     private val guiFramework: GuiFramework = GuiFramework.instantiate(plugin)
@@ -133,7 +129,7 @@ class ReportsMenu(private val player: Player) : Menu("report-menu") {
                             menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }
                         }
 
-                        ClickAction.PAGE_FORWARDS
+                        ClickAction.PAGE_BACKWARDS
                     }))
         }
 

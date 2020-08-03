@@ -17,4 +17,8 @@ class GuiManager(plugin: EternalReports) : Manager(plugin) {
     override fun reload() {
         menus.forEach(Consumer { obj: Menu -> obj.reload() })
     }
+
+    override fun disable() {
+        // Unused
+    }
 }

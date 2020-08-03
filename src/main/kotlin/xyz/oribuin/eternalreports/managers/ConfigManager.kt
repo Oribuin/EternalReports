@@ -2,6 +2,7 @@ package xyz.oribuin.eternalreports.managers
 
 import org.bukkit.configuration.file.FileConfiguration
 import xyz.oribuin.eternalreports.EternalReports
+import java.io.File
 
 class ConfigManager(plugin: EternalReports) : Manager(plugin) {
     override fun reload() {
@@ -10,16 +11,23 @@ class ConfigManager(plugin: EternalReports) : Manager(plugin) {
         val config = plugin.config
 
         for (value in Setting.values()) {
-            config.addDefault(value.key, value)
+            config.addDefault(value.key,value.defaultValue)
             value.load(config)
         }
 
     }
 
-    enum class Setting(val key: String) {
-        ALERT_SETTINGS_SOUND_ENABLED("alert-settings.sound.enabled"),
-        ALERT_SETTINGS_SOUND("alert-settings.sound.sound"),
-        ALERT_SETTINGS_SOUND_VOLUME("alert-settings.sound.volume");
+    enum class Setting(val key: String, val defaultValue: Any) {
+        ALERT_SETTINGS_SOUND_ENABLED("alert-settings.sound.enabled", true),
+        ALERT_SETTINGS_SOUND("alert-settings.sound.sound", "ENTITY_ARROW_HIT_PLAYER"),
+        ALERT_SETTINGS_SOUND_VOLUME("alert-settings.sound.volume", 50),
+        SQL_ENABLED("my-sql.enabled", false),
+        SQL_HOSTNAME("my-sql.hostname", ""),
+        SQL_PORT("my-sql.port", 3310),
+        SQL_DATABASENAME("my-sql.database-name", ""),
+        SQL_USERNAME("my-sql.user-name", ""),
+        SQL_PASSWORD("my-sql.password", ""),
+        SQL_USE_SSL("my-sql.use-ssl", false);
 
 
         private var value: Any? = null
@@ -59,8 +67,8 @@ class ConfigManager(plugin: EternalReports) : Manager(plugin) {
         /**
          * @return the setting as a String
          */
-        val string: String?
-            get() = value as String?
+        val string: String
+            get() = value as String
 
         private val number: Double
             get() {
@@ -79,8 +87,8 @@ class ConfigManager(plugin: EternalReports) : Manager(plugin) {
         /**
          * @return the setting as a string list
          */
-        val stringList: List<*>?
-            get() = value as List<*>?
+        val stringList: List<*>
+            get() = value as List<*>
 
         /**
          * Loads the value from the config and caches it
@@ -89,5 +97,9 @@ class ConfigManager(plugin: EternalReports) : Manager(plugin) {
             value = config[key]
         }
 
+    }
+
+    override fun disable() {
+        // Unused
     }
 }

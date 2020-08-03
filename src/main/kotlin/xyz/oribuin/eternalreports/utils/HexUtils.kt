@@ -14,10 +14,16 @@ object HexUtils {
             Pattern.compile("<#([A-Fa-f0-9]){6}>"),  // <#FFFFFF>
             Pattern.compile("&#([A-Fa-f0-9]){6}"),  // &#FFFFFF
             Pattern.compile("#([A-Fa-f0-9]){6}"), // #FFFFFF
-            Pattern.compile("\\{#([A-Fa-f0-9])}") // {#FFFFFF}
+            Pattern.compile("\\{#([A-Fa-f0-9])}{6}") // {#FFFFFF}
     )
 
-    private val STOP = Pattern.compile("<(gradient|g)(:#([A-Fa-f0-9]){6})*>|<(rainbow|r)(:\\d*\\.?\\d+){0,2}>|(&[a-f0-9r])|<#([A-Fa-f0-9]){6}>|&#([A-Fa-f0-9]){6}|#([A-Fa-f0-9]){6}|" + org.bukkit.ChatColor.COLOR_CHAR)
+    private val STOP = Pattern.compile("" +
+            "<(gradient|g)(:#([A-Fa-f0-9]){6})*>|" + // <g:#hex:#hex:#hex>
+            "<(rainbow|r)(:\\d*\\.?\\d+){0,2}>|" + // <rainbow:0.1-1.0>
+            "(&[a-f0-9r])|<#([A-Fa-f0-9]){6}>|" + // <#Hex>
+            "&#([A-Fa-f0-9]){6}|" + // &#Hex
+            "#([A-Fa-f0-9]){6}|" // #Hex
+            + org.bukkit.ChatColor.COLOR_CHAR)
 
     /**
      * Parses gradients, hex colors, and legacy color codes
@@ -141,8 +147,6 @@ object HexUtils {
             hex.substring(1, hex.length - 1)
         } else if (hex.startsWith("&")) {
             hex.substring(1)
-        } else if (hex.startsWith("{")) {
-            hex.substring(1, hex.length - 1)
         } else {
             hex
         }

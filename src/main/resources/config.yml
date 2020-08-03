@@ -1,3 +1,4 @@
+# EternalReports by Oribuin ♥
 
 # Alert Settings
 alert-settings:
@@ -6,3 +7,13 @@ alert-settings:
     # Find all sounds from https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
     sound: 'ENTITY_ARROW_HIT_PLAYER'
     volume: 50
+
+my-sql:
+  enabled: false
+  hostname: ''
+  port: 3310
+  database-name: ''
+  user-name: ''
+  user-password: ''
+  # Enable if database supports SSL
+  use-ssl: false

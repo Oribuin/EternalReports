@@ -46,4 +46,8 @@ class MessageManager(plugin: EternalReports) : Manager(plugin) {
     companion object {
         private const val MESSAGE_CONFIG = "messages.yml"
     }
+
+    override fun disable() {
+        // Unused
+    }
 }

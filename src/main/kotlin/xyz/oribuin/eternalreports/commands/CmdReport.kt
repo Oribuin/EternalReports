@@ -7,7 +7,7 @@ import org.bukkit.entity.Player
 import org.bukkit.util.StringUtil
 import xyz.oribuin.eternalreports.EternalReports
 import xyz.oribuin.eternalreports.data.Report
-import xyz.oribuin.eternalreports.data.StaffPlayer
+import xyz.oribuin.eternalreports.data.StaffMember
 import xyz.oribuin.eternalreports.events.PlayerReportEvent
 import xyz.oribuin.eternalreports.managers.ConfigManager
 import xyz.oribuin.eternalreports.utils.StringPlaceholders
@@ -64,12 +64,12 @@ class CmdReport(override val plugin: EternalReports) : OriCommand(plugin, "repor
 
         // Message staff members with alerts
         Bukkit.getOnlinePlayers().stream()
-                .filter { staffMember: Player -> staffMember.hasPermission("eternalreports.alerts") && StaffPlayer(staffMember).hasNotifications() }
+                .filter { staffMember: Player -> staffMember.hasPermission("eternalreports.alerts") && StaffMember(staffMember).hasNotifications() }
                 .forEach { staffMember: Player ->
                     if (ConfigManager.Setting.ALERT_SETTINGS_SOUND_ENABLED.boolean) {
 
                         // Why such a long method kotlin?
-                        ConfigManager.Setting.ALERT_SETTINGS_SOUND.string?.let { Sound.valueOf(it) }?.let { staffMember.playSound(staffMember.location, it, ConfigManager.Setting.ALERT_SETTINGS_SOUND_VOLUME.float, 1.toFloat()) }
+                        ConfigManager.Setting.ALERT_SETTINGS_SOUND.string.let { Sound.valueOf(it) }.let { staffMember.playSound(staffMember.location, it, ConfigManager.Setting.ALERT_SETTINGS_SOUND_VOLUME.float, 1.toFloat()) }
                     }
                     msg.sendMessage(staffMember, "alerts.user-reported", placeholders)
                 }

@@ -21,9 +21,7 @@ import xyz.oribuin.eternalreports.managers.*
    • Make the plugin functional
  */
 
-class EternalReports : JavaPlugin() {
-
-    lateinit var connector: DatabaseConnector
+class EternalReports : JavaPlugin(), Listener{
     lateinit var configManager: ConfigManager
     lateinit var dataManager: DataManager
     lateinit var guiManager: GuiManager
@@ -43,9 +41,6 @@ class EternalReports : JavaPlugin() {
 
         // Register all the listeners
         registerListeners(PlayerJoin())
-
-        // SQLite
-        connector = SQLiteConnector(this)
 
         // Register Managers
         this.configManager = ConfigManager(this)
@@ -72,6 +67,19 @@ class EternalReports : JavaPlugin() {
         this.reportManager.reload()
     }
 
+    override fun onDisable() {
+        this.disable()
+        Bukkit.getScheduler().cancelTasks(this)
+    }
+
+    private fun disable() {
+        this.configManager.disable()
+        this.dataManager.disable()
+        this.messageManager.disable()
+        this.guiManager.disable()
+        this.reportManager.disable()
+    }
+
     private fun registerCommands(vararg commands: OriCommand) {
         for (cmd in commands) {
             cmd.registerCommand()
@@ -83,4 +91,5 @@ class EternalReports : JavaPlugin() {
             Bukkit.getPluginManager().registerEvents(listener, this)
         }
     }
+
 }

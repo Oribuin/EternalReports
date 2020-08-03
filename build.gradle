@@ -29,6 +29,7 @@ dependencies {
     // Spigot Stuff
     compileOnly 'org.spigotmc:spigot-api:1.16.1-R0.1-SNAPSHOT'
     compileOnly 'me.clip:placeholderapi:2.10.6'
+    compileOnly 'com.zaxxer:HikariCP:3.4.5'
     implementation 'dev.esophose:guiframework:1.1.0'
 }
 

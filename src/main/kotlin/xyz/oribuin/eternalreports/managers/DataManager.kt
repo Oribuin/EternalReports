@@ -5,26 +5,54 @@ import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 import xyz.oribuin.eternalreports.EternalReports
 import xyz.oribuin.eternalreports.data.Report
-import xyz.oribuin.eternalreports.data.ReportPlayer
+import xyz.oribuin.eternalreports.database.DatabaseConnector
+import xyz.oribuin.eternalreports.database.MySQLConnector
+import xyz.oribuin.eternalreports.database.SQLiteConnector
 import xyz.oribuin.eternalreports.utils.FileUtils.createFile
 import java.sql.Connection
-import java.util.*
-import java.util.function.Consumer
 
 class DataManager(plugin: EternalReports) : Manager(plugin) {
+    var connector: DatabaseConnector? = null
 
     override fun reload() {
-        createFile(plugin, "eternalreports.db")
-        createTables()
+
+        try {
+            if (ConfigManager.Setting.SQL_ENABLED.boolean) {
+                val hostname = ConfigManager.Setting.SQL_HOSTNAME.string
+                val port = ConfigManager.Setting.SQL_PORT.int
+                val database = ConfigManager.Setting.SQL_DATABASENAME.string
+                val username = ConfigManager.Setting.SQL_USERNAME.string
+                val password = ConfigManager.Setting.SQL_PASSWORD.string
+                val useSSL = ConfigManager.Setting.SQL_USE_SSL.boolean
+
+                this.connector = MySQLConnector(this.plugin, hostname, port, database, username, password, useSSL)
+                this.plugin.logger.info("Now using MySQL for the plugin Database.")
+            } else {
+                createFile(plugin, "eternalreports.db")
+
+                this.connector = SQLiteConnector(this.plugin)
+                this.plugin.logger.info("Now using SQLite for the Plugin Database.")
+            }
+
+            this.createTables()
+
+        } catch (ex: Exception) {
+            this.plugin.logger.severe("Fatal error connecting to Database, Plugin has disabled itself.")
+            Bukkit.getPluginManager().disablePlugin(this.plugin)
+            ex.printStackTrace()
+        }
+
     }
 
     private fun createTables() {
+        
+        this.plugin.logger.warning("(DEBUG) Creating all database tables.")
         val queries = arrayOf(
-                "CREATE TABLE IF NOT EXISTS " + tablePrefix + "reports (id INT, sender TXT, reported TXT, reason TXT, resolved BOOLEAN, PRIMARY KEY(sender, reported, reason))",
-                "CREATE TABLE IF NOT EXISTS " + tablePrefix + "users (user TXT, reports, reported, PRIMARY KEY(user))"
+                "CREATE TABLE IF NOT EXISTS ${tablePrefix}reports (id INT, sender TXT, reported TXT, reason TXT, resolved BOOLEAN, PRIMARY KEY(sender, reported, reason))",
+                "CREATE TABLE IF NOT EXISTS ${tablePrefix}users (user TXT, reports, reported, PRIMARY KEY(user))"
         )
         async(Runnable {
-            plugin.connector.connect { connection: Connection ->
+            connector?.connect { connection: Connection ->
                 for (string in queries) {
                     connection.prepareStatement(string).use { statement -> statement.executeUpdate() }
                 }
@@ -35,7 +63,7 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
     fun createReport(sender: Player, reported: OfflinePlayer, reason: String) {
 
         async(Runnable {
-            plugin.connector.connect { connection: Connection ->
+            connector?.connect { connection: Connection ->
                 val createReport = "REPLACE INTO ${this.tablePrefix}reports (id, sender, reported, reason, resolved) VALUES (?, ?, ?, ?, ?)"
                 connection.prepareStatement(createReport).use { statement ->
                     statement.setInt(1, this.plugin.reportManager.globalReportCount)
@@ -46,13 +74,15 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
                     statement.executeUpdate()
                 }
 
+                this.plugin.reportManager.reports.add(Report(this.plugin.reportManager.globalReportCount, sender, reported, reason, false))
+
             }
         })
     }
 
     fun deleteReport(report: Report) {
         async(Runnable {
-            plugin.connector.connect { connection: Connection ->
+            connector?.connect { connection: Connection ->
                 val removeReport = "DELETE FROM ${tablePrefix}reports WHERE id = ? AND sender = ? AND reported = ? AND reason = ?"
                 connection.prepareStatement(removeReport).use { statement ->
                     statement.setInt(1, report.id)
@@ -61,12 +91,16 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
                     statement.setString(4, report.reason)
                 }
             }
+
+            if (!this.plugin.reportManager.reports.contains(report)) {
+                this.plugin.reportManager.reports.remove(report)
+            }
         })
     }
 
     fun resolveReport(report: Report, resolved: Boolean) {
         async(Runnable {
-            plugin.connector.connect { connection: Connection ->
+            connector?.connect { connection: Connection ->
                 val removeReport = "REPLACE INTO ${tablePrefix}reports (id, sender, reported, reason, resolved) VALUES (?, ?, ?, ?, ?)"
                 connection.prepareStatement(removeReport).use { statement ->
                     statement.setInt(1, report.id)
@@ -74,6 +108,11 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
                     statement.setString(3, report.reported.uniqueId.toString())
                     statement.setString(4, report.reason)
                     statement.setBoolean(5, resolved)
+                }
+
+                if (this.plugin.reportManager.reports.contains(report)) {
+                    this.plugin.reportManager.reports.remove(report)
+                    this.plugin.reportManager.reports.add(Report(report.id, report.sender, report.reported, report.reason, resolved))
                 }
             }
         })
@@ -97,6 +136,10 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
         Bukkit.getScheduler().runTask(plugin, syncCallback)
     }
 
-    val tablePrefix: String
+    private val tablePrefix: String
         get() = plugin.description.name.toLowerCase() + '_'
+
+    override fun disable() {
+       this.connector?.closeConnection()
+    }
 }

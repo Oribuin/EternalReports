@@ -69,7 +69,6 @@ class EternalReports : JavaPlugin(), Listener{
 
     override fun onDisable() {
         this.disable()
-        Bukkit.getScheduler().cancelTasks(this)
     }
 
     private fun disable() {

@@ -47,12 +47,12 @@ class ReportsMenu(private val player: Player) : Menu("report-menu") {
                 .setTitle(HexUtils.colorify(this.getValue("menu-name")))
 
         this.borderSlots().forEach { slot: Int -> guiScreen.addItemStackAt(slot, getItem("border-item")) }
+        val reports = plugin.reportManager.reports
 
-        if (plugin.reportManager.globalReportCount == 0) {
+        if (reports.size == -1) {
             guiScreen.addItemStackAt(menuConfig.getInt("no-reports.slot"), getItem("no-reports"))
         }
 
-        val reports = plugin.reportManager.reports
 
         // TODO: Add Filter Button (Requires other GuiScreens)
         /*

@@ -39,6 +39,7 @@ report-item:
     right_click_commands: [] # TODO: Add /reports resolve <report>
     shift_left_click_commands: [] # TODO: Add /reports delete <report>
     shift_right_click_commands: [] # Unused
+
   console-commands:
     left_click_commands:
       - 'tp %sender% %reported%'

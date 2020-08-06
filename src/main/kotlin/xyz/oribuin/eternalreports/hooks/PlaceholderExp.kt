@@ -9,7 +9,7 @@ class PlaceholderExp(private val plugin: EternalReports) : PlaceholderExpansion(
     override fun onPlaceholderRequest(player: Player, placeholders: String): String? {
 
         if (placeholders.toLowerCase() == "total")
-            return plugin.reportManager.globalReportCount.toString()
+            return plugin.reportManager.reports.size.toString()
 
         if (placeholders.toLowerCase() == "resolved")
             return plugin.reportManager.resolvedReports.toString()

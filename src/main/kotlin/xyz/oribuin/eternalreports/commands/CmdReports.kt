@@ -5,27 +5,28 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.util.StringUtil
 import xyz.oribuin.eternalreports.EternalReports
+import xyz.oribuin.eternalreports.managers.DataManager
+import xyz.oribuin.eternalreports.managers.MessageManager
+import xyz.oribuin.eternalreports.managers.ReportManager
 import xyz.oribuin.eternalreports.menus.ReportsMenu
 import xyz.oribuin.eternalreports.utils.StringPlaceholders
-import kotlin.system.measureNanoTime
 
 class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "reports") {
 
     private fun onReloadCommand(sender: CommandSender) {
-        val messageManager = plugin.messageManager
+        val messageManager = plugin.getManager(MessageManager::class)
 
         if (!sender.hasPermission("eternalreports.reload")) {
             messageManager.sendMessage(sender, "invalid-permission")
             return
         }
 
-
         this.plugin.reload()
         messageManager.sendMessage(sender, "reload", StringPlaceholders.single("version", this.plugin.description.version))
     }
 
     private fun onResolveCommand(sender: CommandSender, args: Array<String>) {
-        val messageManager = plugin.messageManager
+        val messageManager = plugin.getManager(MessageManager::class)
         if (!sender.hasPermission("eternalreports.resolve")) {
             messageManager.sendMessage(sender, "invalid-permission")
             return
@@ -36,7 +37,7 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
             return
         }
 
-        val reports = this.plugin.reportManager.reports.filter { report -> report.id == args[1].toInt() }
+        val reports = plugin.getManager(ReportManager::class).reports.filter { report -> report.id == args[1].toInt() }
 
         if (reports.isEmpty()) {
             messageManager.sendMessage(sender, "invalid-report")
@@ -53,14 +54,14 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
 
         if (report.isResolved) {
             messageManager.sendMessage(sender, "commands.unresolved-report", placeholders)
-            this.plugin.dataManager.resolveReport(report, false)
+            plugin.getManager(DataManager::class).resolveReport(report, false)
             report.isResolved = false
 
             this.plugin.logger.info(sender.name + " has resolved ${report.sender.name}'s report on ${report.reported.name} for ${report.reason}")
 
         } else {
             messageManager.sendMessage(sender, "commands.resolved-report", placeholders)
-            this.plugin.dataManager.resolveReport(report, true)
+            plugin.getManager(DataManager::class).resolveReport(report, true)
             report.isResolved = true
 
             this.plugin.logger.info(sender.name + " has unresolved ${report.sender.name}'s report on ${report.reported.name} for ${report.reason}")
@@ -68,7 +69,7 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
     }
 
     private fun onRemoveCommand(sender: CommandSender, args: Array<String>) {
-        val messageManager = plugin.messageManager
+        val messageManager = plugin.getManager(MessageManager::class)
         if (!sender.hasPermission("eternalreports.remove")) {
             messageManager.sendMessage(sender, "invalid-permission")
             return
@@ -79,10 +80,10 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
             return
         }
 
-        val reports = this.plugin.reportManager.reports.filter { report -> report.id == args[1].toInt() }
+        val reports = plugin.getManager(ReportManager::class).reports.filter { report -> report.id == args[1].toInt() }
 
         if (reports.isEmpty()) {
-             messageManager.sendMessage(sender, "invalid-report")
+            messageManager.sendMessage(sender, "invalid-report")
             return
         }
 
@@ -95,13 +96,13 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
                 .addPlaceholder("id", report.id).build()
 
         messageManager.sendMessage(sender, "commands.removed-report", placeholders)
-        this.plugin.dataManager.deleteReport(report)
+        plugin.getManager(DataManager::class).deleteReport(report)
 
         this.plugin.logger.info(sender.name + " has removed ${report.sender.name}'s report on ${report.reported.name} for ${report.reason}")
     }
 
     override fun executeCommand(sender: CommandSender, args: Array<String>) {
-        val messageManager = plugin.messageManager
+        val messageManager = plugin.getManager(MessageManager::class)
         if (args.isEmpty() || args.size == 1 && args[0].toLowerCase() == "menu") {
             if (sender !is Player) {
                 messageManager.sendMessage(sender, "player-only")
@@ -113,7 +114,7 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
                 return
             }
 
-            ReportsMenu(sender).openGui()
+            ReportsMenu(plugin, sender).openMenu()
             return
         }
 
@@ -130,7 +131,7 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
                 return
             }
 
-            ReportsMenu(mentioned).openGui()
+            ReportsMenu(plugin, mentioned).openMenu()
         }
 
         when (args[0].toLowerCase()) {
@@ -184,7 +185,7 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
                 "resolve", "remove" -> {
                     val reportIds = mutableListOf<String>()
 
-                    this.plugin.reportManager.reports.forEach { report -> reportIds.add(report.id.toString()) }
+                    plugin.getManager(ReportManager::class).reports.forEach { report -> reportIds.add(report.id.toString()) }
                     StringUtil.copyPartialMatches(args[1].toLowerCase(), reportIds, suggestions)
                 }
             }

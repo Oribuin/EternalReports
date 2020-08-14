@@ -10,11 +10,13 @@ class GuiManager(plugin: EternalReports) : Manager(plugin) {
     private val menus = LinkedList<Menu>()
 
 
-    fun registerMenus() {
+    private fun registerMenus() {
         ReportsMenu.instance?.let { menus.add(it) }
     }
 
     override fun reload() {
+        this.registerMenus()
+
         menus.forEach(Consumer { obj: Menu -> obj.reload() })
     }
 

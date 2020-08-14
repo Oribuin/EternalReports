@@ -3,28 +3,29 @@ package xyz.oribuin.eternalreports.hooks
 import me.clip.placeholderapi.expansion.PlaceholderExpansion
 import org.bukkit.entity.Player
 import xyz.oribuin.eternalreports.EternalReports
+import xyz.oribuin.eternalreports.managers.ReportManager
 
 class PlaceholderExp(private val plugin: EternalReports) : PlaceholderExpansion() {
 
     override fun onPlaceholderRequest(player: Player, placeholders: String): String? {
 
         if (placeholders.toLowerCase() == "total")
-            return plugin.reportManager.reports.size.toString()
+            return plugin.getManager(ReportManager::class).reports.size.toString()
 
         if (placeholders.toLowerCase() == "resolved")
-            return plugin.reportManager.resolvedReports.toString()
+            return plugin.getManager(ReportManager::class).resolvedReports.toString()
 
         if (placeholders.toLowerCase() == "unresolved")
-            return plugin.reportManager.unresolvedReports.toString()
+            return plugin.getManager(ReportManager::class).unresolvedReports.toString()
 
         if (placeholders.toLowerCase() == "player_total")
-            return plugin.reportManager.getReportTotal(player).toString()
+            return plugin.getManager(ReportManager::class).getReportTotal(player).toString()
 
         if (placeholders.toLowerCase() == "player_resolved")
-            return plugin.reportManager.getResolvedReportTotal(player).toString()
+            return plugin.getManager(ReportManager::class).getResolvedReportTotal(player).toString()
 
         if (placeholders.toLowerCase() == "player_unresolved")
-            return plugin.reportManager.getUnresolvedReportTotal(player).toString()
+            return plugin.getManager(ReportManager::class).getUnresolvedReportTotal(player).toString()
 
         return null
     }

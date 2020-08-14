@@ -19,8 +19,8 @@ class ReportManager(plugin: EternalReports) : Manager(plugin) {
     }
 
     private fun registerReports() {
-        this.plugin.dataManager.async(Runnable {
-            plugin.dataManager.connector?.connect { connection: Connection ->
+        this.plugin.getManager(DataManager::class).async(Runnable {
+            this.plugin.getManager(DataManager::class).connector?.connect { connection: Connection ->
                 val query = "SELECT * FROM ${tablePrefix}reports"
 
                 connection.prepareStatement(query).use { statement ->
@@ -41,8 +41,8 @@ class ReportManager(plugin: EternalReports) : Manager(plugin) {
 
     private fun removeReports() {
         for (report in reports) {
-            this.plugin.dataManager.async(Runnable {
-                this.plugin.dataManager.connector?.connect { connection ->
+            this.plugin.getManager(DataManager::class).async(Runnable {
+                this.plugin.getManager(DataManager::class).connector?.connect { connection ->
                     val query = "REPLACE INTO ${tablePrefix}reports (id, sender, reported, reason, resolved) VALUES (?, ?, ?, ?, ?)"
 
                     connection.prepareStatement(query).use { statement ->

@@ -2,7 +2,6 @@ package xyz.oribuin.eternalreports.managers
 
 import org.bukkit.configuration.file.FileConfiguration
 import xyz.oribuin.eternalreports.EternalReports
-import java.io.File
 
 class ConfigManager(plugin: EternalReports) : Manager(plugin) {
     override fun reload() {
@@ -11,7 +10,7 @@ class ConfigManager(plugin: EternalReports) : Manager(plugin) {
         val config = plugin.config
 
         for (value in Setting.values()) {
-            config.addDefault(value.key,value.defaultValue)
+            config.addDefault(value.key, value.defaultValue)
             value.load(config)
         }
 

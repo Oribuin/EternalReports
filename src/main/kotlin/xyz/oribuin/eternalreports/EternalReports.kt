@@ -6,35 +6,32 @@ import org.bukkit.plugin.java.JavaPlugin
 import xyz.oribuin.eternalreports.commands.CmdReport
 import xyz.oribuin.eternalreports.commands.CmdReports
 import xyz.oribuin.eternalreports.commands.OriCommand
-import xyz.oribuin.eternalreports.database.DatabaseConnector
-import xyz.oribuin.eternalreports.database.SQLiteConnector
 import xyz.oribuin.eternalreports.hooks.PlaceholderExp
 import xyz.oribuin.eternalreports.listeners.PlayerJoin
 import xyz.oribuin.eternalreports.managers.*
+import kotlin.reflect.KClass
 
 /*
   TODO List
    • Create Menus
    • Add report management commands
    • Add filters on GUIs
-   • Add MySQL Support
    • Make the plugin functional
  */
 
-class EternalReports : JavaPlugin(), Listener{
-    lateinit var configManager: ConfigManager
-    lateinit var dataManager: DataManager
-    lateinit var guiManager: GuiManager
-    lateinit var messageManager: MessageManager
-    lateinit var reportManager: ReportManager
+class EternalReports : JavaPlugin(), Listener {
 
-    companion object {
-        var instance: EternalReports? = null
-            private set
-    }
+
+    private val managers: MutableMap<KClass<out Manager>, Manager> = HashMap()
 
     override fun onEnable() {
-        instance = this
+
+        // Load PDM because no one likes large jar files
+        /*
+        val dependencyManager = PDMBuilder(this).build()
+        dependencyManager.loadAllDependencies().join()
+
+         */
 
         // Register all the commands
         registerCommands(CmdReport(this), CmdReports(this))
@@ -42,29 +39,21 @@ class EternalReports : JavaPlugin(), Listener{
         // Register all the listeners
         registerListeners(PlayerJoin())
 
-        // Register Managers
-        this.configManager = ConfigManager(this)
-        this.dataManager = DataManager(this)
-        this.messageManager = MessageManager(this)
-        this.guiManager = GuiManager(this)
-        this.reportManager = ReportManager(this)
-
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             PlaceholderExp(this).register()
         }
 
         // Register other stuff
-        this.guiManager.registerMenus()
         this.reload()
         this.saveDefaultConfig()
     }
 
     fun reload() {
-        this.configManager.reload()
-        this.dataManager.reload()
-        this.messageManager.reload()
-        this.guiManager.reload()
-        this.reportManager.reload()
+        this.getManager(ConfigManager::class).reload()
+        this.getManager(DataManager::class).reload()
+        this.getManager(GuiManager::class).reload()
+        this.getManager(MessageManager::class).reload()
+        this.getManager(ReportManager::class).reload()
     }
 
     override fun onDisable() {
@@ -72,11 +61,11 @@ class EternalReports : JavaPlugin(), Listener{
     }
 
     private fun disable() {
-        this.configManager.disable()
-        this.dataManager.disable()
-        this.messageManager.disable()
-        this.guiManager.disable()
-        this.reportManager.disable()
+        this.getManager(ConfigManager::class).disable()
+        this.getManager(DataManager::class).disable()
+        this.getManager(GuiManager::class).disable()
+        this.getManager(MessageManager::class).disable()
+        this.getManager(ReportManager::class).disable()
     }
 
     private fun registerCommands(vararg commands: OriCommand) {
@@ -91,4 +80,20 @@ class EternalReports : JavaPlugin(), Listener{
         }
     }
 
+    fun <M : Manager> getManager(managerClass: KClass<M>): M {
+        synchronized(this.managers) {
+            @Suppress("UNCHECKED_CAST")
+            if (this.managers.containsKey(managerClass))
+                return this.managers[managerClass] as M
+
+            return try {
+                val manager = managerClass.constructors.first().call(this)
+                manager.reload()
+                this.managers[managerClass] = manager
+                manager
+            } catch (ex: ReflectiveOperationException) {
+                error("Failed to load manager for ${managerClass.simpleName}")
+            }
+        }
+    }
 }

@@ -6,9 +6,8 @@ import xyz.oribuin.eternalreports.EternalReports
 import xyz.oribuin.eternalreports.utils.FileUtils.createMenuFile
 import java.io.File
 
-abstract class Menu(private val guiName: String) {
+abstract class Menu(val plugin: EternalReports, private val guiName: String) {
     val menuConfig: FileConfiguration
-    val plugin = EternalReports.instance!!
 
     init {
         createMenuFile(plugin, menuFile)
@@ -25,5 +24,5 @@ abstract class Menu(private val guiName: String) {
 
     private val menuFile: File
         get() = File(plugin.dataFolder.toString() + File.separator + "menus", getGuiName() + ".yml")
-
 }
+

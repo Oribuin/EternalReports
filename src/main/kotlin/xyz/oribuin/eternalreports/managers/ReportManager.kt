@@ -21,7 +21,7 @@ class ReportManager(plugin: EternalReports) : Manager(plugin) {
 
     private fun registerReports() {
         this.plugin.getManager(DataManager::class).async(Runnable {
-            this.plugin.getManager(DataManager::class).connector?.connect { connection: Connection ->
+            this.plugin.getManager(DataManager::class).connector?.connect { connection ->
                 val query = "SELECT * FROM ${tablePrefix}reports"
 
                 connection.prepareStatement(query).use { statement ->
@@ -50,7 +50,7 @@ class ReportManager(plugin: EternalReports) : Manager(plugin) {
     }
 
     override fun disable() {
-        // Unused
+        this.reports.clear()
     }
 
     private val tablePrefix: String

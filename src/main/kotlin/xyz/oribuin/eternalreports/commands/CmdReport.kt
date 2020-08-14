@@ -13,6 +13,7 @@ import xyz.oribuin.eternalreports.managers.ConfigManager
 import xyz.oribuin.eternalreports.managers.DataManager
 import xyz.oribuin.eternalreports.managers.MessageManager
 import xyz.oribuin.eternalreports.managers.ReportManager
+import xyz.oribuin.eternalreports.utils.PluginUtils
 import xyz.oribuin.eternalreports.utils.StringPlaceholders
 import java.util.*
 
@@ -77,8 +78,10 @@ class CmdReport(override val plugin: EternalReports) : OriCommand(plugin, "repor
                     msg.sendMessage(staffMember, "alerts.user-reported", placeholders)
                 }
 
+        PluginUtils.debug("Creating Report in Database.")
         plugin.getManager(DataManager::class).createReport(sender, reported, reason)
 
+        PluginUtils.debug("Calling PlayerReportEvent.")
         val event = PlayerReportEvent(Report(plugin.getManager(ReportManager::class).globalReportCount, sender, reported, reason, false))
         Bukkit.getPluginManager().callEvent(event)
     }

@@ -15,14 +15,15 @@ abstract class Menu(val plugin: EternalReports, private val guiName: String) {
     }
 
     fun reload() {
+        createMenuFile(plugin, menuFile)
         YamlConfiguration.loadConfiguration(menuFile)
     }
 
-    fun getGuiName(): String {
+    private fun getGuiName(): String {
         return guiName.toLowerCase()
     }
 
     private val menuFile: File
-        get() = File(plugin.dataFolder.toString() + File.separator + "menus", getGuiName() + ".yml")
+        get() = File("${plugin.dataFolder}${File.separator}menus", getGuiName() + ".yml")
 }
 

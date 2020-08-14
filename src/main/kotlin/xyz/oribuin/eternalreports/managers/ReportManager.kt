@@ -4,6 +4,7 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import xyz.oribuin.eternalreports.EternalReports
 import xyz.oribuin.eternalreports.data.Report
+import xyz.oribuin.eternalreports.utils.PluginUtils
 import java.sql.Connection
 import java.util.*
 
@@ -27,37 +28,13 @@ class ReportManager(plugin: EternalReports) : Manager(plugin) {
                     val result = statement.executeQuery()
                     while (result.next()) {
 
-                        reports.add(Report(
-                                result.getInt("id"), // ID
-                                Bukkit.getOfflinePlayer(UUID.fromString(result.getString("sender"))), // Sender
-                                Bukkit.getOfflinePlayer(UUID.fromString(result.getString("reported"))), // Reported
-                                result.getString("reason"), // Reason
-                                result.getBoolean("resolved"))) // Is resolved
+                        val report = Report(result.getInt("id"), Bukkit.getOfflinePlayer(UUID.fromString(result.getString("sender"))), Bukkit.getOfflinePlayer(UUID.fromString(result.getString("reported"))), result.getString("reason"), result.getBoolean("resolved"))
+                        PluginUtils.debug("Registering report ${report.id} into val reports = mutableListOf<Report>()")
+                        reports.add(report)
                     }
                 }
             }
         })
-    }
-
-    private fun removeReports() {
-        for (report in reports) {
-            this.plugin.getManager(DataManager::class).async(Runnable {
-                this.plugin.getManager(DataManager::class).connector?.connect { connection ->
-                    val query = "REPLACE INTO ${tablePrefix}reports (id, sender, reported, reason, resolved) VALUES (?, ?, ?, ?, ?)"
-
-                    connection.prepareStatement(query).use { statement ->
-                        statement.setInt(1, report.id)
-                        statement.setString(2, report.sender.uniqueId.toString())
-                        statement.setString(3, report.reported.uniqueId.toString())
-                        statement.setString(4, report.reason)
-                        statement.setBoolean(5, report.isResolved)
-
-                        statement.executeUpdate()
-                        reports.remove(report)
-                    }
-                }
-            })
-        }
     }
 
     fun getReportTotal(player: Player): Int {
@@ -73,7 +50,7 @@ class ReportManager(plugin: EternalReports) : Manager(plugin) {
     }
 
     override fun disable() {
-        this.removeReports()
+        // Unused
     }
 
     private val tablePrefix: String

@@ -1,5 +1,11 @@
 # EternalReports by Oribuin ♥
 
+# Should debug be enabled?
+debug: true
+
+# Configure the formatting of the time
+date-time-format: 'hh:mm on :dd-m-yyyy'
+
 # Alert Settings
 alert-settings:
   sound:
@@ -15,5 +21,3 @@ my-sql:
   database-name: ''
   user-name: ''
   user-password: ''
-  # Enable if database supports SSL
-  use-ssl: false

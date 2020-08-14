@@ -9,6 +9,7 @@ import xyz.oribuin.eternalreports.database.DatabaseConnector
 import xyz.oribuin.eternalreports.database.MySQLConnector
 import xyz.oribuin.eternalreports.database.SQLiteConnector
 import xyz.oribuin.eternalreports.utils.FileUtils.createFile
+import xyz.oribuin.eternalreports.utils.PluginUtils
 import java.sql.Connection
 
 class DataManager(plugin: EternalReports) : Manager(plugin) {
@@ -46,7 +47,7 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
 
     private fun createTables() {
 
-        this.plugin.logger.warning("(DEBUG) Creating all database tables.")
+        PluginUtils.debug("Create all Databse Tables.")
         val queries = arrayOf(
                 "CREATE TABLE IF NOT EXISTS ${tablePrefix}reports (id INT, sender TXT, reported TXT, reason TXT, resolved BOOLEAN, PRIMARY KEY(sender, reported, reason))",
                 "CREATE TABLE IF NOT EXISTS ${tablePrefix}users (user TXT, reports, reported, PRIMARY KEY(user))"
@@ -64,6 +65,7 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
 
         val reportManager = plugin.getManager(ReportManager::class)
 
+        PluginUtils.debug("Starting \"REPLACE INTO ${this.tablePrefix}reports (id, sender, reported, reason, resolved) VALUES (?, ?, ?, ?, ?)\" into Database.")
         async(Runnable {
             connector?.connect { connection: Connection ->
                 val createReport = "REPLACE INTO ${this.tablePrefix}reports (id, sender, reported, reason, resolved) VALUES (?, ?, ?, ?, ?)"
@@ -76,6 +78,8 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
                     statement.executeUpdate()
                 }
 
+                PluginUtils.debug("Successfully created report inside Databse")
+
                 reportManager.reports.add(Report(reportManager.globalReportCount, sender, reported, reason, false))
 
             }
@@ -85,6 +89,7 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
     fun deleteReport(report: Report) {
         val reportManager = plugin.getManager(ReportManager::class)
 
+        PluginUtils.debug("Starting \"DELETE FROM ${tablePrefix}reports WHERE id = ? AND sender = ? AND reported = ? AND reason = ?\"")
         async(Runnable {
             connector?.connect { connection: Connection ->
                 val removeReport = "DELETE FROM ${tablePrefix}reports WHERE id = ? AND sender = ? AND reported = ? AND reason = ?"
@@ -93,7 +98,10 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
                     statement.setString(2, report.sender.uniqueId.toString())
                     statement.setString(3, report.reported.uniqueId.toString())
                     statement.setString(4, report.reason)
+                    statement.executeUpdate()
                 }
+
+                PluginUtils.debug("Successfully deleted report from database.")
             }
 
             if (!reportManager.reports.contains(report)) {
@@ -105,6 +113,7 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
     fun resolveReport(report: Report, resolved: Boolean) {
         val reportManager = plugin.getManager(ReportManager::class)
 
+        PluginUtils.debug("Starting \"REPLACE INTO ${tablePrefix}reports (id, sender, reported, reason, resolved) VALUES (?, ?, ?, ?, ?)\"")
         async(Runnable {
             connector?.connect { connection: Connection ->
                 val removeReport = "REPLACE INTO ${tablePrefix}reports (id, sender, reported, reason, resolved) VALUES (?, ?, ?, ?, ?)"
@@ -114,7 +123,10 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
                     statement.setString(3, report.reported.uniqueId.toString())
                     statement.setString(4, report.reason)
                     statement.setBoolean(5, resolved)
+                    statement.executeUpdate();
                 }
+
+                PluginUtils.debug("Successfully set ${report.id} as resolved (${resolved}}")
 
                 if (reportManager.reports.contains(report)) {
                     reportManager.reports.remove(report)

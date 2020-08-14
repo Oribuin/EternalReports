@@ -1,6 +1,3 @@
-# Configure the Reports Menu with all the emojis listed in it in this file
-
-# Supports PlaceholderAPI
 menu-name: 'EternalReports | Total: %eternalreports_total%'
 # Should there be click sounds?
 use-sound: true
@@ -24,26 +21,35 @@ report-item:
   name: '&cReported User: &f%reported%'
   glowing: true
   lore:
+    - ' &f» &cID: &f%report_id%'
+    -
     - ' &f» &cReported By: &f%sender%'
     - ' &f» &cReason: &f%reason%'
     - ' '
     - ' &f» &cResolved: &e%resolved%'
-  # https://hub.spigotmc.org/javadocs/spigot/org/bukkit/inventory/ItemFlag.html
+    - ' '
+    - ' &7(Left Click to teleport to reported player)'
+    - ' &7(Right Click to teleport to reporter)'
+    - ' &7(Shift Right Click to Resolve)'
+    - ' &7(Shift Left Click to Delete)'
+
 
   # Use %player% for the user who clicked the menu
   player-commands:
     left_click_commands:
       - 'tp %reported%'
-    right_click_commands: [] # TODO: Add /reports resolve <report>
-    shift_left_click_commands: [] # TODO: Add /reports delete <report>
-    shift_right_click_commands: [] # Unused
+    right_click_commands:
+      - 'tp %sender%'
+    shift_left_click_commands:
+      - 'reports resolve %report_id%'
+    shift_right_click_commands:
+      - 'reports delete %report_id%'
 
   console-commands:
-    left_click_commands:
-      - 'tp %sender% %reported%'
-    right_click_commands: [] # TODO: Add /reports resolve <report>
-    shift_left_click_commands: [] # TODO: Add /reports delete <report>
-    shift_right_click_commands: [] # Unused
+    left_click_commands: []
+    right_click_commands: []
+    shift_left_click_commands: []
+    shift_right_click_commands: []
 
 no-reports:
   name: '&cSorry! There are no reports here!'

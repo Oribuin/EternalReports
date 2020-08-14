@@ -41,7 +41,7 @@ object FileUtils {
             }
 
             try {
-                plugin.getResource("menus" + File.separator + file.name).use { inputStream ->
+                plugin.getResource("menus${File.separator}${file.name}").use { inputStream ->
                     if (inputStream == null) {
                         file.createNewFile()
                         return

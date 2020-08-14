@@ -9,6 +9,7 @@ import xyz.oribuin.eternalreports.commands.OriCommand
 import xyz.oribuin.eternalreports.hooks.PlaceholderExp
 import xyz.oribuin.eternalreports.listeners.PlayerJoin
 import xyz.oribuin.eternalreports.managers.*
+import xyz.oribuin.eternalreports.utils.PluginUtils
 import kotlin.reflect.KClass
 
 /*
@@ -20,8 +21,6 @@ import kotlin.reflect.KClass
  */
 
 class EternalReports : JavaPlugin(), Listener {
-
-
     private val managers: MutableMap<KClass<out Manager>, Manager> = HashMap()
 
     override fun onEnable() {
@@ -34,16 +33,20 @@ class EternalReports : JavaPlugin(), Listener {
          */
 
         // Register all the commands
+        PluginUtils.debug("Registering all plugin commands.")
         registerCommands(CmdReport(this), CmdReports(this))
 
         // Register all the listeners
+        PluginUtils.debug("Registering all plugin listeners.")
         registerListeners(PlayerJoin())
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            PluginUtils.debug("Registering PlaceholderAPI Placeholders.")
             PlaceholderExp(this).register()
         }
 
         // Register other stuff
+        PluginUtils.debug("Loading Managers.")
         this.reload()
         this.saveDefaultConfig()
     }
@@ -61,6 +64,7 @@ class EternalReports : JavaPlugin(), Listener {
     }
 
     private fun disable() {
+        PluginUtils.debug("Disabling managers.")
         this.getManager(ConfigManager::class).disable()
         this.getManager(DataManager::class).disable()
         this.getManager(GuiManager::class).disable()

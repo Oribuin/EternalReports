@@ -14,9 +14,12 @@ class ConfigManager(plugin: EternalReports) : Manager(plugin) {
             value.load(config)
         }
 
+        plugin.saveConfig()
     }
 
     enum class Setting(val key: String, val defaultValue: Any) {
+        DEBUG("debug", true),
+        TIME("date-time-format", "hh:mm on :dd-m-yyyy"),
         ALERT_SETTINGS_SOUND_ENABLED("alert-settings.sound.enabled", true),
         ALERT_SETTINGS_SOUND("alert-settings.sound.sound", "ENTITY_ARROW_HIT_PLAYER"),
         ALERT_SETTINGS_SOUND_VOLUME("alert-settings.sound.volume", 50),

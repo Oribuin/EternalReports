@@ -46,8 +46,8 @@ class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plu
         this.borderSlots().forEach { slot: Int -> getItem("border-item")?.let { screen.addItemStackAt(slot, it) } }
         val reports = plugin.getManager(ReportManager::class).reports
 
-        if (reports.size == -1) {
-            screen.addItemStackAt(menuConfig.getInt("no-reports.slot"), Objects.requireNonNull(getItem("no-reports"))!!)
+        if (reports.size == 0) {
+            getItem("no-reports")?.let { screen.addItemStackAt(menuConfig.getInt("no-reports.slot"), it) }
         }
 
         // Add forward page
@@ -99,7 +99,7 @@ class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plu
 
 
                 val placeholders = StringPlaceholders.builder()
-                        .addPlaceholder("id", report.id)
+                        .addPlaceholder("report_id", report.id)
                         .addPlaceholder("sender", report.sender.name)
                         .addPlaceholder("reported", report.reported.name)
                         .addPlaceholder("reason", report.reason)
@@ -196,30 +196,33 @@ class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plu
         get() = !guiFramework.guiManager.activeGuis.contains(container)
 
     private fun getValue(path: String): String {
-        return if (menuConfig.getString(path) == null) {
-            "Invalid Path $path"
+        val value = menuConfig.getString(path) ?: "Invalid path $path"
 
-        } else colorify(apply(player, Objects.requireNonNull<String>(menuConfig.getString(path))))
+        return colorify(apply(player, value))
     }
 
     private fun getValue(path: String, placeholders: StringPlaceholders): String {
-        return if (menuConfig.getString(path) == null) {
-            "Invalid Path $path"
+        val value = menuConfig.getString(path) ?: "Invalid path $path"
 
-        } else colorify(placeholders.apply(apply(player, Objects.requireNonNull<String>(menuConfig.getString(path)))))
+        return colorify(placeholders.apply(apply(player, value)))
     }
 
     private fun getItem(path: String): ItemStack? {
-        val itemStack = ItemStack(Material.valueOf(menuConfig.getString("$path.material")!!))
-        val itemMeta = itemStack.itemMeta ?: return null
+        val itemStack = menuConfig.getString("$path.material")?.let { Material.valueOf(it) }?.let { ItemStack(it) }
+
+        val itemMeta = itemStack?.itemMeta ?: return ItemStack(Material.STRUCTURE_VOID)
+
         itemMeta.setDisplayName(this.getValue("$path.name"))
+
         val lore: MutableList<String> = ArrayList()
         for (line in menuConfig.getStringList("$path.lore")) lore.add(this.format(line, empty()))
+
         itemMeta.lore = lore
         if (menuConfig.getBoolean("$path.glowing")) {
             itemMeta.addEnchant(Enchantment.MENDING, 1, true)
             itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS)
         }
+
         itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
         itemStack.itemMeta = itemMeta
         return itemStack

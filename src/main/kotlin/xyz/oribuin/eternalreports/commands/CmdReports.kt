@@ -9,6 +9,7 @@ import xyz.oribuin.eternalreports.managers.DataManager
 import xyz.oribuin.eternalreports.managers.MessageManager
 import xyz.oribuin.eternalreports.managers.ReportManager
 import xyz.oribuin.eternalreports.menus.ReportsMenu
+import xyz.oribuin.eternalreports.utils.PluginUtils
 import xyz.oribuin.eternalreports.utils.StringPlaceholders
 
 class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "reports") {
@@ -54,6 +55,7 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
 
         if (report.isResolved) {
             messageManager.sendMessage(sender, "commands.unresolved-report", placeholders)
+            PluginUtils.debug("Unresolving report ${report.id}.")
             plugin.getManager(DataManager::class).resolveReport(report, false)
             report.isResolved = false
 
@@ -61,6 +63,7 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
 
         } else {
             messageManager.sendMessage(sender, "commands.resolved-report", placeholders)
+            PluginUtils.debug("Resolving report ${report.id}.")
             plugin.getManager(DataManager::class).resolveReport(report, true)
             report.isResolved = true
 
@@ -96,6 +99,7 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
                 .addPlaceholder("id", report.id).build()
 
         messageManager.sendMessage(sender, "commands.removed-report", placeholders)
+        PluginUtils.debug("Deleting report ${report.id}.")
         plugin.getManager(DataManager::class).deleteReport(report)
 
         this.plugin.logger.info(sender.name + " has removed ${report.sender.name}'s report on ${report.reported.name} for ${report.reason}")
@@ -182,7 +186,7 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
                     StringUtil.copyPartialMatches(args[1].toLowerCase(), players, suggestions)
                 }
 
-                "resolve", "remove" -> {
+                "resolve", "delete" -> {
                     val reportIds = mutableListOf<String>()
 
                     plugin.getManager(ReportManager::class).reports.forEach { report -> reportIds.add(report.id.toString()) }

@@ -10,16 +10,15 @@ abstract class Menu(val plugin: EternalReports, private val guiName: String) {
     val menuConfig: FileConfiguration
 
     init {
-        createMenuFile(plugin, menuFile)
+        createMenuFile(plugin, guiName)
         menuConfig = YamlConfiguration.loadConfiguration(menuFile)
     }
 
     fun reload() {
-        createMenuFile(plugin, menuFile)
         YamlConfiguration.loadConfiguration(menuFile)
     }
 
-    private fun getGuiName(): String {
+    fun getGuiName(): String {
         return guiName.toLowerCase()
     }
 

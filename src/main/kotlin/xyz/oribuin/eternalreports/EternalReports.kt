@@ -9,7 +9,10 @@ import xyz.oribuin.eternalreports.commands.OriCommand
 import xyz.oribuin.eternalreports.hooks.PlaceholderExp
 import xyz.oribuin.eternalreports.listeners.PlayerJoin
 import xyz.oribuin.eternalreports.managers.*
+import xyz.oribuin.eternalreports.utils.FileUtils
 import xyz.oribuin.eternalreports.utils.PluginUtils
+import java.util.*
+import kotlin.collections.HashMap
 import kotlin.reflect.KClass
 
 /*
@@ -45,31 +48,18 @@ class EternalReports : JavaPlugin(), Listener {
             PlaceholderExp(this).register()
         }
 
-        // Register other stuff
         PluginUtils.debug("Loading Managers.")
+        this.getManager(ConfigManager::class)
+        this.getManager(DataManager::class)
+        this.getManager(GuiManager::class)
+        this.getManager(MessageManager::class)
+        this.getManager(ReportManager::class)
+
+        FileUtils.createFile(this, "report-menu.yml")
+
+        // Register other stuff
         this.reload()
         this.saveDefaultConfig()
-    }
-
-    fun reload() {
-        this.getManager(ConfigManager::class).reload()
-        this.getManager(DataManager::class).reload()
-        this.getManager(GuiManager::class).reload()
-        this.getManager(MessageManager::class).reload()
-        this.getManager(ReportManager::class).reload()
-    }
-
-    override fun onDisable() {
-        this.disable()
-    }
-
-    private fun disable() {
-        PluginUtils.debug("Disabling managers.")
-        this.getManager(ConfigManager::class).disable()
-        this.getManager(DataManager::class).disable()
-        this.getManager(GuiManager::class).disable()
-        this.getManager(MessageManager::class).disable()
-        this.getManager(ReportManager::class).disable()
     }
 
     private fun registerCommands(vararg commands: OriCommand) {
@@ -99,5 +89,18 @@ class EternalReports : JavaPlugin(), Listener {
                 error("Failed to load manager for ${managerClass.simpleName}")
             }
         }
+    }
+
+    fun reload() {
+        this.disableManagers()
+        this.managers.values.forEach { manager -> manager.reload() }
+    }
+
+    override fun onDisable() {
+        this.disableManagers()
+    }
+
+    private fun disableManagers() {
+        this.managers.values.forEach { manager -> manager.disable() }
     }
 }

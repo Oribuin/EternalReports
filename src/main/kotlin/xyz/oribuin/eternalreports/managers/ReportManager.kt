@@ -5,7 +5,6 @@ import org.bukkit.entity.Player
 import xyz.oribuin.eternalreports.EternalReports
 import xyz.oribuin.eternalreports.data.Report
 import xyz.oribuin.eternalreports.utils.PluginUtils
-import java.sql.Connection
 import java.util.*
 
 class ReportManager(plugin: EternalReports) : Manager(plugin) {
@@ -20,21 +19,26 @@ class ReportManager(plugin: EternalReports) : Manager(plugin) {
     }
 
     private fun registerReports() {
-        this.plugin.getManager(DataManager::class).async(Runnable {
-            this.plugin.getManager(DataManager::class).connector?.connect { connection ->
-                val query = "SELECT * FROM ${tablePrefix}reports"
+        val data = plugin.getManager(DataManager::class)
 
-                connection.prepareStatement(query).use { statement ->
-                    val result = statement.executeQuery()
-                    while (result.next()) {
+        Bukkit.getScheduler().runTaskLater(plugin, Runnable {
+            data.async(Runnable {
+                data.connector?.connect { connection ->
+                    val query = "SELECT * FROM ${tablePrefix}reports"
 
-                        val report = Report(result.getInt("id"), Bukkit.getOfflinePlayer(UUID.fromString(result.getString("sender"))), Bukkit.getOfflinePlayer(UUID.fromString(result.getString("reported"))), result.getString("reason"), result.getBoolean("resolved"))
-                        PluginUtils.debug("Registering report ${report.id} into val reports = mutableListOf<Report>()")
-                        reports.add(report)
+                    connection.prepareStatement(query).use { statement ->
+                        val result = statement.executeQuery()
+                        while (result.next()) {
+
+                            val report = Report(result.getInt("id"), Bukkit.getOfflinePlayer(UUID.fromString(result.getString("sender"))), Bukkit.getOfflinePlayer(UUID.fromString(result.getString("reported"))), result.getString("reason"), result.getBoolean("resolved"))
+                            PluginUtils.debug("Registering report ${report.id} into val reports = mutableListOf<Report>()")
+                            reports.add(report)
+                        }
                     }
                 }
-            }
-        })
+            })
+
+        }, 500)
     }
 
     fun getReportTotal(player: Player): Int {

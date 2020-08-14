@@ -2,7 +2,6 @@ package xyz.oribuin.eternalreports.utils
 
 import org.bukkit.plugin.Plugin
 import java.io.File
-import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Paths
 
@@ -17,41 +16,32 @@ object FileUtils {
         val file = File(plugin.dataFolder, fileName)
 
         if (!file.exists()) {
-            try {
-                plugin.getResource(fileName).use { inStream ->
-                    if (inStream == null) {
-                        file.createNewFile()
-                        return
-                    }
-
-                    Files.copy(inStream, Paths.get(file.absolutePath))
+            plugin.getResource(fileName).use { inStream ->
+                if (inStream == null) {
+                    file.createNewFile()
+                    return
                 }
 
-            } catch (e: IOException) {
-                e.printStackTrace()
+                Files.copy(inStream, Paths.get(file.absolutePath))
             }
         }
     }
 
     @JvmStatic
-    fun createMenuFile(plugin: Plugin, file: File) {
+    fun createMenuFile(plugin: Plugin, fileName: String) {
+        val dir = File(plugin.dataFolder, "menus")
+        val file = File(dir, "$fileName.yml")
+        if (!dir.exists())
+            dir.mkdirs()
+
         if (!file.exists()) {
-            if (!file.parentFile.exists()) {
-                file.parentFile.mkdir()
-            }
-
-            try {
-                plugin.getResource("menus${File.separator}${file.name}").use { inputStream ->
-                    if (inputStream == null) {
-                        file.createNewFile()
-                        return
-                    }
-
-                    Files.copy(inputStream, Paths.get(file.absolutePath))
+            plugin.getResource(file.absolutePath).use { inputStream ->
+                if (inputStream == null) {
+                    file.createNewFile()
+                    return
                 }
 
-            } catch (ex: IOException) {
-                ex.printStackTrace()
+                Files.copy(inputStream, Paths.get(file.absolutePath))
             }
         }
     }

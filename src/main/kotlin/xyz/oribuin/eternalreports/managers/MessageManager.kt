@@ -67,9 +67,9 @@ class MessageManager(plugin: EternalReports) : Manager(plugin) {
 
         // Command success messages
         CMD_REPORT_USER("commands.reported-user", "&bYou have reported &f%reported% &bfor &f&n%reason%&b!"),
-        CMD_RESOLVED_REPORT("commands.resolved-report", "&bYou have resolved &f%sender%&b''s&b report! (ID: &f%report_id%&b)"),
-        CMD_UNRESOLVED_REPORT("commands.unresolved-report", "&bYou have unresolved &f%sender%&b''s&b report! (ID: &f%report_id%&b)"),
-        CMD_REMOVED_REPORT("commands.removed-report", "&bYou have successfully removed &f%sender%''s&b report! (ID: &f%report_id%&b)"),
+        CMD_RESOLVED_REPORT("commands.resolved-report", "&bYou have resolved &f%reported%&b''s&b report! (ID: &f%report_id%&b)"),
+        CMD_UNRESOLVED_REPORT("commands.unresolved-report", "&bYou have unresolved &f%reported%&b''s&b report! (ID: &f%report_id%&b)"),
+        CMD_REMOVED_REPORT("commands.removed-report", "&bYou have successfully removed &f%reported%''s&b report! (ID: &f%report_id%&b)"),
         CMD_ALERTS_ON("commands.alerts-on", "&bYou have &fenabled report alerts!"),
         CMD_ALERTS_OFF("commands.alerts-off", "&bYou have &fdisabled&b report alerts!"),
 
@@ -77,6 +77,18 @@ class MessageManager(plugin: EternalReports) : Manager(plugin) {
         ALERTS_USER_REPORTED("alerts.user-reported", "&f%sender% &bhas reported &f%reported%&b for &f&n%reason%&b!"),
         ALERTS_REPORT_RESOLVED("alerts.report-resolved", "&f%sender% &bhas set &f%reported%''s&b report as &b%resolved%&f!"),
         ALERTS_REPORT_DELETED("alerts.report-deleted", "&f%sender% &bhas deleted &f%reported%''s&b report (ID: &f%report_id%&b)"),
+
+        // Help Menu
+        HELP_MESSAGE("help-message", listOf(
+                "<rainbow:0.7>EternalReports &f» &bCommands",
+                " &f• &b/report <Player> <Reason> #8E54E9- &fReport a Player.",
+                " &f• &b/reports [alert/toggle] #8E54E9- &fToggle alert notifications.",
+                " &f• &b/reports [delete/remove] <Report-id> #8E54E9- &fDelete a report.",
+                " &f• &b/reports menu [Player] #8E54E9- &fOpen the reports menu.",
+                " &f• &b/reports resolve <Report-Id> #8E54E9- &fResolve/Unresolve a report",
+                " ",
+                " &bPlugin created by <g:#4776E6:#8E54E9>Oribuin"
+        )),
 
         // Error Messages
         INVALID_PERMISSION("invalid-permission", "&cYou do not have permission for this command."),

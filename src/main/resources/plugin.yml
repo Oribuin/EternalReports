@@ -12,7 +12,7 @@ commands:
     usage: /report <user> <reason>
   reports:
     description: Manage reports
-    usage: /reports <menu/delete/resolve>
+    usage: /reports help
 
 permissions:
   eternalreports.*:

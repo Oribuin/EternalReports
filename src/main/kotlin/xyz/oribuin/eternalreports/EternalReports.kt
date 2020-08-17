@@ -24,7 +24,6 @@ class EternalReports : JavaPlugin(), Listener {
 
         // Register all the commands
 
-        PluginUtils.debug("Loading Managers.")
         this.getManager(ConfigManager::class)
         this.getManager(DataManager::class)
         this.getManager(GuiManager::class)
@@ -32,17 +31,12 @@ class EternalReports : JavaPlugin(), Listener {
         this.getManager(ReportManager::class)
 
         FileUtils.createMenuFile(this, "report-menu")
-
-
-        PluginUtils.debug("Registering all plugin commands.")
         registerCommands(CmdReport(this), CmdReports(this))
 
         // Register all the listeners
-        PluginUtils.debug("Registering all plugin listeners.")
         registerListeners(PlayerJoin())
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            PluginUtils.debug("Registering PlaceholderAPI Placeholders.")
             PlaceholderExp(this).register()
         }
 

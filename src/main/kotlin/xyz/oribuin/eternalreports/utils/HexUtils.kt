@@ -1,6 +1,7 @@
 package xyz.oribuin.eternalreports.utils
 
 import net.md_5.bungee.api.ChatColor
+import org.bukkit.Bukkit
 import xyz.oribuin.eternalreports.utils.NMSUtil.versionNumber
 import java.awt.Color
 import java.util.*
@@ -143,12 +144,16 @@ object HexUtils {
     }
 
     private fun cleanHex(hex: String): String {
-        return if (hex.startsWith("<")) {
-            hex.substring(1, hex.length - 1)
-        } else if (hex.startsWith("&")) {
-            hex.substring(1)
-        } else {
-            hex
+        return when {
+            hex.startsWith("<") -> {
+                hex.substring(1, hex.length - 1)
+            }
+            hex.startsWith("&") -> {
+                hex.substring(1)
+            }
+            else -> {
+                hex
+            }
         }
     }
 
@@ -183,7 +188,7 @@ object HexUtils {
     /**
      * Maps hex codes to ChatColors
      */
-    private enum class ChatColorHexMapping(hex: Int, chatColor: ChatColor) {
+    private enum class ChatColorHexMapping(hex: Int, val chatColor: ChatColor) {
         BLACK(0x000000, ChatColor.BLACK),
         DARK_BLUE(0x0000AA, ChatColor.DARK_BLUE),
         DARK_GREEN(0x00AA00, ChatColor.DARK_GREEN),
@@ -204,7 +209,6 @@ object HexUtils {
         val red: Int = hex shr 16 and 0xFF
         val green: Int = hex shr 8 and 0xFF
         val blue: Int = hex and 0xFF
-        val chatColor: ChatColor = chatColor
 
     }
 
@@ -296,4 +300,48 @@ object HexUtils {
             hue = 0f
         }
     }
+}
+object NMSUtil {
+    private var cachedVersion: String? = null
+    private var cachedVersionNumber = -1
+
+    /**
+     * Gets the server version
+     *
+     * @return The server version
+     */
+    private val version: String?
+        get() {
+            if (cachedVersion == null) {
+                val name = Bukkit.getServer().javaClass.getPackage().name
+                cachedVersion = name.substring(name.lastIndexOf('.') + 1) + "."
+            }
+            return cachedVersion
+        }
+
+    /**
+     * Gets the server version major release number
+     *
+     * @return The server version major release number
+     */
+    @JvmStatic
+    val versionNumber: Int
+        get() {
+            if (cachedVersionNumber == -1) {
+                val name = version!!.substring(3)
+                cachedVersionNumber = name.substring(0, name.length - 4).toInt()
+            }
+            return cachedVersionNumber
+        }
+
+    /**
+     * @return true if the server is running Spigot or a fork, false otherwise
+     */
+    val isSpigot: Boolean
+        get() = try {
+            Class.forName("org.spigotmc.SpigotConfig")
+            true
+        } catch (e: ClassNotFoundException) {
+            false
+        }
 }

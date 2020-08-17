@@ -13,10 +13,7 @@ import xyz.oribuin.eternalreports.managers.MessageManager
 import xyz.oribuin.eternalreports.managers.ReportManager
 import xyz.oribuin.eternalreports.menus.ReportsMenu
 import xyz.oribuin.eternalreports.utils.HexUtils
-import xyz.oribuin.eternalreports.utils.PluginUtils
 import xyz.oribuin.eternalreports.utils.StringPlaceholders
-import java.util.*
-import kotlin.collections.ArrayList
 
 class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "reports") {
 
@@ -147,8 +144,24 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
 
     }
 
+    private fun onHelpCommand(sender: CommandSender) {
+        if (!sender.hasPermission("eternalreports.help")) {
+            messageManager.sendMessage(sender, "invalid-permission")
+            return
+        }
+
+
+        for (string in messageManager.messageConfig.getStringList("help-message")) {
+            sender.sendMessage(HexUtils.colorify(string))
+        }
+
+        if (sender is Player) {
+            sender.playSound(sender.location, Sound.ENTITY_ARROW_HIT_PLAYER, 50f, 1f)
+        }
+    }
+
     override fun executeCommand(sender: CommandSender, args: Array<String>) {
-        if (args.isEmpty() || args.size == 1 && args[0].toLowerCase() == "menu") {
+        if (args.isEmpty() || args.size == 1) {
             if (sender !is Player) {
                 messageManager.sendMessage(sender, "player-only")
                 return
@@ -211,6 +224,9 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
             val subCommand = if (args.isEmpty()) "" else args[0]
 
             val commands: MutableList<String> = ArrayList()
+
+            if (sender.hasPermission("eternalreports.help"))
+                commands.add("help")
 
             if (sender.hasPermission("eternalreports.reload"))
                 commands.add("reload")

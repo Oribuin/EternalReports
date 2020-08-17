@@ -11,7 +11,6 @@ import xyz.oribuin.eternalreports.hooks.PlaceholderExp
 import xyz.oribuin.eternalreports.listeners.PlayerJoin
 import xyz.oribuin.eternalreports.managers.*
 import xyz.oribuin.eternalreports.utils.FileUtils
-import xyz.oribuin.eternalreports.utils.PluginUtils
 import kotlin.reflect.KClass
 
 /**
@@ -22,11 +21,9 @@ class EternalReports : JavaPlugin(), Listener {
     private val managers: MutableMap<KClass<out Manager>, Manager> = HashMap()
 
     override fun onEnable() {
-        val dependencyManager = PDMBuilder(this).build()
-        dependencyManager.loadAllDependencies().join()
+        PDMBuilder(this).build().loadAllDependencies().join()
 
         // Register all the commands
-
         this.getManager(ConfigManager::class)
         this.getManager(DataManager::class)
         this.getManager(GuiManager::class)

@@ -1,7 +1,6 @@
 package xyz.oribuin.eternalreports.managers
 
 import org.bukkit.Bukkit
-import org.bukkit.entity.Player
 import xyz.oribuin.eternalreports.EternalReports
 import xyz.oribuin.eternalreports.data.Report
 import java.util.*

@@ -17,12 +17,10 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.inventory.meta.SkullMeta
 import xyz.oribuin.eternalreports.EternalReports
-import xyz.oribuin.eternalreports.hooks.PlaceholderAPIHook
 import xyz.oribuin.eternalreports.hooks.PlaceholderAPIHook.apply
 import xyz.oribuin.eternalreports.managers.MessageManager
 import xyz.oribuin.eternalreports.managers.ReportManager
 import xyz.oribuin.eternalreports.utils.FileUtils
-import xyz.oribuin.eternalreports.utils.HexUtils
 import xyz.oribuin.eternalreports.utils.HexUtils.colorify
 import xyz.oribuin.eternalreports.utils.PluginUtils
 import xyz.oribuin.eternalreports.utils.StringPlaceholders

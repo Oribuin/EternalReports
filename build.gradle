@@ -3,7 +3,7 @@ import org.apache.tools.ant.filters.ReplaceTokens
 plugins {
     id 'java'
     id 'org.jetbrains.kotlin.jvm' version '1.4.0'
-    id 'me.bristermitten.pdm' version "0.0.19"
+    id 'me.bristermitten.pdm' version "0.0.20"
 }
 
 group 'xyz.oribuin'
@@ -30,10 +30,10 @@ dependencies {
     // Spigot Stuff
     compileOnly 'org.spigotmc:spigot-api:1.16.1-R0.1-SNAPSHOT'
     compileOnly 'me.clip:placeholderapi:2.10.9'
-    implementation 'dev.rosewood:guiframework:1.1.1'
+    pdm 'dev.rosewood:guiframework:1.1.1'
 
     // Other
-    compileOnly 'com.zaxxer:HikariCP:3.4.5'
+    pdm 'com.zaxxer:HikariCP:3.4.5'
 }
 
 

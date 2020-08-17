@@ -104,9 +104,7 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
                 PluginUtils.debug("Successfully deleted report from database.")
             }
 
-            if (reportManager.reports.contains(report)) {
-                reportManager.reports.remove(report)
-            }
+            reportManager.reports.remove(report)
         })
     }
 

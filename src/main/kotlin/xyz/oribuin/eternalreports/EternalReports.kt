@@ -11,29 +11,16 @@ import xyz.oribuin.eternalreports.listeners.PlayerJoin
 import xyz.oribuin.eternalreports.managers.*
 import xyz.oribuin.eternalreports.utils.FileUtils
 import xyz.oribuin.eternalreports.utils.PluginUtils
-import java.util.*
-import kotlin.collections.HashMap
 import kotlin.reflect.KClass
 
-/*
-  TODO List
-   • Create Menus
-   • Add report management commands
-   • Add filters on GUIs
-   • Make the plugin functional
+/**
+ * @author Oribuin
  */
 
 class EternalReports : JavaPlugin(), Listener {
     private val managers: MutableMap<KClass<out Manager>, Manager> = HashMap()
 
     override fun onEnable() {
-
-        // Load PDM because no one likes large jar files
-        /*
-        val dependencyManager = PDMBuilder(this).build()
-        dependencyManager.loadAllDependencies().join()
-
-         */
 
         // Register all the commands
         PluginUtils.debug("Registering all plugin commands.")
@@ -55,7 +42,7 @@ class EternalReports : JavaPlugin(), Listener {
         this.getManager(MessageManager::class)
         this.getManager(ReportManager::class)
 
-        FileUtils.createFile(this, "report-menu.yml")
+        FileUtils.createMenuFile(this, "report-menu")
 
         // Register other stuff
         this.reload()

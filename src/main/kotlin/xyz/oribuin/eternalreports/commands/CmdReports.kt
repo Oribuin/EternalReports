@@ -51,7 +51,7 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
                 .addPlaceholder("reporter", report.sender.name)
                 .addPlaceholder("reported", report.reported.name)
                 .addPlaceholder("reason", report.reason)
-                .addPlaceholder("id", report.id).build()
+                .addPlaceholder("report_id", report.id).build()
 
         if (report.isResolved) {
             messageManager.sendMessage(sender, "commands.unresolved-report", placeholders)
@@ -96,7 +96,7 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
                 .addPlaceholder("reporter", report.sender.name)
                 .addPlaceholder("reported", report.reported.name)
                 .addPlaceholder("reason", report.reason)
-                .addPlaceholder("id", report.id).build()
+                .addPlaceholder("report_id", report.id).build()
 
         messageManager.sendMessage(sender, "commands.removed-report", placeholders)
         PluginUtils.debug("Deleting report ${report.id}.")
@@ -142,11 +142,12 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
             "reload" -> {
                 this.onReloadCommand(sender)
             }
+
             "resolve" -> {
                 this.onResolveCommand(sender, args)
             }
 
-            "delete" -> {
+            "delete", "remove" -> {
                 this.onRemoveCommand(sender, args)
             }
             else -> {

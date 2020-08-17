@@ -15,7 +15,7 @@ object PluginUtils {
     }
 
     @JvmStatic
-    fun formatTime(long: Long) : String {
+    fun formatTime(long: Long): String {
         return SimpleDateFormat(ConfigManager.Setting.TIME.string).format(Date(long))
     }
 }

@@ -6,7 +6,7 @@ commands:
   reported-user: '&bYou have reported &f%player% &bfor &f&n%reason%&b!'
   resolved-report: '&bYou have resolved &f%reporter%&b''s report! (&f%report_id%&b)'
   unresolved-report: '&bYou have unresolved &f%reporter%&b''s report! (&f%report_id%&b)'
-  remove-report: '&bYou have successfully removed &f%reporter''s report! (&f%report_id%&b)'
+  removed-report: '&bYou have successfully removed &f%reporter%''s report! (&f%report_id%&b)'
 
 # » Alert Messages «
 alerts:

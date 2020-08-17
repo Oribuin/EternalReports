@@ -70,7 +70,7 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
             connector?.connect { connection: Connection ->
                 val createReport = "REPLACE INTO ${this.tablePrefix}reports (id, sender, reported, reason, resolved) VALUES (?, ?, ?, ?, ?)"
                 connection.prepareStatement(createReport).use { statement ->
-                    statement.setInt(1, reportManager.globalReportCount)
+                    statement.setInt(1, reportManager.reports.size + 1)
                     statement.setString(2, sender.uniqueId.toString())
                     statement.setString(3, reported.uniqueId.toString())
                     statement.setString(4, reason)
@@ -80,7 +80,7 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
 
                 PluginUtils.debug("Successfully created report inside Databse")
 
-                reportManager.reports.add(Report(reportManager.globalReportCount, sender, reported, reason, false))
+                reportManager.reports.add(Report(reportManager.reports.size + 1, sender, reported, reason, false))
 
             }
         })
@@ -104,7 +104,7 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
                 PluginUtils.debug("Successfully deleted report from database.")
             }
 
-            if (!reportManager.reports.contains(report)) {
+            if (reportManager.reports.contains(report)) {
                 reportManager.reports.remove(report)
             }
         })
@@ -123,7 +123,7 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
                     statement.setString(3, report.reported.uniqueId.toString())
                     statement.setString(4, report.reason)
                     statement.setBoolean(5, resolved)
-                    statement.executeUpdate();
+                    statement.executeUpdate()
                 }
 
                 PluginUtils.debug("Successfully set ${report.id} as resolved (${resolved}}")

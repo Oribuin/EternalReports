@@ -31,14 +31,26 @@ class ReportManager(plugin: EternalReports) : Manager(plugin) {
                         while (result.next()) {
 
                             val report = Report(result.getInt("id"), Bukkit.getOfflinePlayer(UUID.fromString(result.getString("sender"))), Bukkit.getOfflinePlayer(UUID.fromString(result.getString("reported"))), result.getString("reason"), result.getBoolean("resolved"))
-                            PluginUtils.debug("Registering report ${report.id} into val reports = mutableListOf<Report>()")
-                            reports.add(report)
+
+
+                            println("[DB Reports] ID ${report.id} sender ${report.sender} reported ${report.reported} reason ${report.reason} resolved ${report.isResolved}")
+
+                            if (!reports.contains(report)) {
+                                //PluginUtils.debug("Registering report ${report.id} into val reports = mutableListOf<Report>()")
+                                reports.add(report)
+                            }
                         }
+
+                        Bukkit.getScheduler().runTaskLater(plugin, Runnable {
+                            for (rep in reports) {
+                                println("[List Reports] ID ${rep.id} sender ${rep.sender} reported ${rep.reported} reason ${rep.reason} resolved ${rep.isResolved}")
+                            }
+                        }, 30)
                     }
                 }
             })
 
-        }, 500)
+        }, 10)
     }
 
     fun getReportTotal(player: Player): Int {

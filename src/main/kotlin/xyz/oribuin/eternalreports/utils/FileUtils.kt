@@ -31,6 +31,7 @@ object FileUtils {
     fun createMenuFile(plugin: Plugin, fileName: String) {
         val dir = File(plugin.dataFolder, "menus")
         val file = File(dir, "$fileName.yml")
+
         if (!dir.exists())
             dir.mkdirs()
 

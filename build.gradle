@@ -2,7 +2,7 @@ import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
     id 'java'
-    id 'org.jetbrains.kotlin.jvm' version '1.3.72'
+    id 'org.jetbrains.kotlin.jvm' version '1.4.0'
     id 'com.github.johnrengelman.shadow' version '6.0.0'
     //id 'me.bristermitten.pdm' version "0.0.18"
 }
@@ -26,7 +26,7 @@ repositories {
 dependencies {
     // Overlord language
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    implementation "org.jetbrains.kotlin:kotlin-reflect:1.3.72"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:1.4.0"
 
     // Spigot Stuff
     shadow 'org.spigotmc:spigot-api:1.16.1-R0.1-SNAPSHOT'

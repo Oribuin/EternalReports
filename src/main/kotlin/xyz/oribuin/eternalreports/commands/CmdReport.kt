@@ -128,5 +128,4 @@ class CmdReport(override val plugin: EternalReports) : OriCommand(plugin, "repor
         }
         return suggestions
     }
-
 }

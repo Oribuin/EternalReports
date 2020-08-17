@@ -161,18 +161,35 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
     }
 
     override fun executeCommand(sender: CommandSender, args: Array<String>) {
-        if (args.isEmpty() || args.size == 1) {
-            if (sender !is Player) {
-                messageManager.sendMessage(sender, "player-only")
-                return
+        if (args.isEmpty()) {
+            this.onHelpCommand(sender)
+            return
+        }
+
+        if (args.size == 1) {
+            when (args[0].toLowerCase()) {
+                "menu" -> {
+                    if (sender !is Player) {
+                        messageManager.sendMessage(sender, "player-only")
+                        return
+                    }
+
+                    if (!sender.hasPermission("eternalreports.menu")) {
+                        messageManager.sendMessage(sender, "invalid-permission")
+                        return
+                    }
+
+                    ReportsMenu(plugin, sender).openMenu()
+                }
+
+                "help" -> {
+                    this.onHelpCommand(sender)
+                }
+                else -> {
+                    messageManager.sendMessage(sender, "unknown-command")
+                }
             }
 
-            if (!sender.hasPermission("eternalreports.menu")) {
-                messageManager.sendMessage(sender, "invalid-permission")
-                return
-            }
-
-            ReportsMenu(plugin, sender).openMenu()
             return
         }
 

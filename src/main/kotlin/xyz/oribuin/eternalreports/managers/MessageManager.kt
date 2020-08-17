@@ -63,18 +63,20 @@ class MessageManager(plugin: EternalReports) : Manager(plugin) {
         // Misc Stuff
         PREFIX("prefix", "<rainbow:0.7>Reports &f» "),
         COOLDOWN("cooldown", "&bYou cannot execute this command for another &f%cooldown% &bseconds!"),
-        RELOAD("reload", "&bYou have reloaded EternalReports (&f%version&&b)"),
+        RELOAD("reload", "&bYou have reloaded EternalReports (&f%version%&b)"),
 
         // Command success messages
-        CMD_REPORT_USER("commands.reported-user", "&bYou have reported &f%player% &bfor &f&n%reason%&b!"),
-        CMD_RESOLVED_REPORT("commands.resolved-report", "&bYou have resolved &f%reporter%&b''s&b report! (&f%report_id%&b)"),
-        CMD_UNRESOLVED_REPORT("commands.unresolved-report", "&bYou have unresolved &f%reporter%&b''s&b report! (&f%report_id%&b)"),
-        CMD_REMOVED_REPORT("commands.removed-report", "&bYou have successfully removed &f%reporter%''s&b report! (&f%report_id%&b)"),
+        CMD_REPORT_USER("commands.reported-user", "&bYou have reported &f%reported% &bfor &f&n%reason%&b!"),
+        CMD_RESOLVED_REPORT("commands.resolved-report", "&bYou have resolved &f%sender%&b''s&b report! (ID: &f%report_id%&b)"),
+        CMD_UNRESOLVED_REPORT("commands.unresolved-report", "&bYou have unresolved &f%sender%&b''s&b report! (ID: &f%report_id%&b)"),
+        CMD_REMOVED_REPORT("commands.removed-report", "&bYou have successfully removed &f%sender%''s&b report! (ID: &f%report_id%&b)"),
+        CMD_ALERTS_ON("commands.alerts-on", "&bYou have &fenabled report alerts!"),
+        CMD_ALERTS_OFF("commands.alerts-off", "&bYou have &fdisabled&b report alerts!"),
 
         // Alert Messages
-        ALERTS_USER_REPORTED("alerts.user.reported", "&f%sender% &bhas reported &f%player%&b for &f&n%reason%&b!"),
-        ALERTS_REPORT_RESOLVED("alerts.report-resolved", "&f%sender% &bhas set &f%player''s&b report as &b%resolved%&f!"),
-        ALERTS_REPORT_DELETED("alerts.report-deleted", "&f%sender% &bhas deleted &f%player''s&b report (ID: &f%report_id%&b)"),
+        ALERTS_USER_REPORTED("alerts.user-reported", "&f%sender% &bhas reported &f%reported%&b for &f&n%reason%&b!"),
+        ALERTS_REPORT_RESOLVED("alerts.report-resolved", "&f%sender% &bhas set &f%reported%''s&b report as &b%resolved%&f!"),
+        ALERTS_REPORT_DELETED("alerts.report-deleted", "&f%sender% &bhas deleted &f%reported%''s&b report (ID: &f%report_id%&b)"),
 
         // Error Messages
         INVALID_PERMISSION("invalid-permission", "&cYou do not have permission for this command."),

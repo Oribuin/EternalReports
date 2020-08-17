@@ -65,7 +65,6 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
 
         if (report.isResolved) {
             messageManager.sendMessage(sender, "commands.unresolved-report", placeholders)
-            PluginUtils.debug("Unresolving report ${report.id}.")
             plugin.getManager(DataManager::class).resolveReport(report, false)
             report.isResolved = false
 
@@ -124,6 +123,30 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
         this.plugin.logger.info(sender.name + " has removed ${report.sender.name}'s report on ${report.reported.name} for ${report.reason}")
     }
 
+    private fun onToggleNotificaations(sender: CommandSender) {
+
+        if (sender !is Player) {
+            messageManager.sendMessage(sender, "player-only")
+            return
+        }
+
+        if (!sender.hasPermission("eternalreports.toggle")) {
+            messageManager.sendMessage(sender, "invalid-permission")
+            return
+        }
+
+        val staffMember = StaffMember(sender)
+
+        if (staffMember.hasNotifications()) {
+            staffMember.toggleList[sender.uniqueId] = false
+            messageManager.sendMessage(sender, "commands.alerts-off")
+        } else {
+            staffMember.toggleList[sender.uniqueId] = true
+            messageManager.sendMessage(sender, "commands.alerts-on")
+        }
+
+    }
+
     override fun executeCommand(sender: CommandSender, args: Array<String>) {
         if (args.isEmpty() || args.size == 1 && args[0].toLowerCase() == "menu") {
             if (sender !is Player) {
@@ -168,6 +191,10 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
             "delete", "remove" -> {
                 this.onRemoveCommand(sender, args)
             }
+
+            "toggle", "alerts" -> {
+                this.onToggleNotificaations(sender)
+            }
             else -> {
                 messageManager.sendMessage(sender, "unknown-command")
             }
@@ -194,11 +221,17 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
             if (sender.hasPermission("eternalreports.resolve"))
                 commands.add("resolve")
 
-            if (sender.hasPermission("eternalreports.delete"))
+            if (sender.hasPermission("eternalreports.delete")) {
+                commands.add("remove")
                 commands.add("delete")
+            }
+
+            if (sender.hasPermission("eternalreports.toggle")) {
+                commands.add("alerts")
+                commands.add("toggle")
+            }
 
             StringUtil.copyPartialMatches(subCommand, commands, suggestions)
-            return null
         } else if (args.size == 2) {
             if (args[0].toLowerCase() == "menu" && sender.hasPermission("eternalreports.menu.other")) {
                 val players: MutableList<String> = ArrayList()
@@ -222,9 +255,9 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
 
     private fun resolvedFormatted(resolved: Boolean): String? {
         return if (resolved) {
-            messageManager.messageConfig.getString("resolved-formatting.is-resolved")?.let { HexUtils.colorify(it) }
+            messageManager.messageConfig.getString("resolve-formatting.is-resolved")?.let { HexUtils.colorify(it) }
         } else {
-            messageManager.messageConfig.getString("resolved-formatting.isNT-resolved")?.let { HexUtils.colorify(it) }
+            messageManager.messageConfig.getString("resolve-formatting.isnt-resolved")?.let { HexUtils.colorify(it) }
         }
     }
 

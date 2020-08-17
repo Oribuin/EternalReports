@@ -25,3 +25,5 @@ permissions:
       - eternalreports.menu.other
       - eternalreports.resolve
       - eternalreports.reload
+      - eternalreports.alerts
+      - eternalreports.toggle

@@ -70,22 +70,21 @@ class CmdReport(override val plugin: EternalReports) : OriCommand(plugin, "repor
 
         // Report reason
         val reason = java.lang.String.join(" ", *args).substring(args[0].length + 1)
+        val report = Report(plugin.getManager(ReportManager::class).reports.size + 1, sender, reported, reason, false, System.currentTimeMillis())
 
         // Create Placeholders
         val placeholders = StringPlaceholders.builder()
-                .addPlaceholder("sender", sender.getName())
-                .addPlaceholder("player", reported.name)
-                .addPlaceholder("reason", reason)
-                .addPlaceholder("report_id", plugin.getManager(ReportManager::class).reports.size + 1)
+                .addPlaceholder("sender", report.sender.name)
+                .addPlaceholder("reported", report.reported.name)
+                .addPlaceholder("reason", report.reason)
+                .addPlaceholder("report_id", report.id)
+                .addPlaceholder("time", PluginUtils.formatTime(report.time))
                 .build()
-
-        val report = Report(plugin.getManager(ReportManager::class).reports.size + 1, sender, reported, reason, false)
 
         if (reportManager.reports.contains(report)) {
             msg.sendMessage(sender, "report-exists", placeholders)
-            return;
+            return
         }
-
 
         // Send the command sender the report message
         msg.sendMessage(sender, "commands.reported-user", placeholders)
@@ -103,7 +102,7 @@ class CmdReport(override val plugin: EternalReports) : OriCommand(plugin, "repor
                 }
 
         plugin.getManager(DataManager::class).createReport(sender, reported, reason)
-        Bukkit.getPluginManager().callEvent( PlayerReportEvent(report))
+        Bukkit.getPluginManager().callEvent(PlayerReportEvent(report))
     }
 
     override fun tabComplete(sender: CommandSender, args: Array<String>): MutableList<String>? {

@@ -27,11 +27,10 @@ class ReportManager(plugin: EternalReports) : Manager(plugin) {
                     val result = statement.executeQuery()
                     while (result.next()) {
 
-                        val report = Report(result.getInt("id"), Bukkit.getOfflinePlayer(UUID.fromString(result.getString("sender"))), Bukkit.getOfflinePlayer(UUID.fromString(result.getString("reported"))), result.getString("reason"), result.getBoolean("resolved"))
+                        val report = Report(result.getInt("id"), Bukkit.getOfflinePlayer(UUID.fromString(result.getString("sender"))), Bukkit.getOfflinePlayer(UUID.fromString(result.getString("reported"))), result.getString("reason"), result.getBoolean("resolved"), result.getLong("time"))
 
                         if (!reports.contains(report)) {
                             reports.add(report)
-                            println("[DB Reports] ID ${report.id} sender ${report.sender} reported ${report.reported} reason ${report.reason} resolved ${report.isResolved}")
                         }
                     }
                 }

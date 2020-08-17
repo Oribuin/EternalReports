@@ -46,10 +46,8 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
     }
 
     private fun createTables() {
-
-        PluginUtils.debug("Create all Databse Tables.")
         val queries = arrayOf(
-                "CREATE TABLE IF NOT EXISTS ${tablePrefix}reports (id INT, sender TXT, reported TXT, reason TXT, resolved BOOLEAN, PRIMARY KEY(sender, reported, reason))",
+                "CREATE TABLE IF NOT EXISTS ${tablePrefix}reports (id INT, sender TXT, reported TXT, reason TXT, resolved BOOLEAN, time LONG, PRIMARY KEY(sender, reported, reason, time))",
                 "CREATE TABLE IF NOT EXISTS ${tablePrefix}users (user TXT, reports, reported, PRIMARY KEY(user))"
         )
         async(Runnable {
@@ -65,22 +63,22 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
 
         val reportManager = plugin.getManager(ReportManager::class)
 
-        PluginUtils.debug("Starting \"REPLACE INTO ${this.tablePrefix}reports (id, sender, reported, reason, resolved) VALUES (?, ?, ?, ?, ?)\" into Database.")
         async(Runnable {
             connector?.connect { connection: Connection ->
-                val createReport = "REPLACE INTO ${this.tablePrefix}reports (id, sender, reported, reason, resolved) VALUES (?, ?, ?, ?, ?)"
+                val createReport = "REPLACE INTO ${this.tablePrefix}reports (id, sender, reported, reason, resolved, time) VALUES (?, ?, ?, ?, ?, ?)"
                 connection.prepareStatement(createReport).use { statement ->
                     statement.setInt(1, reportManager.reports.size + 1)
                     statement.setString(2, sender.uniqueId.toString())
                     statement.setString(3, reported.uniqueId.toString())
                     statement.setString(4, reason)
                     statement.setBoolean(5, false)
+                    statement.setLong(6, System.currentTimeMillis())
                     statement.executeUpdate()
                 }
 
                 PluginUtils.debug("Successfully created report inside Databse")
 
-                reportManager.reports.add(Report(reportManager.reports.size + 1, sender, reported, reason, false))
+                reportManager.reports.add(Report(reportManager.reports.size + 1, sender, reported, reason, false, System.currentTimeMillis()))
 
             }
         })
@@ -89,7 +87,6 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
     fun deleteReport(report: Report) {
         val reportManager = plugin.getManager(ReportManager::class)
 
-        PluginUtils.debug("Starting \"DELETE FROM ${tablePrefix}reports WHERE id = ? AND sender = ? AND reported = ? AND reason = ?\"")
         async(Runnable {
             connector?.connect { connection: Connection ->
                 val removeReport = "DELETE FROM ${tablePrefix}reports WHERE id = ? AND sender = ? AND reported = ? AND reason = ?"
@@ -111,24 +108,22 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
     fun resolveReport(report: Report, resolved: Boolean) {
         val reportManager = plugin.getManager(ReportManager::class)
 
-        PluginUtils.debug("Starting \"REPLACE INTO ${tablePrefix}reports (id, sender, reported, reason, resolved) VALUES (?, ?, ?, ?, ?)\"")
         async(Runnable {
             connector?.connect { connection: Connection ->
-                val removeReport = "REPLACE INTO ${tablePrefix}reports (id, sender, reported, reason, resolved) VALUES (?, ?, ?, ?, ?)"
+                val removeReport = "REPLACE INTO ${tablePrefix}reports (id, sender, reported, reason, resolved, time) VALUES (?, ?, ?, ?, ?, ?)"
                 connection.prepareStatement(removeReport).use { statement ->
                     statement.setInt(1, report.id)
                     statement.setString(2, report.sender.uniqueId.toString())
                     statement.setString(3, report.reported.uniqueId.toString())
                     statement.setString(4, report.reason)
                     statement.setBoolean(5, resolved)
+                    statement.setLong(6, report.time)
                     statement.executeUpdate()
                 }
 
-                PluginUtils.debug("Successfully set ${report.id} as resolved (${resolved}}")
-
                 if (reportManager.reports.contains(report)) {
                     reportManager.reports.remove(report)
-                    reportManager.reports.add(Report(report.id, report.sender, report.reported, report.reason, resolved))
+                    reportManager.reports.add(Report(report.id, report.sender, report.reported, report.reason, resolved, report.time))
                 }
             }
         })
@@ -139,7 +134,7 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
      *
      * @param asyncCallback The callback to run on a separate thread
      */
-    fun async(asyncCallback: Runnable) {
+    private fun async(asyncCallback: Runnable) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, asyncCallback)
     }
 

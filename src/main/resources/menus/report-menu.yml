@@ -28,13 +28,14 @@ report-item:
     -
     - ' &f» &cReported By: &f%sender%'
     - ' &f» &cReason: &f%reason%'
+    - ' &f» &cTime: &f%time%'
     - ' '
     - ' &f» &cResolved: &e%resolved%'
     - ' '
     - ' &7(Left Click to teleport to reported player)'
     - ' &7(Right Click to teleport to reporter)'
-    - ' &7(Shift Right Click to Resolve)'
     - ' &7(Shift Left Click to Delete)'
+    - ' &7(Shift Right Click to Resolve)'
 
 
   # Use %player% for the user who clicked the menu

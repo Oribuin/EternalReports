@@ -22,7 +22,7 @@ class ConfigManager(plugin: EternalReports) : Manager(plugin) {
 
     enum class Setting(val key: String, val defaultValue: Any) {
         DEBUG("debug", true),
-        TIME("date-time-format", "hh:mm on :dd-m-yyyy"),
+        TIME("date-time-format", "HH:mm dd/m/yyyy"),
         COOLDOWN("cooldown", 10.0),
         ALERT_SETTINGS_SOUND_ENABLED("alert-settings.sound.enabled", true),
         ALERT_SETTINGS_SOUND("alert-settings.sound.sound", "ENTITY_ARROW_HIT_PLAYER"),

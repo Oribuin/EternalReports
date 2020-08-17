@@ -24,6 +24,7 @@ import xyz.oribuin.eternalreports.managers.ReportManager
 import xyz.oribuin.eternalreports.utils.FileUtils
 import xyz.oribuin.eternalreports.utils.HexUtils
 import xyz.oribuin.eternalreports.utils.HexUtils.colorify
+import xyz.oribuin.eternalreports.utils.PluginUtils
 import xyz.oribuin.eternalreports.utils.StringPlaceholders
 import xyz.oribuin.eternalreports.utils.StringPlaceholders.Companion.empty
 import java.util.*
@@ -111,6 +112,7 @@ class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plu
                         .addPlaceholder("reported", report.reported.name)
                         .addPlaceholder("reason", report.reason)
                         .addPlaceholder("resolved", resolvedFormatted(report.isResolved))
+                        .addPlaceholder("time", PluginUtils.formatTime(report.time))
 
                 val lore = mutableListOf<String>()
                 for (string in menuConfig.getStringList("report-item.lore"))

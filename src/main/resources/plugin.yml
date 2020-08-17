@@ -1,9 +1,9 @@
 name: EternalReports
 main: xyz.oribuin.eternalreports.EternalReports
 version: '@version@'
-author: Oribuin
+authors: [Oribuin, Esophose]
 api-version: "1.16"
-description: Simple 1.16 Report Plugin made with functionality in mind.
+description: Simple 1.16 Kotlin Report Plugin made with functionality in mind.
 softdepend:
   - PlaceholderAPI
 commands:
@@ -13,3 +13,15 @@ commands:
   reports:
     description: Manage reports
     usage: /reports <menu/delete/resolve>
+
+permissions:
+  eternalreports.*:
+    default: op
+    description: All permissions for the plugin
+    children:
+      - eternalreports.report
+      - eternalreports.delete
+      - eternalreports.menu
+      - eternalreports.menu.other
+      - eternalreports.resolve
+      - eternalreports.reload

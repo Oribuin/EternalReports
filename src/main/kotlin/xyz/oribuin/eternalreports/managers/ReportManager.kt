@@ -4,12 +4,10 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import xyz.oribuin.eternalreports.EternalReports
 import xyz.oribuin.eternalreports.data.Report
-import xyz.oribuin.eternalreports.utils.PluginUtils
 import java.util.*
 
 class ReportManager(plugin: EternalReports) : Manager(plugin) {
     val reports = mutableListOf<Report>()
-    val globalReportCount = reports.size
     val resolvedReports = reports.stream().filter { x -> x.isResolved }.count().toInt()
     val unresolvedReports = reports.stream().filter { x -> !x.isResolved }.count().toInt()
 
@@ -21,34 +19,23 @@ class ReportManager(plugin: EternalReports) : Manager(plugin) {
     private fun registerReports() {
         val data = plugin.getManager(DataManager::class)
 
-        Bukkit.getScheduler().runTaskLater(plugin, Runnable {
-            data.async(Runnable {
-                data.connector?.connect { connection ->
-                    val query = "SELECT * FROM ${tablePrefix}reports"
+        Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, Runnable {
+            data.connector?.connect { connection ->
+                val query = "SELECT * FROM ${tablePrefix}reports"
 
-                    connection.prepareStatement(query).use { statement ->
-                        val result = statement.executeQuery()
-                        while (result.next()) {
+                connection.prepareStatement(query).use { statement ->
+                    val result = statement.executeQuery()
+                    while (result.next()) {
 
-                            val report = Report(result.getInt("id"), Bukkit.getOfflinePlayer(UUID.fromString(result.getString("sender"))), Bukkit.getOfflinePlayer(UUID.fromString(result.getString("reported"))), result.getString("reason"), result.getBoolean("resolved"))
+                        val report = Report(result.getInt("id"), Bukkit.getOfflinePlayer(UUID.fromString(result.getString("sender"))), Bukkit.getOfflinePlayer(UUID.fromString(result.getString("reported"))), result.getString("reason"), result.getBoolean("resolved"))
 
-
+                        if (!reports.contains(report)) {
+                            reports.add(report)
                             println("[DB Reports] ID ${report.id} sender ${report.sender} reported ${report.reported} reason ${report.reason} resolved ${report.isResolved}")
-
-                            if (!reports.contains(report)) {
-                                //PluginUtils.debug("Registering report ${report.id} into val reports = mutableListOf<Report>()")
-                                reports.add(report)
-                            }
                         }
-
-                        Bukkit.getScheduler().runTaskLater(plugin, Runnable {
-                            for (rep in reports) {
-                                println("[List Reports] ID ${rep.id} sender ${rep.sender} reported ${rep.reported} reason ${rep.reason} resolved ${rep.isResolved}")
-                            }
-                        }, 30)
                     }
                 }
-            })
+            }
 
         }, 10)
     }

@@ -4,6 +4,9 @@ use-sound: true
 # https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
 click-sound: 'ENTITY_ARROW_HIT_PLAYER'
 
+# The rate this gui will update at.
+tick-update-rate: 2
+
 resolved-formatting:
   is-resolved: '&fResolved'
   isnt-resolved: '&fUnresolved'
@@ -36,20 +39,23 @@ report-item:
 
   # Use %player% for the user who clicked the menu
   player-commands:
-    left_click_commands:
+    left-click-commands:
       - 'tp %reported%'
-    right_click_commands:
+    right-click-commands:
       - 'tp %sender%'
-    shift_left_click_commands:
+    shift-left_click-commands:
       - 'reports resolve %report_id%'
-    shift_right_click_commands:
+    shift-right-click-commands:
       - 'reports delete %report_id%'
+    middle-click-commands:
+      - 'say hello!'
 
   console-commands:
-    left_click_commands: []
-    right_click_commands: []
-    shift_left_click_commands: []
-    shift_right_click_commands: []
+    left-click-commands: []
+    right-click-commands: []
+    shift-left-click-commands: []
+    shift-right-click-commands: []
+    middle-click-commands: []
 
 no-reports:
   name: '&cSorry! There are no reports here!'

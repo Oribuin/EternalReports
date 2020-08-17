@@ -23,6 +23,17 @@ class EternalReports : JavaPlugin(), Listener {
     override fun onEnable() {
 
         // Register all the commands
+
+        PluginUtils.debug("Loading Managers.")
+        this.getManager(ConfigManager::class)
+        this.getManager(DataManager::class)
+        this.getManager(GuiManager::class)
+        this.getManager(MessageManager::class)
+        this.getManager(ReportManager::class)
+
+        FileUtils.createMenuFile(this, "report-menu")
+
+
         PluginUtils.debug("Registering all plugin commands.")
         registerCommands(CmdReport(this), CmdReports(this))
 
@@ -34,15 +45,6 @@ class EternalReports : JavaPlugin(), Listener {
             PluginUtils.debug("Registering PlaceholderAPI Placeholders.")
             PlaceholderExp(this).register()
         }
-
-        PluginUtils.debug("Loading Managers.")
-        this.getManager(ConfigManager::class)
-        this.getManager(DataManager::class)
-        this.getManager(GuiManager::class)
-        this.getManager(MessageManager::class)
-        this.getManager(ReportManager::class)
-
-        FileUtils.createMenuFile(this, "report-menu")
 
         // Register other stuff
         this.reload()

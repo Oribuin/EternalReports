@@ -19,14 +19,29 @@ import java.util.*
 
 class CmdReport(override val plugin: EternalReports) : OriCommand(plugin, "report") {
 
+    private val cooldowns: MutableMap<UUID, Long> = HashMap()
+
     override fun executeCommand(sender: CommandSender, args: Array<String>) {
         val msg = plugin.getManager(MessageManager::class)
+        val reportManager = plugin.getManager(ReportManager::class)
 
         // Check if sender is player
         if (sender !is Player) {
             msg.sendMessage(sender, "player-only")
             return
         }
+
+        if (cooldowns.containsKey(sender.uniqueId)) {
+            val secondsLeft = (cooldowns[sender.uniqueId]
+                    ?: return).div(1000).plus(ConfigManager.Setting.COOLDOWN.long).minus(System.currentTimeMillis().div(1000))
+
+            if (secondsLeft > 0) {
+                msg.sendMessage(sender, "cooldown", StringPlaceholders.single("cooldown", secondsLeft))
+                return
+            }
+        }
+
+        cooldowns[sender.uniqueId] = System.currentTimeMillis()
 
         // Check arguments
         if (args.size <= 1) {
@@ -61,7 +76,16 @@ class CmdReport(override val plugin: EternalReports) : OriCommand(plugin, "repor
                 .addPlaceholder("sender", sender.getName())
                 .addPlaceholder("player", reported.name)
                 .addPlaceholder("reason", reason)
+                .addPlaceholder("report_id", plugin.getManager(ReportManager::class).reports.size + 1)
                 .build()
+
+        val report = Report(plugin.getManager(ReportManager::class).reports.size + 1, sender, reported, reason, false)
+
+        if (reportManager.reports.contains(report)) {
+            msg.sendMessage(sender, "report-exists", placeholders)
+            return;
+        }
+
 
         // Send the command sender the report message
         msg.sendMessage(sender, "commands.reported-user", placeholders)
@@ -78,12 +102,8 @@ class CmdReport(override val plugin: EternalReports) : OriCommand(plugin, "repor
                     msg.sendMessage(staffMember, "alerts.user-reported", placeholders)
                 }
 
-        PluginUtils.debug("Creating Report in Database.")
         plugin.getManager(DataManager::class).createReport(sender, reported, reason)
-
-        PluginUtils.debug("Calling PlayerReportEvent.")
-        val event = PlayerReportEvent(Report(plugin.getManager(ReportManager::class).globalReportCount, sender, reported, reason, false))
-        Bukkit.getPluginManager().callEvent(event)
+        Bukkit.getPluginManager().callEvent( PlayerReportEvent(report))
     }
 
     override fun tabComplete(sender: CommandSender, args: Array<String>): MutableList<String>? {

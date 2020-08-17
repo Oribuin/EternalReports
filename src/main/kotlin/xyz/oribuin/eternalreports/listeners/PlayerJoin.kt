@@ -9,6 +9,7 @@ class PlayerJoin : Listener {
 
     @EventHandler(ignoreCancelled = true)
     fun playerJoin(event: PlayerJoinEvent) {
+
         val staffPlayer = StaffMember(event.player)
         if (event.player.hasPermission("eternalreports.alerts")) {
 

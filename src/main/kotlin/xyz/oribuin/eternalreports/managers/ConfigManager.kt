@@ -2,6 +2,7 @@ package xyz.oribuin.eternalreports.managers
 
 import org.bukkit.configuration.file.FileConfiguration
 import xyz.oribuin.eternalreports.EternalReports
+import java.io.File
 
 class ConfigManager(plugin: EternalReports) : Manager(plugin) {
     override fun reload() {
@@ -10,25 +11,28 @@ class ConfigManager(plugin: EternalReports) : Manager(plugin) {
         val config = plugin.config
 
         for (value in Setting.values()) {
-            config.addDefault(value.key, value.defaultValue)
+            if (config.get(value.key) == null) {
+                config.set(value.key, value.defaultValue)
+            }
             value.load(config)
         }
 
-        plugin.saveConfig()
+        config.save(File(plugin.dataFolder, "config.yml"))
     }
 
     enum class Setting(val key: String, val defaultValue: Any) {
         DEBUG("debug", true),
         TIME("date-time-format", "hh:mm on :dd-m-yyyy"),
+        COOLDOWN("cooldown", 10.0),
         ALERT_SETTINGS_SOUND_ENABLED("alert-settings.sound.enabled", true),
         ALERT_SETTINGS_SOUND("alert-settings.sound.sound", "ENTITY_ARROW_HIT_PLAYER"),
         ALERT_SETTINGS_SOUND_VOLUME("alert-settings.sound.volume", 50),
         SQL_ENABLED("my-sql.enabled", false),
-        SQL_HOSTNAME("my-sql.hostname", ""),
+        SQL_HOSTNAME("my-sql.hostname", " "),
         SQL_PORT("my-sql.port", 3310),
-        SQL_DATABASENAME("my-sql.database-name", ""),
-        SQL_USERNAME("my-sql.user-name", ""),
-        SQL_PASSWORD("my-sql.password", ""),
+        SQL_DATABASENAME("my-sql.database-name", " "),
+        SQL_USERNAME("my-sql.user-name", " "),
+        SQL_PASSWORD("my-sql.password", " "),
         SQL_USE_SSL("my-sql.use-ssl", false);
 
 

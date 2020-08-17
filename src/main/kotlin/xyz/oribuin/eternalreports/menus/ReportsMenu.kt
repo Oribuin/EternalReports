@@ -17,9 +17,12 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.inventory.meta.SkullMeta
 import xyz.oribuin.eternalreports.EternalReports
+import xyz.oribuin.eternalreports.hooks.PlaceholderAPIHook
 import xyz.oribuin.eternalreports.hooks.PlaceholderAPIHook.apply
+import xyz.oribuin.eternalreports.managers.MessageManager
 import xyz.oribuin.eternalreports.managers.ReportManager
 import xyz.oribuin.eternalreports.utils.FileUtils
+import xyz.oribuin.eternalreports.utils.HexUtils
 import xyz.oribuin.eternalreports.utils.HexUtils.colorify
 import xyz.oribuin.eternalreports.utils.StringPlaceholders
 import xyz.oribuin.eternalreports.utils.StringPlaceholders.Companion.empty
@@ -29,6 +32,7 @@ import java.util.function.Function
 class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plugin, "report-menu") {
     private val guiFramework = GuiFramework.instantiate(plugin)
     private val container = GuiFactory.createContainer()
+            .setTickRate(menuConfig.getInt("tick-update-rate"))
 
     companion object {
         var instance: ReportsMenu? = null
@@ -245,11 +249,13 @@ class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plu
         }
     }
 
-    private fun resolvedFormatted(resolved: Boolean): String {
+    private fun resolvedFormatted(resolved: Boolean): String? {
+        val msg = plugin.getManager(MessageManager::class)
+
         return if (resolved) {
-            this.getValue("resolved-formatting.is-resolved")
+            msg.messageConfig.getString("resolve-formatting.is-resolved")?.let { apply(player, it) }?.let { colorify(it) }
         } else {
-            this.getValue("resolved-formatting.isnt-resolved")
+            msg.messageConfig.getString("resolve-formatting.isnt-resolved")?.let { apply(player, it) }?.let { colorify(it) }
         }
     }
 

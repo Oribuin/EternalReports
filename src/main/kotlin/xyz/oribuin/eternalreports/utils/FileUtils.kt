@@ -36,7 +36,7 @@ object FileUtils {
             dir.mkdirs()
 
         if (!file.exists()) {
-            plugin.getResource(file.absolutePath).use { inputStream ->
+            plugin.getResource("menus/${fileName}.yml").use { inputStream ->
                 if (inputStream == null) {
                     file.createNewFile()
                     return

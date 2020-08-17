@@ -15,6 +15,7 @@ abstract class Menu(val plugin: EternalReports, private val guiName: String) {
     }
 
     fun reload() {
+        createMenuFile(plugin, guiName)
         YamlConfiguration.loadConfiguration(menuFile)
     }
 

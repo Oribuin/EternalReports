@@ -14,6 +14,8 @@ import java.sql.Connection
 
 class DataManager(plugin: EternalReports) : Manager(plugin) {
     var connector: DatabaseConnector? = null
+    private var reportsMade: Int = 0
+    private var reportsAgainst: Int = 0
 
     override fun reload() {
 
@@ -48,7 +50,7 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
     private fun createTables() {
         val queries = arrayOf(
                 "CREATE TABLE IF NOT EXISTS ${tablePrefix}reports (id INT, sender TXT, reported TXT, reason TXT, resolved BOOLEAN, time LONG, PRIMARY KEY(sender, reported, reason, time))",
-                "CREATE TABLE IF NOT EXISTS ${tablePrefix}users (user TXT, reports, reported, PRIMARY KEY(user))"
+                "CREATE TABLE IF NOT EXISTS ${tablePrefix}users (user TXT, reports INT, reported INT, PRIMARY KEY(user))"
         )
         async(Runnable {
             connector?.connect { connection: Connection ->
@@ -127,6 +129,60 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
                 }
             }
         })
+    }
+
+    fun updateReportsMade(player: Player, count: Int) {
+        async(Runnable {
+            connector?.connect { connection ->
+                val updateUser = "REPLACE INTO ${tablePrefix}users (user, reports) VALUES (?, ?)"
+                connection.prepareStatement(updateUser).use { statement ->
+                    statement.setString(1, player.uniqueId.toString())
+                    statement.setInt(2, count)
+                    statement.executeUpdate()
+                }
+            }
+        })
+    }
+
+    fun updateReportsAgainst(player: Player, count: Int) {
+        async(Runnable {
+            connector?.connect { connection ->
+                val updateUser = "REPLACE INTO ${tablePrefix}users (user, reported) VALUES (?, ?)"
+                connection.prepareStatement(updateUser).use { statement ->
+                    statement.setString(1, player.uniqueId.toString())
+                    statement.setInt(2, count)
+                    statement.executeUpdate()
+                }
+            }
+        })
+    }
+
+    fun getReportsMade(player: Player): Int {
+        connector?.connect { connection ->
+            val query = "SELECT reports FROM ${tablePrefix}users WHERE user = ?"
+            connection.prepareStatement(query).use { statement ->
+                statement.setString(1, player.uniqueId.toString())
+                val result = statement.executeQuery()
+                if (result.next())
+                    reportsMade = result.getInt(1)
+            }
+        }
+
+        return reportsMade
+    }
+
+    fun getReportsAgainst(player: Player): Int {
+        connector?.connect { connection ->
+            val query = "SELECT reported FROM ${tablePrefix}users WHERE user = ?"
+            connection.prepareStatement(query).use { statement ->
+                statement.setString(1, player.uniqueId.toString())
+                val result = statement.executeQuery()
+                if (result.next())
+                    reportsAgainst = result.getInt(1)
+            }
+        }
+
+        return reportsAgainst
     }
 
     /**

@@ -82,6 +82,7 @@ class EternalReports : JavaPlugin(), Listener {
 
     fun reload() {
         this.disableManagers()
+        this.server.scheduler.cancelTasks(this)
         this.managers.values.forEach { manager -> manager.reload() }
     }
 

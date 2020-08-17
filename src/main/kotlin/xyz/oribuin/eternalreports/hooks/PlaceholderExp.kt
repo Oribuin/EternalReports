@@ -3,6 +3,7 @@ package xyz.oribuin.eternalreports.hooks
 import me.clip.placeholderapi.expansion.PlaceholderExpansion
 import org.bukkit.entity.Player
 import xyz.oribuin.eternalreports.EternalReports
+import xyz.oribuin.eternalreports.managers.DataManager
 import xyz.oribuin.eternalreports.managers.ReportManager
 
 class PlaceholderExp(private val plugin: EternalReports) : PlaceholderExpansion() {
@@ -18,14 +19,11 @@ class PlaceholderExp(private val plugin: EternalReports) : PlaceholderExpansion(
         if (placeholders.toLowerCase() == "unresolved")
             return plugin.getManager(ReportManager::class).unresolvedReports.toString()
 
-        if (placeholders.toLowerCase() == "player_total")
-            return plugin.getManager(ReportManager::class).getReportTotal(player).toString()
+        if (placeholders.toLowerCase() == "reports_made")
+            return plugin.getManager(DataManager::class).getReportsMade(player).toString()
 
-        if (placeholders.toLowerCase() == "player_resolved")
-            return plugin.getManager(ReportManager::class).getResolvedReportTotal(player).toString()
-
-        if (placeholders.toLowerCase() == "player_unresolved")
-            return plugin.getManager(ReportManager::class).getUnresolvedReportTotal(player).toString()
+        if (placeholders.toLowerCase() == "reports_against")
+            return plugin.getManager(DataManager::class).getReportsAgainst(player).toString()
 
         return null
     }

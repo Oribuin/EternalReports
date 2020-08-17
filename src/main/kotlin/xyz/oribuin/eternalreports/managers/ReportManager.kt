@@ -10,7 +10,6 @@ class ReportManager(plugin: EternalReports) : Manager(plugin) {
     val reports = mutableListOf<Report>()
     val resolvedReports = reports.stream().filter { x -> x.isResolved }.count().toInt()
     val unresolvedReports = reports.stream().filter { x -> !x.isResolved }.count().toInt()
-
     override fun reload() {
         this.reports.clear()
         this.registerReports()
@@ -18,6 +17,7 @@ class ReportManager(plugin: EternalReports) : Manager(plugin) {
 
     private fun registerReports() {
         val data = plugin.getManager(DataManager::class)
+
 
         Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, Runnable {
             data.connector?.connect { connection ->
@@ -32,23 +32,19 @@ class ReportManager(plugin: EternalReports) : Manager(plugin) {
                         if (!reports.contains(report)) {
                             reports.add(report)
                         }
+
+                        val count = reports.stream().filter { t -> t == report}.count()
+
+                        Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, Runnable {
+                            while (count > 1) {
+                                reports.stream().filter { t -> t == report }.forEach { t -> reports.remove(t) }
+                            }
+                        }, 0, 3)
                     }
                 }
             }
 
         }, 10)
-    }
-
-    fun getReportTotal(player: Player): Int {
-        return reports.stream().filter { x -> x.sender.uniqueId == player.uniqueId }.count().toInt()
-    }
-
-    fun getResolvedReportTotal(player: Player): Int {
-        return reports.stream().filter { x -> x.sender.uniqueId == player.uniqueId && x.isResolved }.count().toInt()
-    }
-
-    fun getUnresolvedReportTotal(player: Player): Int {
-        return reports.stream().filter { x -> x.sender.uniqueId == player.uniqueId && !x.isResolved }.count().toInt()
     }
 
     override fun disable() {

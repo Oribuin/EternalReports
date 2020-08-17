@@ -24,6 +24,7 @@ class CmdReport(override val plugin: EternalReports) : OriCommand(plugin, "repor
     override fun executeCommand(sender: CommandSender, args: Array<String>) {
         val msg = plugin.getManager(MessageManager::class)
         val reportManager = plugin.getManager(ReportManager::class)
+        val dataManager = plugin.getManager(DataManager::class)
 
         // Check if sender is player
         if (sender !is Player) {
@@ -70,7 +71,7 @@ class CmdReport(override val plugin: EternalReports) : OriCommand(plugin, "repor
 
         // Report reason
         val reason = java.lang.String.join(" ", *args).substring(args[0].length + 1)
-        val report = Report(plugin.getManager(ReportManager::class).reports.size + 1, sender, reported, reason, false, System.currentTimeMillis())
+        val report = Report(reportManager.reports.size + 1, sender, reported, reason, false, System.currentTimeMillis())
 
         // Create Placeholders
         val placeholders = StringPlaceholders.builder()
@@ -101,7 +102,10 @@ class CmdReport(override val plugin: EternalReports) : OriCommand(plugin, "repor
                     msg.sendMessage(staffMember, "alerts.user-reported", placeholders)
                 }
 
-        plugin.getManager(DataManager::class).createReport(sender, reported, reason)
+        dataManager.createReport(sender, reported, reason)
+        dataManager.updateReportsMade(sender, dataManager.getReportsMade(sender) + 1)
+        reported.player?.let { reported.player?.let { dataManager.getReportsMade(it).plus(1) }?.let { it1 -> dataManager.updateReportsAgainst(it, it1) } }
+
         Bukkit.getPluginManager().callEvent(PlayerReportEvent(report))
     }
 

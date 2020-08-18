@@ -8,7 +8,7 @@ import xyz.oribuin.eternalreports.EternalReports
 
 abstract class OriCommand(open val plugin: EternalReports, // Get Command Name
                           private val name: String) : TabExecutor {
-    fun registerCommand() {
+    fun register() {
         val cmd = Bukkit.getPluginCommand(name)
         if (cmd != null) {
             cmd.setExecutor(this)

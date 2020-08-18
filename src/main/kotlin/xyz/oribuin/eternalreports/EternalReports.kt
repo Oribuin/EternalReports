@@ -47,7 +47,7 @@ class EternalReports : JavaPlugin(), Listener {
 
     private fun registerCommands(vararg commands: OriCommand) {
         for (cmd in commands) {
-            cmd.registerCommand()
+            cmd.register()
         }
     }
 

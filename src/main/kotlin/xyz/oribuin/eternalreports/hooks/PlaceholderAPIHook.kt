@@ -8,7 +8,7 @@ object PlaceholderAPIHook {
     private var enabled: Boolean? = null
 
     // return true if PlaceholderAPI is enabled
-    private fun enabled(): Boolean {
+    fun enabled(): Boolean {
         return enabled ?: (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null.also { enabled = it })
     }
 

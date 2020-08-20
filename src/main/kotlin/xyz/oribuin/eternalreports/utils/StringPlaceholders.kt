@@ -15,12 +15,12 @@ class StringPlaceholders {
     }
 
     fun apply(string: String): String {
-        var placeholder = string
+        var string = string
 
         for (key in placeholders.keys)
-            placeholder = string.replace(Pattern.quote("%$key%").toRegex(), Matcher.quoteReplacement(placeholders[key]))
+            string = string.replace(Pattern.quote("%$key%").toRegex(), Matcher.quoteReplacement(placeholders[key]))
 
-        return placeholder
+        return string
     }
 
     fun getPlaceholders(): Map<String, String> {

@@ -16,10 +16,11 @@ import kotlin.reflect.KClass
  * @author Oribuin
  */
 
-class EternalReports : JavaPlugin(), Listener {
+class EternalReports : JavaPlugin() {
     private val managers = mutableMapOf<KClass<out Manager>, Manager>()
 
     override fun onEnable() {
+
         // Register all the managers
         this.getManager(ConfigManager::class)
         this.getManager(DataManager::class)

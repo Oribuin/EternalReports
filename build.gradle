@@ -3,7 +3,7 @@ import org.apache.tools.ant.filters.ReplaceTokens
 plugins {
     id 'java'
     id 'org.jetbrains.kotlin.jvm' version '1.4.0'
-    id 'me.bristermitten.pdm' version "0.0.20"
+    id 'com.github.johnrengelman.shadow' version '6.0.0'
 }
 
 group 'xyz.oribuin'
@@ -24,16 +24,16 @@ repositories {
 // Dependencies
 dependencies {
     // Overlord language
-    pdm "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    pdm "org.jetbrains.kotlin:kotlin-reflect:1.4.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:1.4.0"
 
     // Spigot Stuff
-    compileOnly 'org.spigotmc:spigot-api:1.16.1-R0.1-SNAPSHOT'
+    shadow 'org.spigotmc:spigot-api:1.16.1-R0.1-SNAPSHOT'
     compileOnly 'me.clip:placeholderapi:2.10.9'
-    pdm 'dev.rosewood:guiframework:1.1.1'
+    implementation 'dev.rosewood:guiframework:1.1.1'
 
     // Other
-    pdm 'com.zaxxer:HikariCP:3.4.5'
+    implementation 'com.zaxxer:HikariCP:3.4.5'
 }
 
 processResources {
@@ -49,4 +49,9 @@ compileKotlin {
     }
 }
 
-jar.dependsOn project.tasks.getByName('pdm')
+shadowJar {
+    mergeServiceFiles()
+    archiveFileName = 'EternalReports-' + project.property("version") + '.jar'
+    relocate('dev.rosewood.guiframework', 'xyz.oribuin.eternalreports.libs.guiframework')
+    relocate('org.jetbrains.kotlin', 'xyz.oribuin.eternalreports.libs.kotlin')
+}

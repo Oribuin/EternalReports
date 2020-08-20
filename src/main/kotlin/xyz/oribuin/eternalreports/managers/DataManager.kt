@@ -65,7 +65,7 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
 
         val reportManager = plugin.getManager(ReportManager::class)
 
-        async(Runnable {
+        async{
             connector?.connect { connection: Connection ->
                 val createReport = "REPLACE INTO ${this.tablePrefix}reports (id, sender, reported, reason, resolved, time) VALUES (?, ?, ?, ?, ?, ?)"
                 connection.prepareStatement(createReport).use { statement ->
@@ -78,18 +78,16 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
                     statement.executeUpdate()
                 }
 
-                PluginUtils.debug("Successfully created report inside Databse")
-
                 reportManager.reports.add(Report(reportManager.reports.size + 1, sender, reported, reason, false, System.currentTimeMillis()))
 
             }
-        })
+        }
     }
 
     fun deleteReport(report: Report) {
         val reportManager = plugin.getManager(ReportManager::class)
 
-        async(Runnable {
+        async {
             connector?.connect { connection: Connection ->
                 val removeReport = "DELETE FROM ${tablePrefix}reports WHERE id = ? AND sender = ? AND reported = ? AND reason = ?"
                 connection.prepareStatement(removeReport).use { statement ->
@@ -100,11 +98,10 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
                     statement.executeUpdate()
                 }
 
-                PluginUtils.debug("Successfully deleted report from database.")
             }
 
             reportManager.reports.remove(report)
-        })
+        }
     }
 
     fun resolveReport(report: Report, resolved: Boolean) {

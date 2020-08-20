@@ -5,13 +5,9 @@ import java.util.*
 import kotlin.collections.HashMap
 
 class StaffMember(private val player: Player) {
-    val toggleList: MutableMap<UUID, Boolean>
-
-    init {
-        toggleList = HashMap()
-    }
+    val toggleList: MutableSet<UUID> = mutableSetOf()
 
     fun hasNotifications(): Boolean {
-        return toggleList.getOrDefault(player.uniqueId, true)
+        return toggleList.contains(player.uniqueId)
     }
 }

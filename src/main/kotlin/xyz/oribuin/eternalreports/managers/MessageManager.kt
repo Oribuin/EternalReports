@@ -80,14 +80,16 @@ class MessageManager(plugin: EternalReports) : Manager(plugin) {
 
         // Help Menu
         HELP_MESSAGE("help-message", listOf(
-                "<rainbow:0.7>EternalReports &f» &bCommands",
+                " ",
+                "'<rainbow:0.7>EternalReports &f» &bCommands'",
                 " &f• &b/report&b &f<Player> <Reason> #8E54E9- &bReport a Player.",
                 " &f• &b/reports&b [alert/toggle] #8E54E9- &bToggle alert notifications.",
                 " &f• &b/reports&b [delete/remove] &f<Report-id> #8E54E9- &bDelete a report.",
                 " &f• &b/reports&b menu &f[Player] #8E54E9- &bOpen the reports menu.",
                 " &f• &b/reports resolve &f<Report-Id> #8E54E9- &bResolve/Unresolve a report",
                 " ",
-                " &f» &bPlugin created by <g:#4776E6:#8E54E9>Oribuin"
+                " &f» &bPlugin created by <g:#4776E6:#8E54E9>Oribuin",
+                " "
         )),
 
         // Error Messages

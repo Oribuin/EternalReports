@@ -19,7 +19,7 @@ import java.util.*
 
 class CmdReport(override val plugin: EternalReports) : OriCommand(plugin, "report") {
 
-    private val cooldowns: MutableMap<UUID, Long> = HashMap()
+    private val cooldowns =  mutableMapOf<UUID, Long>()
 
     override fun executeCommand(sender: CommandSender, args: Array<String>) {
         val msg = plugin.getManager(MessageManager::class)

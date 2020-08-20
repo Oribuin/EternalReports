@@ -73,6 +73,6 @@ class StringPlaceholders {
     }
 
     init {
-        placeholders = HashMap()
+        placeholders = mutableMapOf()
     }
 }

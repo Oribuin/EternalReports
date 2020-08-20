@@ -124,7 +124,7 @@ class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plu
                             meta.owningPlayer = report.reported
                         }
                         .setGlowing(menuConfig.getBoolean("report-item.glowing"))
-                        .setClickAction(Function { event: InventoryClickEvent ->
+                        .setClickAction({ event: InventoryClickEvent ->
                             val pplayer = event.whoClicked as Player
                             if (menuConfig.getBoolean("use-sound")) {
                                 menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }

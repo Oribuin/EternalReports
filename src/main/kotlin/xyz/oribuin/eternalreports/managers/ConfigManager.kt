@@ -21,7 +21,6 @@ class ConfigManager(plugin: EternalReports) : Manager(plugin) {
     }
 
     enum class Setting(val key: String, val defaultValue: Any) {
-        DEBUG("debug", true),
         TIME("date-time-format", "HH:mm dd/m/yyyy"),
         COOLDOWN("cooldown", 10.0),
         ALERT_SETTINGS_SOUND_ENABLED("alert-settings.sound.enabled", true),

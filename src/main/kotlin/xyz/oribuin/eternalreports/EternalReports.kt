@@ -1,6 +1,5 @@
 package xyz.oribuin.eternalreports
 
-import me.bristermitten.pdm.PDMBuilder
 import org.bukkit.Bukkit
 import org.bukkit.event.Listener
 import org.bukkit.plugin.java.JavaPlugin
@@ -18,12 +17,10 @@ import kotlin.reflect.KClass
  */
 
 class EternalReports : JavaPlugin(), Listener {
-    private val managers: MutableMap<KClass<out Manager>, Manager> = HashMap()
+    private val managers = mutableMapOf<KClass<out Manager>, Manager>()
 
     override fun onEnable() {
-        PDMBuilder(this).build().loadAllDependencies().join()
-
-        // Register all the commands
+        // Register all the managers
         this.getManager(ConfigManager::class)
         this.getManager(DataManager::class)
         this.getManager(GuiManager::class)

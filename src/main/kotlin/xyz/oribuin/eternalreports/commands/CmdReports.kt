@@ -135,10 +135,10 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
         val staffMember = StaffMember(sender)
 
         if (staffMember.hasNotifications()) {
-            staffMember.toggleList[sender.uniqueId] = false
+            staffMember.toggleList.remove(sender.uniqueId)
             messageManager.sendMessage(sender, "commands.alerts-off")
         } else {
-            staffMember.toggleList[sender.uniqueId] = true
+            staffMember.toggleList.remove(sender.uniqueId)
             messageManager.sendMessage(sender, "commands.alerts-on")
         }
 
@@ -185,6 +185,15 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
                 "help" -> {
                     this.onHelpCommand(sender)
                 }
+
+                "toggle", "alerts" -> {
+                    this.onToggleNotificaations(sender)
+                }
+
+                "reload" -> {
+                    this.onReloadCommand(sender)
+                }
+
                 else -> {
                     messageManager.sendMessage(sender, "unknown-command")
                 }
@@ -210,20 +219,12 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
         }
 
         when (args[0].toLowerCase()) {
-            "reload" -> {
-                this.onReloadCommand(sender)
-            }
-
             "resolve" -> {
                 this.onResolveCommand(sender, args)
             }
 
             "delete", "remove" -> {
                 this.onRemoveCommand(sender, args)
-            }
-
-            "toggle", "alerts" -> {
-                this.onToggleNotificaations(sender)
             }
             else -> {
                 messageManager.sendMessage(sender, "unknown-command")

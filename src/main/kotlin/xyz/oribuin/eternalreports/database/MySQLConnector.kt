@@ -2,6 +2,7 @@ package xyz.oribuin.eternalreports.database
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
+import org.bukkit.Bukkit
 import org.bukkit.plugin.Plugin
 import java.sql.Connection
 import java.sql.SQLException
@@ -39,7 +40,9 @@ class MySQLConnector(private val plugin: Plugin, hostname: String, port: Int, da
         config.maximumPoolSize = 5
         try {
             hikari = HikariDataSource(config)
-        } catch (ignored: Exception) {
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+            Bukkit.getPluginManager().disablePlugin(plugin)
         }
     }
 }

@@ -116,8 +116,6 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
 
         messageManager.sendMessage(sender, "commands.removed-report", placeholders)
         plugin.getManager(DataManager::class).deleteReport(report)
-
-        this.plugin.logger.info(sender.name + " has removed ${report.sender.name}'s report on ${report.reported.name} for ${report.reason}")
     }
 
     private fun onToggleNotificaations(sender: CommandSender) {

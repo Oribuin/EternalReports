@@ -40,7 +40,7 @@ class MySQLConnector(private val plugin: Plugin, hostname: String, port: Int, da
         config.maximumPoolSize = 5
         try {
             hikari = HikariDataSource(config)
-        } catch (ex: Exception) {
+        } catch (ex: SQLException) {
             ex.printStackTrace()
             Bukkit.getPluginManager().disablePlugin(plugin)
         }

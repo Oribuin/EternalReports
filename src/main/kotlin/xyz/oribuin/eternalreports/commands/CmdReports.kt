@@ -148,7 +148,6 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
             return
         }
 
-
         for (string in messageManager.messageConfig.getStringList("help-message")) {
             sender.sendMessage(HexUtils.colorify(string))
         }
@@ -234,12 +233,11 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
 
         val deleteCmdList = listOf("delete", "remove")
 
-
         val suggestions: MutableList<String> = ArrayList()
         if (args.isEmpty() || args.size == 1) {
             val subCommand = if (args.isEmpty()) "" else args[0]
 
-            val commands: MutableList<String> = ArrayList()
+            val commands = mutableListOf<String>()
 
             if (sender.hasPermission("eternalreports.help"))
                 commands.add("help")

@@ -6,6 +6,7 @@ import org.bukkit.plugin.java.JavaPlugin
 import xyz.oribuin.eternalreports.commands.CmdReport
 import xyz.oribuin.eternalreports.commands.CmdReports
 import xyz.oribuin.eternalreports.commands.OriCommand
+import xyz.oribuin.eternalreports.hooks.PlaceholderAPIHook
 import xyz.oribuin.eternalreports.hooks.PlaceholderExp
 import xyz.oribuin.eternalreports.listeners.PlayerJoin
 import xyz.oribuin.eternalreports.managers.*
@@ -20,7 +21,6 @@ class EternalReports : JavaPlugin() {
     private val managers = mutableMapOf<KClass<out Manager>, Manager>()
 
     override fun onEnable() {
-
         // Register all the managers
         this.getManager(ConfigManager::class)
         this.getManager(DataManager::class)
@@ -29,24 +29,19 @@ class EternalReports : JavaPlugin() {
         this.getManager(ReportManager::class)
 
         FileUtils.createMenuFile(this, "report-menu")
-        registerCommands(CmdReport(this), CmdReports(this))
+        CmdReport(this).register()
+        CmdReports(this).register()
 
         // Register all the listeners
         registerListeners(PlayerJoin())
 
-        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+        if (PlaceholderAPIHook.enabled()) {
             PlaceholderExp(this).register()
         }
 
         // Register other stuff
         this.reload()
         this.saveDefaultConfig()
-    }
-
-    private fun registerCommands(vararg commands: OriCommand) {
-        for (cmd in commands) {
-            cmd.register()
-        }
     }
 
     private fun registerListeners(vararg listeners: Listener) {

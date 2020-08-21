@@ -8,7 +8,7 @@ import java.util.regex.Pattern
  * @author Esophose
  */
 class StringPlaceholders {
-    private val placeholders: MutableMap<String, String>
+    private val placeholders: MutableMap<String, String> = mutableMapOf()
 
     fun addPlaceholder(placeholder: String, value: Any?) {
         placeholders[placeholder] = objectToString(value)
@@ -72,7 +72,4 @@ class StringPlaceholders {
         }
     }
 
-    init {
-        placeholders = mutableMapOf()
-    }
 }

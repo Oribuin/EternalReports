@@ -7,6 +7,9 @@ import org.bukkit.entity.Player
 import org.bukkit.util.StringUtil
 import xyz.oribuin.eternalreports.EternalReports
 import xyz.oribuin.eternalreports.data.StaffMember
+import xyz.oribuin.eternalreports.events.PlayerReportEvent
+import xyz.oribuin.eternalreports.events.ReportDeleteEvent
+import xyz.oribuin.eternalreports.events.ReportResolveEvent
 import xyz.oribuin.eternalreports.managers.ConfigManager
 import xyz.oribuin.eternalreports.managers.DataManager
 import xyz.oribuin.eternalreports.managers.MessageManager
@@ -77,7 +80,7 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
 
         // Message staff members with alerts
         Bukkit.getOnlinePlayers().stream()
-                .filter { staffMember: Player -> staffMember.hasPermission("eternalreports.alerts") && StaffMember(staffMember).hasNotifications() }
+                .filter { staffMember: Player -> staffMember.hasPermission("eternalreports.alerts") && StaffMember.instance.toggleList.contains(staffMember.uniqueId) }
                 .forEach { staffMember: Player ->
                     if (ConfigManager.Setting.ALERT_SETTINGS_SOUND_ENABLED.boolean) {
 
@@ -86,6 +89,8 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
                     }
                     messageManager.sendMessage(staffMember, "alerts.report-resolved", placeholders)
                 }
+
+        Bukkit.getPluginManager().callEvent(ReportResolveEvent(report))
     }
 
     private fun onRemoveCommand(sender: CommandSender, args: Array<String>) {
@@ -116,6 +121,7 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
 
         messageManager.sendMessage(sender, "commands.removed-report", placeholders)
         plugin.getManager(DataManager::class).deleteReport(report)
+        Bukkit.getPluginManager().callEvent(ReportDeleteEvent(report))
     }
 
     private fun onToggleNotificaations(sender: CommandSender) {
@@ -130,13 +136,14 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
             return
         }
 
-        val staffMember = StaffMember(sender)
+        val toggleList = StaffMember.instance.toggleList
 
-        if (staffMember.hasNotifications()) {
-            staffMember.toggleList.remove(sender.uniqueId)
+        if (toggleList.contains(sender.uniqueId)) {
+            toggleList.remove(sender.uniqueId)
             messageManager.sendMessage(sender, "commands.alerts-off")
         } else {
-            staffMember.toggleList.remove(sender.uniqueId)
+            toggleList.remove(sender.uniqueId)
+            toggleList.remove(sender.uniqueId)
             messageManager.sendMessage(sender, "commands.alerts-on")
         }
 

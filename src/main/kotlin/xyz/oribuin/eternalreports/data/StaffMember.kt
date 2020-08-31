@@ -2,12 +2,17 @@ package xyz.oribuin.eternalreports.data
 
 import org.bukkit.entity.Player
 import java.util.*
-import kotlin.collections.HashMap
 
-class StaffMember(private val player: Player) {
-    val toggleList: MutableSet<UUID> = mutableSetOf()
+class StaffMember() {
 
-    fun hasNotifications(): Boolean {
-        return toggleList.contains(player.uniqueId)
+    init {
+        instance = this
+    }
+
+    val toggleList  = mutableSetOf<UUID>()
+
+
+    companion object {
+        lateinit var instance: StaffMember
     }
 }

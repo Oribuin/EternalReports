@@ -11,12 +11,12 @@ class PlayerJoin : Listener {
     @EventHandler(ignoreCancelled = true)
     fun playerJoin(event: PlayerJoinEvent) {
 
-        val staffPlayer = StaffMember(event.player)
+        val toggleList = StaffMember.instance.toggleList
         if (event.player.hasPermission("eternalreports.alerts")) {
 
-            staffPlayer.toggleList.add(event.player.uniqueId)
+            toggleList.add(event.player.uniqueId)
         } else {
-            staffPlayer.toggleList.remove(event.player.uniqueId)
+            toggleList.remove(event.player.uniqueId)
         }
     }
 }

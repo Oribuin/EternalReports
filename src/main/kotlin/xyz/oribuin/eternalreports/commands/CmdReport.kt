@@ -19,7 +19,7 @@ import java.util.*
 
 class CmdReport(override val plugin: EternalReports) : OriCommand(plugin, "report") {
 
-    private val cooldowns =  mutableMapOf<UUID, Long>()
+    private val cooldowns = mutableMapOf<UUID, Long>()
 
     override fun executeCommand(sender: CommandSender, args: Array<String>) {
         val msg = plugin.getManager(MessageManager::class)
@@ -92,7 +92,7 @@ class CmdReport(override val plugin: EternalReports) : OriCommand(plugin, "repor
 
         // Message staff members with alerts
         Bukkit.getOnlinePlayers().stream()
-                .filter { staffMember: Player -> staffMember.hasPermission("eternalreports.alerts") && StaffMember(staffMember).hasNotifications() }
+                .filter { staffMember: Player -> staffMember.hasPermission("eternalreports.alerts") && StaffMember.instance.toggleList.contains(staffMember.uniqueId) }
                 .forEach { staffMember: Player ->
                     if (ConfigManager.Setting.ALERT_SETTINGS_SOUND_ENABLED.boolean) {
 

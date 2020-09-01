@@ -3,7 +3,7 @@ import org.apache.tools.ant.filters.ReplaceTokens
 plugins {
     id 'java'
     id 'org.jetbrains.kotlin.jvm' version '1.4.0'
-    id 'me.bristermitten.pdm' version '0.0.25'
+    id 'me.bristermitten.pdm' version '0.0.26'
 }
 
 group 'xyz.oribuin'

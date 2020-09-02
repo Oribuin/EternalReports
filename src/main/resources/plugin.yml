@@ -3,7 +3,7 @@ main: xyz.oribuin.eternalreports.EternalReports
 version: '@version@'
 authors: [Oribuin, Esophose]
 api-version: "1.13"
-description: Simple 1.13+ Kotlin Report Plugin made with functionality in mind.
+description: A simple report plugin created with functionality in mind.
 softdepend:
   - PlaceholderAPI
 commands:

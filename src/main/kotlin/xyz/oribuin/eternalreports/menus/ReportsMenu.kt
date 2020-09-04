@@ -47,7 +47,6 @@ class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plu
     private fun mainMenu(): GuiScreen {
         val screen = GuiFactory.createScreen(container, GuiSize.ROWS_SIX)
                 .setTitle(colorify(this.getValue("menu-name")))
-
         this.borderSlots().forEach { slot -> getItem("border-item")?.let { screen.addItemStackAt(slot, it) } }
 
         val reports = plugin.getManager(ReportManager::class).reports
@@ -116,52 +115,49 @@ class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plu
                 for (string in menuConfig.getStringList("report-item.lore"))
                     lore.add(this.format(string, placeholders.build()))
 
-                Bukkit.getScheduler().runTaskTimer(plugin, Runnable {
-                    val guiButton = GuiFactory.createButton()
-                            .setName(this.getValue("report-item.name", placeholders.build()))
-                            .setLore(lore)
-                            .setIcon(Material.PLAYER_HEAD) { itemMeta: ItemMeta ->
-                                val meta = itemMeta as SkullMeta
-                                meta.owningPlayer = report.reported
+                val guiButton = GuiFactory.createButton()
+                        .setName(this.getValue("report-item.name", placeholders.build()))
+                        .setLore(lore)
+                        .setIcon(Material.PLAYER_HEAD) { itemMeta: ItemMeta ->
+                            val meta = itemMeta as SkullMeta
+                            meta.owningPlayer = report.reported
+                        }
+                        .setGlowing(menuConfig.getBoolean("report-item.glowing"))
+                        .setClickAction({ event: InventoryClickEvent ->
+                            val pplayer = event.whoClicked as Player
+                            if (menuConfig.getBoolean("use-sound")) {
+                                menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }
                             }
-                            .setGlowing(menuConfig.getBoolean("report-item.glowing"))
-                            .setClickAction({ event: InventoryClickEvent ->
-                                val pplayer = event.whoClicked as Player
-                                if (menuConfig.getBoolean("use-sound")) {
-                                    menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }
+
+                            when (event.click) {
+                                ClickType.LEFT -> {
+                                    this.executeCommands("left-click", event, placeholders, pplayer)
                                 }
-
-                                when (event.click) {
-                                    ClickType.LEFT -> {
-                                        this.executeCommands("left-click", event, placeholders, pplayer)
-                                    }
-                                    ClickType.RIGHT -> {
-                                        this.executeCommands("right-click", event, placeholders, pplayer)
-                                    }
-                                    ClickType.SHIFT_LEFT -> {
-                                        this.executeCommands("shift-left-click", event, placeholders, pplayer)
-                                    }
-                                    ClickType.SHIFT_RIGHT -> {
-                                        this.executeCommands("shift-right-click", event, placeholders, pplayer)
-                                    }
-                                    ClickType.MIDDLE -> {
-                                        this.executeCommands("middle-click", event, placeholders, pplayer)
-                                    }
-                                    else -> {
-                                        // Unused
-                                    }
+                                ClickType.RIGHT -> {
+                                    this.executeCommands("right-click", event, placeholders, pplayer)
                                 }
+                                ClickType.SHIFT_LEFT -> {
+                                    this.executeCommands("shift-left-click", event, placeholders, pplayer)
+                                }
+                                ClickType.SHIFT_RIGHT -> {
+                                    this.executeCommands("shift-right-click", event, placeholders, pplayer)
+                                }
+                                ClickType.MIDDLE -> {
+                                    this.executeCommands("middle-click", event, placeholders, pplayer)
+                                }
+                                else -> {
+                                    // Unused
+                                }
+                            }
 
-                                ClickAction.CLOSE
-                            })
+                            ClickAction.CLOSE
+                        })
 
-                    results.addPageContent(guiButton)
-                }, 0, 1)
+                results.addPageContent(guiButton)
             }
 
             return@setPaginatedSection results
         }
-
         return screen
     }
 

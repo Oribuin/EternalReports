@@ -129,6 +129,10 @@ class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plu
                                 menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }
                             }
 
+                            if (event.isShiftClick) {
+                                this.executeCommands("shift-left-click", event, placeholders, pplayer)
+                            }
+
                             when (event.click) {
                                 ClickType.LEFT -> {
                                     this.executeCommands("left-click", event, placeholders, pplayer)
@@ -145,6 +149,7 @@ class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plu
                                 ClickType.MIDDLE -> {
                                     this.executeCommands("middle-click", event, placeholders, pplayer)
                                 }
+
                                 else -> {
                                     // Unused
                                 }

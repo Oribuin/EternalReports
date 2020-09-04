@@ -44,7 +44,7 @@ report-item:
       - 'tp %reported%'
     right-click-commands:
       - 'tp %sender%'
-    shift-left_click-commands:
+    shift-left-click-commands:
       - 'reports resolve %report_id%'
     shift-right-click-commands:
       - 'reports delete %report_id%'

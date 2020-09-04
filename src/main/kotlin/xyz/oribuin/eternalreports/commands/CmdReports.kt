@@ -6,8 +6,6 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.util.StringUtil
 import xyz.oribuin.eternalreports.EternalReports
-import xyz.oribuin.eternalreports.data.StaffMember
-import xyz.oribuin.eternalreports.events.PlayerReportEvent
 import xyz.oribuin.eternalreports.events.ReportDeleteEvent
 import xyz.oribuin.eternalreports.events.ReportResolveEvent
 import xyz.oribuin.eternalreports.managers.ConfigManager
@@ -80,7 +78,7 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
 
         // Message staff members with alerts
         Bukkit.getOnlinePlayers().stream()
-                .filter { staffMember: Player -> staffMember.hasPermission("eternalreports.alerts") && StaffMember.instance.toggleList.contains(staffMember.uniqueId) }
+                .filter { staffMember: Player -> staffMember.hasPermission("eternalreports.alerts") && plugin.toggleList.contains(staffMember.uniqueId) }
                 .forEach { staffMember: Player ->
                     if (ConfigManager.Setting.ALERT_SETTINGS_SOUND_ENABLED.boolean) {
 
@@ -136,7 +134,7 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
             return
         }
 
-        val toggleList = StaffMember.instance.toggleList
+        val toggleList = plugin.toggleList
 
         if (toggleList.contains(sender.uniqueId)) {
             toggleList.remove(sender.uniqueId)

@@ -3,15 +3,14 @@ package xyz.oribuin.eternalreports.listeners
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
-import xyz.oribuin.eternalreports.data.StaffMember
-import java.util.function.Predicate
+import xyz.oribuin.eternalreports.EternalReports
 
-class PlayerJoin : Listener {
+class PlayerJoin(val plugin: EternalReports) : Listener {
 
     @EventHandler(ignoreCancelled = true)
     fun playerJoin(event: PlayerJoinEvent) {
 
-        val toggleList = StaffMember.instance.toggleList
+        val toggleList = plugin.toggleList
         if (event.player.hasPermission("eternalreports.alerts")) {
 
             toggleList.add(event.player.uniqueId)

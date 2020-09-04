@@ -12,6 +12,7 @@ import xyz.oribuin.eternalreports.hooks.PlaceholderExp
 import xyz.oribuin.eternalreports.listeners.PlayerJoin
 import xyz.oribuin.eternalreports.managers.*
 import xyz.oribuin.eternalreports.utils.FileUtils
+import java.util.*
 import kotlin.reflect.KClass
 
 /**
@@ -20,6 +21,7 @@ import kotlin.reflect.KClass
 
 class EternalReports : JavaPlugin() {
     private val managers = mutableMapOf<KClass<out Manager>, Manager>()
+    val toggleList = mutableSetOf<UUID>()
 
     override fun onLoad() {
         PDMBuilder(this).build().loadAllDependencies().join()
@@ -38,7 +40,7 @@ class EternalReports : JavaPlugin() {
         CmdReports(this).register()
 
         // Register all the listeners
-        registerListeners(PlayerJoin())
+        registerListeners(PlayerJoin(this))
 
         if (PlaceholderAPIHook.enabled()) {
             PlaceholderExp(this).register()

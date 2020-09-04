@@ -7,7 +7,6 @@ import org.bukkit.entity.Player
 import org.bukkit.util.StringUtil
 import xyz.oribuin.eternalreports.EternalReports
 import xyz.oribuin.eternalreports.data.Report
-import xyz.oribuin.eternalreports.data.StaffMember
 import xyz.oribuin.eternalreports.events.PlayerReportEvent
 import xyz.oribuin.eternalreports.managers.ConfigManager
 import xyz.oribuin.eternalreports.managers.DataManager
@@ -92,7 +91,7 @@ class CmdReport(override val plugin: EternalReports) : OriCommand(plugin, "repor
 
         // Message staff members with alerts
         Bukkit.getOnlinePlayers().stream()
-                .filter { staffMember: Player -> staffMember.hasPermission("eternalreports.alerts") && StaffMember.instance.toggleList.contains(staffMember.uniqueId) }
+                .filter { staffMember: Player -> staffMember.hasPermission("eternalreports.alerts") && plugin.toggleList.contains(staffMember.uniqueId) }
                 .forEach { staffMember: Player ->
                     if (ConfigManager.Setting.ALERT_SETTINGS_SOUND_ENABLED.boolean) {
 

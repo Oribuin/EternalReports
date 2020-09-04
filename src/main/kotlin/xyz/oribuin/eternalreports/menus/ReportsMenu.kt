@@ -49,7 +49,8 @@ class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plu
         val screen = GuiFactory.createScreen(container, GuiSize.ROWS_SIX)
                 .setTitle(colorify(this.getValue("menu-name")))
 
-        this.borderSlots().forEach { slot: Int -> getItem("border-item")?.let { screen.addItemStackAt(slot, it) } }
+        this.borderSlots().forEach { slot -> getItem("border-item")?.let { screen.addItemStackAt(slot, it) } }
+
         val reports = plugin.getManager(ReportManager::class).reports
 
         if (reports.size == 0) {
@@ -67,7 +68,7 @@ class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plu
                     .setLore(lore)
                     .setIcon(Material.valueOf(this.getValue("forward-page.material")))
                     .setGlowing(menuConfig.getBoolean("forward-page.glowing"))
-                    .setClickAction(Function { event: InventoryClickEvent ->
+                    .setClickAction({ event: InventoryClickEvent ->
                         val pplayer = event.whoClicked as Player
                         if (menuConfig.getBoolean("use-sound")) {
                             menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }
@@ -88,7 +89,7 @@ class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plu
                     .setLore(lore)
                     .setIcon(Material.valueOf(this.getValue("back-page.material")))
                     .setGlowing(menuConfig.getBoolean("back-page.glowing"))
-                    .setClickAction(Function { event: InventoryClickEvent ->
+                    .setClickAction({ event: InventoryClickEvent ->
                         val pplayer = event.whoClicked as Player
                         if (menuConfig.getBoolean("use-sound")) {
                             menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }

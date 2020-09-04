@@ -81,7 +81,7 @@ class MessageManager(plugin: EternalReports) : Manager(plugin) {
         // Help Menu
         HELP_MESSAGE("help-message", listOf(
                 " ",
-                "'<rainbow:0.7>EternalReports &f» &bCommands'",
+                " <rainbow:0.7>EternalReports &f» &bCommands",
                 " &f• &b/report&b &f<Player> <Reason> #8E54E9- &bReport a Player.",
                 " &f• &b/reports&b [alert/toggle] #8E54E9- &bToggle alert notifications.",
                 " &f• &b/reports&b [delete/remove] &f<Report-id> #8E54E9- &bDelete a report.",

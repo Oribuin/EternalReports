@@ -3,6 +3,7 @@ package xyz.oribuin.eternalreports.menus
 import dev.rosewood.guiframework.GuiFactory
 import dev.rosewood.guiframework.GuiFramework
 import dev.rosewood.guiframework.gui.ClickAction
+import dev.rosewood.guiframework.gui.ClickActionType
 import dev.rosewood.guiframework.gui.GuiSize
 import dev.rosewood.guiframework.gui.screen.GuiScreen
 import org.bukkit.Bukkit
@@ -123,40 +124,51 @@ class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plu
                             meta.owningPlayer = report.reported
                         }
                         .setGlowing(menuConfig.getBoolean("report-item.glowing"))
-                        .setClickAction({ event: InventoryClickEvent ->
+
+                        .setClickAction({event: InventoryClickEvent ->
                             val pplayer = event.whoClicked as Player
                             if (menuConfig.getBoolean("use-sound")) {
                                 menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }
                             }
 
-                            if (event.isShiftClick) {
-                                this.executeCommands("shift-left-click", event, placeholders, pplayer)
-                            }
-
-                            when (event.click) {
-                                ClickType.LEFT -> {
-                                    this.executeCommands("left-click", event, placeholders, pplayer)
-                                }
-                                ClickType.RIGHT -> {
-                                    this.executeCommands("right-click", event, placeholders, pplayer)
-                                }
-                                ClickType.SHIFT_LEFT -> {
-                                    this.executeCommands("shift-left-click", event, placeholders, pplayer)
-                                }
-                                ClickType.SHIFT_RIGHT -> {
-                                    this.executeCommands("shift-right-click", event, placeholders, pplayer)
-                                }
-                                ClickType.MIDDLE -> {
-                                    this.executeCommands("middle-click", event, placeholders, pplayer)
-                                }
-
-                                else -> {
-                                    // Unused
-                                }
-                            }
+                            this.executeCommands("left-click", placeholders, pplayer)
 
                             ClickAction.CLOSE
-                        })
+
+                        }, ClickActionType.LEFT_CLICK)
+                        .setClickAction({event: InventoryClickEvent ->
+                            val pplayer = event.whoClicked as Player
+                            if (menuConfig.getBoolean("use-sound")) {
+                                menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }
+                            }
+
+                            this.executeCommands("right-click", placeholders, pplayer)
+
+                            ClickAction.CLOSE
+
+                        }, ClickActionType.RIGHT_CLICK)
+                        .setClickAction({event: InventoryClickEvent ->
+                            val pplayer = event.whoClicked as Player
+                            if (menuConfig.getBoolean("use-sound")) {
+                                menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }
+                            }
+
+                            this.executeCommands("shift-left-click", placeholders, pplayer)
+
+                            ClickAction.CLOSE
+
+                        }, ClickActionType.SHIFT_LEFT_CLICK)
+                        .setClickAction({event: InventoryClickEvent ->
+                            val pplayer = event.whoClicked as Player
+                            if (menuConfig.getBoolean("use-sound")) {
+                                menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }
+                            }
+
+                            this.executeCommands("shift-right-click", placeholders, pplayer)
+
+                            ClickAction.CLOSE
+
+                        }, ClickActionType.SHIFT_RIGHT_CLICK)
 
                 results.addPageContent(guiButton)
             }
@@ -242,13 +254,13 @@ class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plu
         return colorify(apply(player, placeholders.apply(text)))
     }
 
-    private fun executeCommands(path: String, event: InventoryClickEvent, placeholders: StringPlaceholders.Builder, pplayer: Player) {
+    private fun executeCommands(path: String, placeholders: StringPlaceholders.Builder, pplayer: Player) {
         menuConfig.getStringList("report-item.player-commands.$path-commands").forEach { c: String ->
-            pplayer.performCommand(this.format(c, placeholders.addPlaceholder("player", event.whoClicked.name).build()))
+            pplayer.performCommand(this.format(c, placeholders.addPlaceholder("player", pplayer.name).build()))
         }
 
         menuConfig.getStringList("report-item.console-commands.$path-commands").forEach { c: String ->
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), this.format(c, placeholders.addPlaceholder("player", event.whoClicked.name).build()))
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), this.format(c, placeholders.addPlaceholder("player", pplayer.name).build()))
         }
     }
 

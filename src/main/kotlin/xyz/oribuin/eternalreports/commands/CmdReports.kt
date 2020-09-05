@@ -1,9 +1,16 @@
 package xyz.oribuin.eternalreports.commands
 
 import org.bukkit.Bukkit
+import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.inventory.ClickType
+import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.event.inventory.InventoryType
+import org.bukkit.inventory.ItemStack
 import org.bukkit.util.StringUtil
 import xyz.oribuin.eternalreports.EternalReports
 import xyz.oribuin.eternalreports.events.ReportDeleteEvent
@@ -18,8 +25,8 @@ import xyz.oribuin.eternalreports.utils.StringPlaceholders
 
 class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "reports") {
 
-    private val messageManager = plugin.getManager(MessageManager::class)
 
+    private val messageManager = plugin.getManager(MessageManager::class)
 
     private fun onReloadCommand(sender: CommandSender) {
         val messageManager = plugin.getManager(MessageManager::class)
@@ -122,7 +129,7 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
         Bukkit.getPluginManager().callEvent(ReportDeleteEvent(report))
     }
 
-    private fun onToggleNotificaations(sender: CommandSender) {
+    private fun onToggleNotifications(sender: CommandSender) {
 
         if (sender !is Player) {
             messageManager.sendMessage(sender, "player-only")
@@ -140,8 +147,7 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
             toggleList.remove(sender.uniqueId)
             messageManager.sendMessage(sender, "commands.alerts-off")
         } else {
-            toggleList.remove(sender.uniqueId)
-            toggleList.remove(sender.uniqueId)
+            toggleList.add(sender.uniqueId)
             messageManager.sendMessage(sender, "commands.alerts-on")
         }
 
@@ -189,7 +195,7 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
                 }
 
                 "toggle", "alerts" -> {
-                    this.onToggleNotificaations(sender)
+                    this.onToggleNotifications(sender)
                 }
 
                 "reload" -> {
@@ -286,7 +292,6 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
         }
         return suggestions
     }
-
 
     private fun resolvedFormatted(resolved: Boolean): String? {
         return if (resolved) {

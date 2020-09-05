@@ -52,13 +52,13 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
                 "CREATE TABLE IF NOT EXISTS ${tablePrefix}reports (id INT, sender TXT, reported TXT, reason TXT, resolved BOOLEAN, time LONG, PRIMARY KEY(sender, reported, reason, time))",
                 "CREATE TABLE IF NOT EXISTS ${tablePrefix}users (user TXT, reports INT, reported INT, PRIMARY KEY(user))"
         )
-        async(Runnable {
+        async {
             connector?.connect { connection: Connection ->
                 for (string in queries) {
                     connection.prepareStatement(string).use { statement -> statement.executeUpdate() }
                 }
             }
-        })
+        }
     }
 
     fun createReport(sender: Player, reported: OfflinePlayer, reason: String) {

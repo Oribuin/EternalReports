@@ -1,4 +1,4 @@
-package xyz.oribuin.eternalreports.managers
+package xyz.oribuin.eternalreports.manager
 
 import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
@@ -8,8 +8,7 @@ import xyz.oribuin.eternalreports.data.Report
 import xyz.oribuin.eternalreports.database.DatabaseConnector
 import xyz.oribuin.eternalreports.database.MySQLConnector
 import xyz.oribuin.eternalreports.database.SQLiteConnector
-import xyz.oribuin.eternalreports.utils.FileUtils.createFile
-import xyz.oribuin.eternalreports.utils.PluginUtils
+import xyz.oribuin.eternalreports.util.FileUtils.createFile
 import java.sql.Connection
 
 class DataManager(plugin: EternalReports) : Manager(plugin) {

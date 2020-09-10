@@ -1,4 +1,4 @@
-package xyz.oribuin.eternalreports.utils
+package xyz.oribuin.eternalreports.util
 
 import org.bukkit.plugin.Plugin
 import java.io.File

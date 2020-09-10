@@ -1,4 +1,4 @@
-package xyz.oribuin.eternalreports.menus
+package xyz.oribuin.eternalreports.menu
 
 import dev.rosewood.guiframework.GuiFactory
 import dev.rosewood.guiframework.GuiFramework
@@ -11,21 +11,20 @@ import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
-import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.inventory.meta.SkullMeta
 import xyz.oribuin.eternalreports.EternalReports
-import xyz.oribuin.eternalreports.hooks.PlaceholderAPIHook.apply
-import xyz.oribuin.eternalreports.managers.MessageManager
-import xyz.oribuin.eternalreports.managers.ReportManager
-import xyz.oribuin.eternalreports.utils.FileUtils
-import xyz.oribuin.eternalreports.utils.HexUtils.colorify
-import xyz.oribuin.eternalreports.utils.PluginUtils
-import xyz.oribuin.eternalreports.utils.StringPlaceholders
-import xyz.oribuin.eternalreports.utils.StringPlaceholders.Companion.empty
+import xyz.oribuin.eternalreports.hook.PlaceholderAPIHook.apply
+import xyz.oribuin.eternalreports.manager.MessageManager
+import xyz.oribuin.eternalreports.manager.ReportManager
+import xyz.oribuin.eternalreports.util.FileUtils
+import xyz.oribuin.eternalreports.util.HexUtils.colorify
+import xyz.oribuin.eternalreports.util.PluginUtils
+import xyz.oribuin.eternalreports.util.StringPlaceholders
+import xyz.oribuin.eternalreports.util.StringPlaceholders.Companion.empty
 import java.util.*
 
 class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plugin, "report-menu") {

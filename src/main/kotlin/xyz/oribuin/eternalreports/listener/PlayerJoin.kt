@@ -1,4 +1,4 @@
-package xyz.oribuin.eternalreports.listeners
+package xyz.oribuin.eternalreports.listener
 
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener

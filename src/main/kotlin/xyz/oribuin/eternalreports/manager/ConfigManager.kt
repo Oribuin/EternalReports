@@ -1,4 +1,4 @@
-package xyz.oribuin.eternalreports.managers
+package xyz.oribuin.eternalreports.manager
 
 import org.bukkit.configuration.file.FileConfiguration
 import xyz.oribuin.eternalreports.EternalReports

@@ -1,4 +1,4 @@
-package xyz.oribuin.eternalreports.hooks
+package xyz.oribuin.eternalreports.hook
 
 import me.clip.placeholderapi.PlaceholderAPI
 import org.bukkit.Bukkit

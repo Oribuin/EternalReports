@@ -1,8 +1,8 @@
-package xyz.oribuin.eternalreports.utils
+package xyz.oribuin.eternalreports.util
 
 import net.md_5.bungee.api.ChatColor
 import org.bukkit.Bukkit
-import xyz.oribuin.eternalreports.utils.NMSUtil.versionNumber
+import xyz.oribuin.eternalreports.util.NMSUtil.versionNumber
 import java.awt.Color
 import java.util.*
 import java.util.regex.Pattern

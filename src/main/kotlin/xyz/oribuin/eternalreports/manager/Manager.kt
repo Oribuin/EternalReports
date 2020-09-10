@@ -1,4 +1,4 @@
-package xyz.oribuin.eternalreports.managers
+package xyz.oribuin.eternalreports.manager
 
 import xyz.oribuin.eternalreports.EternalReports
 

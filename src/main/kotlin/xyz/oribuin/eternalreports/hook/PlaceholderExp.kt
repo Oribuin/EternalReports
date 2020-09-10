@@ -1,10 +1,10 @@
-package xyz.oribuin.eternalreports.hooks
+package xyz.oribuin.eternalreports.hook
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion
 import org.bukkit.entity.Player
 import xyz.oribuin.eternalreports.EternalReports
-import xyz.oribuin.eternalreports.managers.DataManager
-import xyz.oribuin.eternalreports.managers.ReportManager
+import xyz.oribuin.eternalreports.manager.DataManager
+import xyz.oribuin.eternalreports.manager.ReportManager
 
 class PlaceholderExp(private val plugin: EternalReports) : PlaceholderExpansion() {
 

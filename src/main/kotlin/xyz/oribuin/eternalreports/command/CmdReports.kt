@@ -1,27 +1,20 @@
-package xyz.oribuin.eternalreports.commands
+package xyz.oribuin.eternalreports.command
 
 import org.bukkit.Bukkit
-import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import org.bukkit.event.EventHandler
-import org.bukkit.event.Listener
-import org.bukkit.event.inventory.ClickType
-import org.bukkit.event.inventory.InventoryClickEvent
-import org.bukkit.event.inventory.InventoryType
-import org.bukkit.inventory.ItemStack
 import org.bukkit.util.StringUtil
 import xyz.oribuin.eternalreports.EternalReports
-import xyz.oribuin.eternalreports.events.ReportDeleteEvent
-import xyz.oribuin.eternalreports.events.ReportResolveEvent
-import xyz.oribuin.eternalreports.managers.ConfigManager
-import xyz.oribuin.eternalreports.managers.DataManager
-import xyz.oribuin.eternalreports.managers.MessageManager
-import xyz.oribuin.eternalreports.managers.ReportManager
-import xyz.oribuin.eternalreports.menus.ReportsMenu
-import xyz.oribuin.eternalreports.utils.HexUtils
-import xyz.oribuin.eternalreports.utils.StringPlaceholders
+import xyz.oribuin.eternalreports.event.ReportDeleteEvent
+import xyz.oribuin.eternalreports.event.ReportResolveEvent
+import xyz.oribuin.eternalreports.manager.ConfigManager
+import xyz.oribuin.eternalreports.manager.DataManager
+import xyz.oribuin.eternalreports.manager.MessageManager
+import xyz.oribuin.eternalreports.manager.ReportManager
+import xyz.oribuin.eternalreports.menu.ReportsMenu
+import xyz.oribuin.eternalreports.util.HexUtils
+import xyz.oribuin.eternalreports.util.StringPlaceholders
 
 class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "reports") {
 

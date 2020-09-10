@@ -4,14 +4,13 @@ import me.bristermitten.pdm.PDMBuilder
 import org.bukkit.Bukkit
 import org.bukkit.event.Listener
 import org.bukkit.plugin.java.JavaPlugin
-import xyz.oribuin.eternalreports.commands.CmdReport
-import xyz.oribuin.eternalreports.commands.CmdReports
-import xyz.oribuin.eternalreports.commands.OriCommand
-import xyz.oribuin.eternalreports.hooks.PlaceholderAPIHook
-import xyz.oribuin.eternalreports.hooks.PlaceholderExp
-import xyz.oribuin.eternalreports.listeners.PlayerJoin
-import xyz.oribuin.eternalreports.managers.*
-import xyz.oribuin.eternalreports.utils.FileUtils
+import xyz.oribuin.eternalreports.command.CmdReport
+import xyz.oribuin.eternalreports.command.CmdReports
+import xyz.oribuin.eternalreports.hook.PlaceholderAPIHook
+import xyz.oribuin.eternalreports.hook.PlaceholderExp
+import xyz.oribuin.eternalreports.listener.PlayerJoin
+import xyz.oribuin.eternalreports.manager.*
+import xyz.oribuin.eternalreports.util.FileUtils
 import java.util.*
 import kotlin.reflect.KClass
 

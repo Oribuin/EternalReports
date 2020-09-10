@@ -1,8 +1,8 @@
-package xyz.oribuin.eternalreports.managers
+package xyz.oribuin.eternalreports.manager
 
 import xyz.oribuin.eternalreports.EternalReports
-import xyz.oribuin.eternalreports.menus.Menu
-import xyz.oribuin.eternalreports.menus.ReportsMenu
+import xyz.oribuin.eternalreports.menu.Menu
+import xyz.oribuin.eternalreports.menu.ReportsMenu
 import java.util.*
 import java.util.function.Consumer
 

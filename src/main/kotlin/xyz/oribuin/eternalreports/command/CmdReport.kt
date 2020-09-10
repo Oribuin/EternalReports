@@ -1,4 +1,4 @@
-package xyz.oribuin.eternalreports.commands
+package xyz.oribuin.eternalreports.command
 
 import org.bukkit.Bukkit
 import org.bukkit.Sound
@@ -7,13 +7,13 @@ import org.bukkit.entity.Player
 import org.bukkit.util.StringUtil
 import xyz.oribuin.eternalreports.EternalReports
 import xyz.oribuin.eternalreports.data.Report
-import xyz.oribuin.eternalreports.events.PlayerReportEvent
-import xyz.oribuin.eternalreports.managers.ConfigManager
-import xyz.oribuin.eternalreports.managers.DataManager
-import xyz.oribuin.eternalreports.managers.MessageManager
-import xyz.oribuin.eternalreports.managers.ReportManager
-import xyz.oribuin.eternalreports.utils.PluginUtils
-import xyz.oribuin.eternalreports.utils.StringPlaceholders
+import xyz.oribuin.eternalreports.event.PlayerReportEvent
+import xyz.oribuin.eternalreports.manager.ConfigManager
+import xyz.oribuin.eternalreports.manager.DataManager
+import xyz.oribuin.eternalreports.manager.MessageManager
+import xyz.oribuin.eternalreports.manager.ReportManager
+import xyz.oribuin.eternalreports.util.PluginUtils
+import xyz.oribuin.eternalreports.util.StringPlaceholders
 import java.util.*
 
 class CmdReport(override val plugin: EternalReports) : OriCommand(plugin, "report") {

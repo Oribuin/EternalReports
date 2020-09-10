@@ -1,4 +1,4 @@
-package xyz.oribuin.eternalreports.managers
+package xyz.oribuin.eternalreports.manager
 
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.command.CommandSender
@@ -6,11 +6,11 @@ import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
 import xyz.oribuin.eternalreports.EternalReports
-import xyz.oribuin.eternalreports.hooks.PlaceholderAPIHook
-import xyz.oribuin.eternalreports.utils.FileUtils.createFile
-import xyz.oribuin.eternalreports.utils.HexUtils.colorify
-import xyz.oribuin.eternalreports.utils.StringPlaceholders
-import xyz.oribuin.eternalreports.utils.StringPlaceholders.Companion.empty
+import xyz.oribuin.eternalreports.hook.PlaceholderAPIHook
+import xyz.oribuin.eternalreports.util.FileUtils.createFile
+import xyz.oribuin.eternalreports.util.HexUtils.colorify
+import xyz.oribuin.eternalreports.util.StringPlaceholders
+import xyz.oribuin.eternalreports.util.StringPlaceholders.Companion.empty
 import java.io.File
 
 class MessageManager(plugin: EternalReports) : Manager(plugin) {

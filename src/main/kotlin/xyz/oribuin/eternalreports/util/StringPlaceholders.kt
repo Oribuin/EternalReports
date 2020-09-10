@@ -1,4 +1,4 @@
-package xyz.oribuin.eternalreports.utils
+package xyz.oribuin.eternalreports.util
 
 import java.util.*
 import java.util.regex.Matcher

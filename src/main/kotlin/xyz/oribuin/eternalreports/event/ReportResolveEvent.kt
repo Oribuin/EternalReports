@@ -1,4 +1,4 @@
-package xyz.oribuin.eternalreports.events
+package xyz.oribuin.eternalreports.event
 
 import org.bukkit.event.Cancellable
 import org.bukkit.event.Event

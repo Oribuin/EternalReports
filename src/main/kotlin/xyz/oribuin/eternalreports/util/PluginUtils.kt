@@ -1,6 +1,6 @@
-package xyz.oribuin.eternalreports.utils
+package xyz.oribuin.eternalreports.util
 
-import xyz.oribuin.eternalreports.managers.ConfigManager
+import xyz.oribuin.eternalreports.manager.ConfigManager
 import java.text.SimpleDateFormat
 import java.util.*
 

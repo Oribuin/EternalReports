@@ -70,7 +70,7 @@ class MessageManager(plugin: EternalReports) : Manager(plugin) {
         CMD_RESOLVED_REPORT("commands.resolved-report", "&bYou have resolved &f%sender%&b's&b report! (ID: &f%report_id%&b)"),
         CMD_UNRESOLVED_REPORT("commands.unresolved-report", "&bYou have unresolved &f%sender%&b's&b report! (ID: &f%report_id%&b)"),
         CMD_REMOVED_REPORT("commands.removed-report", "&bYou have successfully removed &f%sender%'s&b report! (ID: &f%report_id%&b)"),
-        CMD_ALERTS_ON("commands.alerts-on", "&bYou have &fenabled report alerts!"),
+        CMD_ALERTS_ON("commands.alerts-on", "&bYou have &fenabled&b report alerts!"),
         CMD_ALERTS_OFF("commands.alerts-off", "&bYou have &fdisabled&b report alerts!"),
 
         // Alert Messages

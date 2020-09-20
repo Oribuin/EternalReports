@@ -301,6 +301,7 @@ object HexUtils {
         }
     }
 }
+
 object NMSUtil {
     private var cachedVersion: String? = null
     private var cachedVersionNumber = -1

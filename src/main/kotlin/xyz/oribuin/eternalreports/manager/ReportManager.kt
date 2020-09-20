@@ -9,6 +9,7 @@ class ReportManager(plugin: EternalReports) : Manager(plugin) {
     val reports = mutableListOf<Report>()
     val resolvedReports = reports.stream().filter { x -> x.isResolved }.count().toInt()
     val unresolvedReports = reports.stream().filter { x -> !x.isResolved }.count().toInt()
+
     override fun reload() {
         this.reports.clear()
         this.registerReports()
@@ -32,7 +33,7 @@ class ReportManager(plugin: EternalReports) : Manager(plugin) {
                             reports.add(report)
                         }
 
-                        val count = reports.stream().filter { t -> t == report}.count()
+                        val count = reports.stream().filter { t -> t == report }.count()
 
                         Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, Runnable {
                             while (count > 1) {

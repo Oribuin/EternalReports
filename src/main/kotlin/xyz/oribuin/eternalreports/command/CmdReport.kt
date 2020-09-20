@@ -59,14 +59,11 @@ class CmdReport(override val plugin: EternalReports) : OriCommand(plugin, "repor
             return
         }
 
-        /*
         // Check if the player has permission to bypass report
-        if (reported.hasPermission("eternalreports.bypass")) {
-            msg.sendMessage(sender, "has-bypass")
-            return
-        }
-        /
-         */
+//        if ((reported.player ?: return).hasPermission("eternalreports.bypass")) {
+//            msg.sendMessage(sender, "has-bypass")
+//            return
+//        }
 
         // Report reason
         val reason = java.lang.String.join(" ", *args).substring(args[0].length + 1)
@@ -126,5 +123,9 @@ class CmdReport(override val plugin: EternalReports) : OriCommand(plugin, "repor
             return null
         }
         return suggestions
+    }
+
+    override fun addSubCommands() {
+        // Unused
     }
 }

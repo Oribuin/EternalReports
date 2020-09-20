@@ -47,6 +47,7 @@ class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plu
     private fun mainMenu(): GuiScreen {
         val screen = GuiFactory.createScreen(container, GuiSize.ROWS_SIX)
                 .setTitle(colorify(this.getValue("menu-name")))
+
         this.borderSlots().forEach { slot -> getItem("border-item")?.let { screen.addItemStackAt(slot, it) } }
 
         val reports = plugin.getManager(ReportManager::class).reports
@@ -124,7 +125,7 @@ class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plu
                         }
                         .setGlowing(menuConfig.getBoolean("report-item.glowing"))
 
-                        .setClickAction({event: InventoryClickEvent ->
+                        .setClickAction({ event: InventoryClickEvent ->
                             val pplayer = event.whoClicked as Player
                             if (menuConfig.getBoolean("use-sound")) {
                                 menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }
@@ -135,7 +136,7 @@ class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plu
                             ClickAction.CLOSE
 
                         }, ClickActionType.LEFT_CLICK)
-                        .setClickAction({event: InventoryClickEvent ->
+                        .setClickAction({ event: InventoryClickEvent ->
                             val pplayer = event.whoClicked as Player
                             if (menuConfig.getBoolean("use-sound")) {
                                 menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }
@@ -146,7 +147,7 @@ class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plu
                             ClickAction.CLOSE
 
                         }, ClickActionType.RIGHT_CLICK)
-                        .setClickAction({event: InventoryClickEvent ->
+                        .setClickAction({ event: InventoryClickEvent ->
                             val pplayer = event.whoClicked as Player
                             if (menuConfig.getBoolean("use-sound")) {
                                 menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }
@@ -157,7 +158,7 @@ class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plu
                             ClickAction.CLOSE
 
                         }, ClickActionType.SHIFT_LEFT_CLICK)
-                        .setClickAction({event: InventoryClickEvent ->
+                        .setClickAction({ event: InventoryClickEvent ->
                             val pplayer = event.whoClicked as Player
                             if (menuConfig.getBoolean("use-sound")) {
                                 menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }
@@ -180,22 +181,15 @@ class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plu
     private fun borderSlots(): List<Int> {
         val slots: MutableList<Int> = ArrayList()
         for (i in 0..8) slots.add(i)
-        run {
-            var i = 9
-            while (i <= 36) {
-                slots.add(i)
-                i += 9
-            }
-        }
-        run {
-            var i = 17
-            while (i <= 44) {
-                slots.add(i)
-                i += 9
-            }
-        }
+        slots.add(9)
+        slots.add(17)
+        slots.add(18)
+        slots.add(26)
+        slots.add(27)
+        slots.add(35)
+        slots.add(36)
+        slots.add(44)
         for (i in 45..53) slots.add(i)
-        slots.addAll(listOf(45, 53))
         return slots
     }
 

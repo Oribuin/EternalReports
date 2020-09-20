@@ -1,234 +1,30 @@
 package xyz.oribuin.eternalreports.command
 
 import org.bukkit.Bukkit
-import org.bukkit.Sound
 import org.bukkit.command.CommandSender
-import org.bukkit.entity.Player
 import org.bukkit.util.StringUtil
 import xyz.oribuin.eternalreports.EternalReports
-import xyz.oribuin.eternalreports.event.ReportDeleteEvent
-import xyz.oribuin.eternalreports.event.ReportResolveEvent
-import xyz.oribuin.eternalreports.manager.ConfigManager
-import xyz.oribuin.eternalreports.manager.DataManager
+import xyz.oribuin.eternalreports.command.subcommand.*
 import xyz.oribuin.eternalreports.manager.MessageManager
 import xyz.oribuin.eternalreports.manager.ReportManager
-import xyz.oribuin.eternalreports.menu.ReportsMenu
 import xyz.oribuin.eternalreports.util.HexUtils
-import xyz.oribuin.eternalreports.util.StringPlaceholders
 
 class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "reports") {
-
+    private val subcommands = mutableListOf<SubCommand>()
 
     private val messageManager = plugin.getManager(MessageManager::class)
 
-    private fun onReloadCommand(sender: CommandSender) {
-        val messageManager = plugin.getManager(MessageManager::class)
-
-        if (!sender.hasPermission("eternalreports.reload")) {
-            messageManager.sendMessage(sender, "invalid-permission")
-            return
-        }
-
-        this.plugin.reload()
-        messageManager.sendMessage(sender, "reload", StringPlaceholders.single("version", this.plugin.description.version))
-    }
-
-    private fun onResolveCommand(sender: CommandSender, args: Array<String>) {
-
-        if (!sender.hasPermission("eternalreports.resolve")) {
-            messageManager.sendMessage(sender, "invalid-permission")
-            return
-        }
-
-        if (args.size == 1) {
-            messageManager.sendMessage(sender, "invalid-arguments")
-            return
-        }
-
-        val reports = plugin.getManager(ReportManager::class).reports.filter { report -> report.id == args[1].toInt() }
-
-        if (reports.isEmpty()) {
-            messageManager.sendMessage(sender, "invalid-report")
-            return
-        }
-
-        val report = reports[0]
-
-        val placeholders = StringPlaceholders.builder()
-                .addPlaceholder("sender", sender.name)
-                .addPlaceholder("reported", report.reported.name)
-                .addPlaceholder("reason", report.reason)
-                .addPlaceholder("report_id", report.id)
-                .addPlaceholder("resolved", resolvedFormatted(report.isResolved)).build()
-
-        if (report.isResolved) {
-            messageManager.sendMessage(sender, "commands.unresolved-report", placeholders)
-            plugin.getManager(DataManager::class).resolveReport(report, false)
-            report.isResolved = false
-
-            this.plugin.logger.info(sender.name + " has resolved ${report.sender.name}'s report on ${report.reported.name} for ${report.reason}")
-
-        } else {
-            messageManager.sendMessage(sender, "commands.resolved-report", placeholders)
-            plugin.getManager(DataManager::class).resolveReport(report, true)
-            report.isResolved = true
-
-            this.plugin.logger.info(sender.name + " has unresolved ${report.sender.name}'s report on ${report.reported.name} for ${report.reason}")
-        }
-
-        // Message staff members with alerts
-        Bukkit.getOnlinePlayers().stream()
-                .filter { staffMember: Player -> staffMember.hasPermission("eternalreports.alerts") && plugin.toggleList.contains(staffMember.uniqueId) }
-                .forEach { staffMember: Player ->
-                    if (ConfigManager.Setting.ALERT_SETTINGS_SOUND_ENABLED.boolean) {
-
-                        // Why such a long method kotlin?
-                        ConfigManager.Setting.ALERT_SETTINGS_SOUND.string.let { Sound.valueOf(it) }.let { staffMember.playSound(staffMember.location, it, ConfigManager.Setting.ALERT_SETTINGS_SOUND_VOLUME.float, 1.toFloat()) }
-                    }
-                    messageManager.sendMessage(staffMember, "alerts.report-resolved", placeholders)
-                }
-
-        Bukkit.getPluginManager().callEvent(ReportResolveEvent(report))
-    }
-
-    private fun onRemoveCommand(sender: CommandSender, args: Array<String>) {
-        if (!sender.hasPermission("eternalreports.delete")) {
-            messageManager.sendMessage(sender, "invalid-permission")
-            return
-        }
-
-        if (args.size == 1) {
-            messageManager.sendMessage(sender, "invalid-arguments")
-            return
-        }
-
-        val reports = plugin.getManager(ReportManager::class).reports.filter { report -> report.id == args[1].toInt() }
-
-        if (reports.isEmpty()) {
-            messageManager.sendMessage(sender, "invalid-report")
-            return
-        }
-
-        val report = reports[0]
-
-        val placeholders = StringPlaceholders.builder()
-                .addPlaceholder("sender", sender.name)
-                .addPlaceholder("reported", report.reported.name)
-                .addPlaceholder("reason", report.reason)
-                .addPlaceholder("report_id", report.id).build()
-
-        messageManager.sendMessage(sender, "commands.removed-report", placeholders)
-        plugin.getManager(DataManager::class).deleteReport(report)
-        Bukkit.getPluginManager().callEvent(ReportDeleteEvent(report))
-    }
-
-    private fun onToggleNotifications(sender: CommandSender) {
-
-        if (sender !is Player) {
-            messageManager.sendMessage(sender, "player-only")
-            return
-        }
-
-        if (!sender.hasPermission("eternalreports.toggle")) {
-            messageManager.sendMessage(sender, "invalid-permission")
-            return
-        }
-
-        val toggleList = plugin.toggleList
-
-        if (toggleList.contains(sender.uniqueId)) {
-            toggleList.remove(sender.uniqueId)
-            messageManager.sendMessage(sender, "commands.alerts-off")
-        } else {
-            toggleList.add(sender.uniqueId)
-            messageManager.sendMessage(sender, "commands.alerts-on")
-        }
-
-    }
-
-    private fun onHelpCommand(sender: CommandSender) {
-        if (!sender.hasPermission("eternalreports.help")) {
-            messageManager.sendMessage(sender, "invalid-permission")
-            return
-        }
-
-        for (string in messageManager.messageConfig.getStringList("help-message")) {
-            sender.sendMessage(HexUtils.colorify(string))
-        }
-
-        if (sender is Player) {
-            sender.playSound(sender.location, Sound.ENTITY_ARROW_HIT_PLAYER, 50f, 1f)
-        }
-    }
-
     override fun executeCommand(sender: CommandSender, args: Array<String>) {
-        if (args.isEmpty()) {
-            this.onHelpCommand(sender)
-            return
-        }
 
-        if (args.size == 1) {
-            when (args[0].toLowerCase()) {
-                "menu" -> {
-                    if (sender !is Player) {
-                        messageManager.sendMessage(sender, "player-only")
-                        return
-                    }
-
-                    if (!sender.hasPermission("eternalreports.menu")) {
-                        messageManager.sendMessage(sender, "invalid-permission")
-                        return
-                    }
-
-                    ReportsMenu(plugin, sender).openMenu()
-                }
-
-                "help" -> {
-                    this.onHelpCommand(sender)
-                }
-
-                "toggle", "alerts" -> {
-                    this.onToggleNotifications(sender)
-                }
-
-                "reload" -> {
-                    this.onReloadCommand(sender)
-                }
-
-                else -> {
-                    messageManager.sendMessage(sender, "unknown-command")
-                }
-            }
-
-            return
-        }
-
-        if (args.size == 2 && args[0].toLowerCase() == "menu") {
-            val mentioned = Bukkit.getPlayer(args[1])
-
-            if (!sender.hasPermission("eternalreports.menu.other")) {
-                messageManager.sendMessage(sender, "invalid-permission")
-                return
-            }
-
-            if (mentioned == null || !mentioned.isOnline || mentioned.hasMetadata("vanished")) {
-                messageManager.sendMessage(sender, "invalid-player")
-                return
-            }
-
-            ReportsMenu(plugin, mentioned).openMenu()
-        }
-
-        when (args[0].toLowerCase()) {
-            "resolve" -> {
-                this.onResolveCommand(sender, args)
-            }
-
-            "delete", "remove" -> {
-                this.onRemoveCommand(sender, args)
-            }
-            else -> {
+        for (cmd in subcommands) {
+            if (args.isEmpty()) {
                 messageManager.sendMessage(sender, "unknown-command")
+                break
+            }
+
+            if (args.isNotEmpty() && cmd.names.contains(args[0].toLowerCase())) {
+                cmd.executeArgument(sender, args)
+                break
             }
         }
     }
@@ -284,6 +80,10 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
             return null
         }
         return suggestions
+    }
+
+    override fun addSubCommands() {
+        subcommands.addAll(listOf(CmdHelp(plugin, this), CmdMenu(plugin, this), CmdReload(plugin, this), CmdRemove(plugin, this), CmdResolve(plugin, this), CmdToggle(plugin, this)))
     }
 
     private fun resolvedFormatted(resolved: Boolean): String? {

@@ -64,11 +64,11 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
 
         val reportManager = plugin.getManager(ReportManager::class)
 
-        async{
+        async {
             connector?.connect { connection: Connection ->
                 val createReport = "REPLACE INTO ${this.tablePrefix}reports (id, sender, reported, reason, resolved, time) VALUES (?, ?, ?, ?, ?, ?)"
                 connection.prepareStatement(createReport).use { statement ->
-                    statement.setInt(1, reportManager.reports.size + 1)
+                    statement.setInt(1, reportsSize)
                     statement.setString(2, sender.uniqueId.toString())
                     statement.setString(3, reported.uniqueId.toString())
                     statement.setString(4, reason)
@@ -77,7 +77,7 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
                     statement.executeUpdate()
                 }
 
-                reportManager.reports.add(Report(reportManager.reports.size + 1, sender, reported, reason, false, System.currentTimeMillis()))
+                reportManager.reports.add(Report(reportsSize, sender, reported, reason, false, System.currentTimeMillis()))
 
             }
         }
@@ -192,6 +192,18 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
 
     private val tablePrefix: String
         get() = plugin.description.name.toLowerCase() + '_'
+
+    private var reportsSize = 0
+        get() {
+            val reports = plugin.getManager(ReportManager::class).reports
+
+            while (reports.size + 1 == reports.size + 2) {
+                field = reports.size + 1
+                field++
+            }
+
+            return field
+        }
 
     override fun disable() {
         // Unused

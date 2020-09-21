@@ -111,9 +111,9 @@ class CmdReport(override val plugin: EternalReports) : OriCommand(plugin, "repor
         if (args.isEmpty() || args.size == 1) {
             val subCommand = if (args.isEmpty()) "" else args[0]
 
-            val players: MutableList<String> = ArrayList()
-
-            Bukkit.getOnlinePlayers().stream().filter { player: Player? -> !player!!.hasMetadata("vanished") }.forEachOrdered { player: Player? -> players.add(player!!.name) }
+            val players = mutableListOf<String>()
+            Bukkit.getOnlinePlayers().stream().filter { player -> !player.hasMetadata("vanished") }.forEachOrdered { player -> players.add(player.name) }
+            players.sortBy { s -> s }
 
             StringUtil.copyPartialMatches(subCommand, players, suggestions)
             return null

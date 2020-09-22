@@ -47,6 +47,22 @@ class ReportManager(plugin: EternalReports) : Manager(plugin) {
         }, 10)
     }
 
+    var reportId = 0
+        get() {
+            val data = plugin.getManager(DataManager::class)
+
+            data.connector?.connect { connection ->
+                connection.prepareStatement("SELECT MAX(id) FROM ${tablePrefix}reports").use { statement ->
+                    val result = statement.executeQuery()
+                    if (result.next()) {
+                        field = result.getInt(1)
+                    }
+                }
+            }
+
+            return field + 1
+        }
+
     override fun disable() {
         this.reports.clear()
     }

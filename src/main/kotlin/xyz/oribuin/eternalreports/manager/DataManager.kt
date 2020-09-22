@@ -68,7 +68,7 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
             connector?.connect { connection: Connection ->
                 val createReport = "REPLACE INTO ${this.tablePrefix}reports (id, sender, reported, reason, resolved, time) VALUES (?, ?, ?, ?, ?, ?)"
                 connection.prepareStatement(createReport).use { statement ->
-                    statement.setInt(1, reportsSize)
+                    statement.setInt(1, reportManager.reportId)
                     statement.setString(2, sender.uniqueId.toString())
                     statement.setString(3, reported.uniqueId.toString())
                     statement.setString(4, reason)
@@ -77,7 +77,7 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
                     statement.executeUpdate()
                 }
 
-                reportManager.reports.add(Report(reportsSize, sender, reported, reason, false, System.currentTimeMillis()))
+                reportManager.reports.add(Report(reportManager.reportId, sender, reported, reason, false, System.currentTimeMillis()))
 
             }
         }
@@ -106,7 +106,7 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
     fun resolveReport(report: Report, resolved: Boolean) {
         val reportManager = plugin.getManager(ReportManager::class)
 
-        async(Runnable {
+        async {
             connector?.connect { connection: Connection ->
                 val removeReport = "REPLACE INTO ${tablePrefix}reports (id, sender, reported, reason, resolved, time) VALUES (?, ?, ?, ?, ?, ?)"
                 connection.prepareStatement(removeReport).use { statement ->
@@ -124,11 +124,11 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
                     reportManager.reports.add(Report(report.id, report.sender, report.reported, report.reason, resolved, report.time))
                 }
             }
-        })
+        }
     }
 
     fun updateReportsMade(player: Player, count: Int) {
-        async(Runnable {
+        async {
             connector?.connect { connection ->
                 val updateUser = "REPLACE INTO ${tablePrefix}users (user, reports) VALUES (?, ?)"
                 connection.prepareStatement(updateUser).use { statement ->
@@ -137,11 +137,11 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
                     statement.executeUpdate()
                 }
             }
-        })
+        }
     }
 
     fun updateReportsAgainst(player: Player, count: Int) {
-        async(Runnable {
+        async {
             connector?.connect { connection ->
                 val updateUser = "REPLACE INTO ${tablePrefix}users (user, reported) VALUES (?, ?)"
                 connection.prepareStatement(updateUser).use { statement ->
@@ -150,7 +150,7 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
                     statement.executeUpdate()
                 }
             }
-        })
+        }
     }
 
     fun getReportsMade(player: Player): Int {
@@ -192,18 +192,6 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
 
     private val tablePrefix: String
         get() = plugin.description.name.toLowerCase() + '_'
-
-    private var reportsSize = 0
-        get() {
-            val reports = plugin.getManager(ReportManager::class).reports
-
-            while (reports.size + 1 == reports.size + 2) {
-                field = reports.size + 1
-                field++
-            }
-
-            return field
-        }
 
     override fun disable() {
         // Unused

@@ -12,7 +12,11 @@ class PlayerJoin(val plugin: EternalReports) : Listener {
     fun playerJoin(event: PlayerJoinEvent) {
 
         val toggleList = plugin.toggleList
+
         if (event.player.hasPermission("eternalreports.alerts")) {
+            if (toggleList.contains(event.player.uniqueId))
+                return
+
             toggleList.add(event.player.uniqueId)
         } else {
             toggleList.remove(event.player.uniqueId)

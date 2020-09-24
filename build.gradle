@@ -3,12 +3,16 @@ import org.apache.tools.ant.filters.ReplaceTokens
 plugins {
     id 'java'
     id 'org.jetbrains.kotlin.jvm' version '1.4.0'
-    id 'me.bristermitten.pdm' version '0.0.26'
+    //id 'me.bristermitten.pdm' version '0.0.28'
+    id 'com.github.johnrengelman.shadow' version '6.0.0'
 }
 
 group 'xyz.oribuin'
 version '1.0'
 compileJava.options.encoding = 'UTF-8'
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 // Repos
 repositories {
@@ -25,15 +29,15 @@ repositories {
 // Dependencies
 dependencies {
     // Overlord language
-    pdm "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    pdm "org.jetbrains.kotlin:kotlin-reflect:1.4.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:1.4.0"
 
     // Spigot Stuff
-    compileOnly 'org.spigotmc:spigot:1.16.2'
-    compileOnly 'me.clip:placeholderapi:2.10.9'
+    shadow 'org.spigotmc:spigot:1.16.2'
+    shadow 'me.clip:placeholderapi:2.10.9'
 
-    pdm 'dev.rosewood:guiframework:1.1.1'
-    pdm 'com.zaxxer:HikariCP:3.4.5'
+    implementation 'dev.rosewood:guiframework:1.1.1'
+    implementation 'com.zaxxer:HikariCP:3.4.5'
 }
 
 processResources {
@@ -49,4 +53,18 @@ compileKotlin {
     }
 }
 
-jar.dependsOn project.tasks.getByName('pdm')
+// Temporary replacement for PDM
+shadowJar {
+    mergeServiceFiles()
+    archiveFileName = 'EternalReports-' + project.property("version") + '.jar'
+
+    // Relocate so much shit
+    relocate ('org.jetbrains', 'xyz.oribuin.eternalreports.libs.jetbrains')
+    relocate ('org.intellij', 'xyz.oribuin.eternalreports.libs.intellij')
+    relocate ('kotlin', 'xyz.oribuin.eternalreports.libs.kotlin')
+    relocate ('dev.rosewood.guiframework', 'xyz.oribuin.eternalreports.libs.guiframework')
+}
+
+
+//jar.dependsOn project.tasks.getByName('pdm')
+jar.dependsOn project.tasks.getByName('shadowJar')

@@ -63,12 +63,15 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
     fun createReport(sender: Player, reported: OfflinePlayer, reason: String) {
 
         val reportManager = plugin.getManager(ReportManager::class)
+        val reportCount = mutableListOf<Int>()
+        reportManager.reports.forEach { report -> reportCount.add(report.id) }
+
 
         async {
             connector?.connect { connection: Connection ->
                 val createReport = "REPLACE INTO ${this.tablePrefix}reports (id, sender, reported, reason, resolved, time) VALUES (?, ?, ?, ?, ?, ?)"
                 connection.prepareStatement(createReport).use { statement ->
-                    statement.setInt(1, reportManager.reportId)
+                    statement.setInt(1, reportManager.getNextReportId(reportCount))
                     statement.setString(2, sender.uniqueId.toString())
                     statement.setString(3, reported.uniqueId.toString())
                     statement.setString(4, reason)
@@ -77,7 +80,7 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
                     statement.executeUpdate()
                 }
 
-                reportManager.reports.add(Report(reportManager.reportId, sender, reported, reason, false, System.currentTimeMillis()))
+                reportManager.reports.add(Report(reportManager.getNextReportId(reportCount), sender, reported, reason, false, System.currentTimeMillis()))
 
             }
         }

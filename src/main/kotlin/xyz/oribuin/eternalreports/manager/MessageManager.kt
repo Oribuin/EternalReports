@@ -38,7 +38,7 @@ class MessageManager(plugin: EternalReports) : Manager(plugin) {
             return
         }
 
-        if (messageConfig.getString(messageId)!!.isNotEmpty()) {
+        if ((messageConfig.getString(messageId)?: return).isNotEmpty()) {
             val msg = messageConfig.getString("prefix") + placeholders.apply(messageConfig.getString(messageId)!!)
             sender.spigot().sendMessage(*TextComponent.fromLegacyText(colorify(parsePlaceholders(sender, msg))))
         }

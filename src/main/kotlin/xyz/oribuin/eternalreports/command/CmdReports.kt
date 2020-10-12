@@ -86,12 +86,4 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
         subcommands.addAll(listOf(CmdHelp(plugin, this), CmdMenu(plugin, this), CmdReload(plugin, this), CmdRemove(plugin, this), CmdResolve(plugin, this), CmdToggle(plugin, this)))
     }
 
-    private fun resolvedFormatted(resolved: Boolean): String? {
-        return if (resolved) {
-            messageManager.messageConfig.getString("resolve-formatting.is-resolved")?.let { HexUtils.colorify(it) }
-        } else {
-            messageManager.messageConfig.getString("resolve-formatting.isnt-resolved")?.let { HexUtils.colorify(it) }
-        }
-    }
-
 }

@@ -28,9 +28,9 @@ import xyz.oribuin.eternalreports.util.StringPlaceholders.Companion.empty
 import java.util.*
 
 class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plugin, "report-menu") {
+
     private val guiFramework = GuiFramework.instantiate(plugin)
-    private val container = GuiFactory.createContainer()
-            .setTickRate(menuConfig.getInt("tick-update-rate"))
+    private val container = GuiFactory.createContainer().setTickRate(menuConfig.getInt("tick-update-rate"))
 
     companion object {
         var instance: ReportsMenu? = null
@@ -38,7 +38,7 @@ class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plu
     }
 
     private fun buildGui() {
-        FileUtils.createMenuFile(plugin, this.getGuiName())
+        FileUtils.createMenuFile(plugin, "report-menu")
 
         container.addScreen(mainMenu())
         guiFramework.guiManager.registerGui(container)
@@ -203,7 +203,9 @@ class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plu
     }
 
     fun openMenu() {
-        if (isInvalid) buildGui()
+        if (isInvalid)
+            buildGui()
+
         container.openFor(player)
     }
 

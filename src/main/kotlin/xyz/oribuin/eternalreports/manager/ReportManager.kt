@@ -18,7 +18,6 @@ class ReportManager(plugin: EternalReports) : Manager(plugin) {
     private fun registerReports() {
         val data = plugin.getManager(DataManager::class)
 
-
         Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, Runnable {
             data.connector?.connect { connection ->
                 val query = "SELECT * FROM ${tablePrefix}reports"

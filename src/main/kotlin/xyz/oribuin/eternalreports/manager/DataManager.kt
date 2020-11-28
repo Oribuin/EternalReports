@@ -48,8 +48,8 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
 
     private fun createTables() {
         val queries = arrayOf(
-                "CREATE TABLE IF NOT EXISTS ${tablePrefix}reports (id INT, sender TXT, reported TXT, reason TXT, resolved BOOLEAN, time LONG, PRIMARY KEY(sender, reported, reason, time))",
-                "CREATE TABLE IF NOT EXISTS ${tablePrefix}users (user TXT, reports INT, reported INT, PRIMARY KEY(user))"
+                "CREATE TABLE IF NOT EXISTS ${tablePrefix}reports (id INTEGER, sender VARCHAR(36), reported VARCHAR(36), reason VARCHAR(100), resolved BOOLEAN, time LONG, PRIMARY KEY(sender, reported, reason, time))",
+                "CREATE TABLE IF NOT EXISTS ${tablePrefix}users (user VARCHAR(36), reports INTEGER, reported INTEGER, PRIMARY KEY(user))"
         )
         async {
             connector?.connect { connection: Connection ->
@@ -80,7 +80,8 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
                     statement.executeUpdate()
                 }
 
-                reportManager.reports.add(Report(reportManager.getNextReportId(reportCount), sender, reported, reason, false, System.currentTimeMillis()))
+                reportManager.reports.add(Report(reportManager.getNextReportId(reportCount
+                ), sender, reported, reason, false, System.currentTimeMillis()))
 
             }
         }

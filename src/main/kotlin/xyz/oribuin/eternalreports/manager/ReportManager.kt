@@ -3,6 +3,7 @@ package xyz.oribuin.eternalreports.manager
 import org.bukkit.Bukkit
 import xyz.oribuin.eternalreports.EternalReports
 import xyz.oribuin.eternalreports.data.Report
+import xyz.oribuin.orilibrary.Manager
 import java.util.*
 
 class ReportManager(plugin: EternalReports) : Manager(plugin) {
@@ -10,13 +11,13 @@ class ReportManager(plugin: EternalReports) : Manager(plugin) {
     val resolvedReports = reports.stream().filter { x -> x.isResolved }.count().toInt()
     val unresolvedReports = reports.stream().filter { x -> !x.isResolved }.count().toInt()
 
-    override fun reload() {
+    override fun enable() {
         this.reports.clear()
         this.registerReports()
     }
 
     private fun registerReports() {
-        val data = plugin.getManager(DataManager::class)
+        val data = plugin.getManager(DataManager::class.java)
 
         Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, Runnable {
             data.connector?.connect { connection ->

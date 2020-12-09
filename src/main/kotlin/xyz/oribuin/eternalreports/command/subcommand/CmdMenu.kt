@@ -4,14 +4,14 @@ import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import xyz.oribuin.eternalreports.EternalReports
-import xyz.oribuin.eternalreports.command.OriCommand
-import xyz.oribuin.eternalreports.command.SubCommand
 import xyz.oribuin.eternalreports.manager.MessageManager
 import xyz.oribuin.eternalreports.menu.ReportsMenu
+import xyz.oribuin.orilibrary.OriCommand
+import xyz.oribuin.orilibrary.SubCommand
 
 class CmdMenu(private val plugin: EternalReports, command: OriCommand) : SubCommand(command, "menu") {
     override fun executeArgument(sender: CommandSender, args: Array<String>) {
-        val messageManager = plugin.getManager(MessageManager::class)
+        val messageManager = plugin.getManager(MessageManager::class.java)
 
         if (args.size == 2) {
             val mentioned = Bukkit.getPlayer(args[1])

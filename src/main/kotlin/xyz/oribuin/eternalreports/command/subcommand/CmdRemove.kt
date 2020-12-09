@@ -4,17 +4,17 @@ import org.bukkit.Bukkit
 import org.bukkit.Sound
 import org.bukkit.command.CommandSender
 import xyz.oribuin.eternalreports.EternalReports
-import xyz.oribuin.eternalreports.command.OriCommand
-import xyz.oribuin.eternalreports.command.SubCommand
 import xyz.oribuin.eternalreports.event.ReportDeleteEvent
 import xyz.oribuin.eternalreports.manager.ConfigManager
 import xyz.oribuin.eternalreports.manager.DataManager
 import xyz.oribuin.eternalreports.manager.MessageManager
 import xyz.oribuin.eternalreports.manager.ReportManager
-import xyz.oribuin.eternalreports.util.StringPlaceholders
+import xyz.oribuin.orilibrary.OriCommand
+import xyz.oribuin.orilibrary.StringPlaceholders
+import xyz.oribuin.orilibrary.SubCommand
 
 class CmdRemove(val plugin: EternalReports, command: OriCommand) : SubCommand(command, "remove", "delete") {
-    private val messageManager = plugin.getManager(MessageManager::class)
+    private val messageManager = plugin.getManager(MessageManager::class.java)
 
     override fun executeArgument(sender: CommandSender, args: Array<String>) {
         // Check permission
@@ -30,7 +30,7 @@ class CmdRemove(val plugin: EternalReports, command: OriCommand) : SubCommand(co
         }
 
         // Get reports matching ID
-        val reports = plugin.getManager(ReportManager::class).reports.filter { report -> report.id == args[1].toInt() }
+        val reports = plugin.getManager(ReportManager::class.java).reports.filter { report -> report.id == args[1].toInt() }
 
         // Check if there aren't any matchingg
         if (reports.isEmpty()) {
@@ -47,6 +47,12 @@ class CmdRemove(val plugin: EternalReports, command: OriCommand) : SubCommand(co
                 .addPlaceholder("reported", report.reported.name)
                 .addPlaceholder("reason", report.reason)
                 .addPlaceholder("report_id", report.id).build()
+
+        val event = ReportDeleteEvent(report)
+        Bukkit.getPluginManager().callEvent(event)
+        if (event.isCancelled) {
+            return
+        }
 
         // Send message
         messageManager.sendMessage(sender, "commands.removed-report", placeholders)
@@ -68,9 +74,7 @@ class CmdRemove(val plugin: EternalReports, command: OriCommand) : SubCommand(co
 
 
         // Delete report
-        plugin.getManager(DataManager::class).deleteReport(report)
-        // Call Event
-        Bukkit.getPluginManager().callEvent(ReportDeleteEvent(report))
+        plugin.getManager(DataManager::class.java).deleteReport(report)
     }
 
 }

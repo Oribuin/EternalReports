@@ -2,10 +2,11 @@ package xyz.oribuin.eternalreports.manager
 
 import org.bukkit.configuration.file.FileConfiguration
 import xyz.oribuin.eternalreports.EternalReports
+import xyz.oribuin.orilibrary.Manager
 import java.io.File
 
 class ConfigManager(plugin: EternalReports) : Manager(plugin) {
-    override fun reload() {
+    override fun enable() {
         plugin.reloadConfig()
         plugin.saveDefaultConfig()
         val config = plugin.config

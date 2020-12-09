@@ -8,7 +8,8 @@ import xyz.oribuin.eternalreports.data.Report
 import xyz.oribuin.eternalreports.database.DatabaseConnector
 import xyz.oribuin.eternalreports.database.MySQLConnector
 import xyz.oribuin.eternalreports.database.SQLiteConnector
-import xyz.oribuin.eternalreports.util.FileUtils.createFile
+import xyz.oribuin.orilibrary.FileUtils.createFile
+import xyz.oribuin.orilibrary.Manager
 import java.sql.Connection
 
 class DataManager(plugin: EternalReports) : Manager(plugin) {
@@ -16,7 +17,7 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
     private var reportsMade: Int = 0
     private var reportsAgainst: Int = 0
 
-    override fun reload() {
+    override fun enable() {
 
         try {
             if (ConfigManager.Setting.SQL_ENABLED.boolean) {
@@ -62,7 +63,7 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
 
     fun createReport(sender: Player, reported: OfflinePlayer, reason: String) {
 
-        val reportManager = plugin.getManager(ReportManager::class)
+        val reportManager = plugin.getManager(ReportManager::class.java)
         val reportCount = mutableListOf<Int>()
         reportManager.reports.forEach { report -> reportCount.add(report.id) }
 
@@ -88,7 +89,7 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
     }
 
     fun deleteReport(report: Report) {
-        val reportManager = plugin.getManager(ReportManager::class)
+        val reportManager = plugin.getManager(ReportManager::class.java)
 
         async {
             connector?.connect { connection: Connection ->
@@ -108,7 +109,7 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
     }
 
     fun resolveReport(report: Report, resolved: Boolean) {
-        val reportManager = plugin.getManager(ReportManager::class)
+        val reportManager = plugin.getManager(ReportManager::class.java)
 
         async {
             connector?.connect { connection: Connection ->

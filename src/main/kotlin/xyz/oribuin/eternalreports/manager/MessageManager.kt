@@ -7,16 +7,17 @@ import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
 import xyz.oribuin.eternalreports.EternalReports
 import xyz.oribuin.eternalreports.hook.PlaceholderAPIHook
-import xyz.oribuin.eternalreports.util.FileUtils.createFile
+import xyz.oribuin.orilibrary.FileUtils.createFile
 import xyz.oribuin.eternalreports.util.HexUtils.colorify
-import xyz.oribuin.eternalreports.util.StringPlaceholders
-import xyz.oribuin.eternalreports.util.StringPlaceholders.Companion.empty
+import xyz.oribuin.orilibrary.Manager
+import xyz.oribuin.orilibrary.StringPlaceholders
+import xyz.oribuin.orilibrary.StringPlaceholders.empty
 import java.io.File
 
 class MessageManager(plugin: EternalReports) : Manager(plugin) {
     lateinit var messageConfig: FileConfiguration
 
-    override fun reload() {
+    override fun enable() {
         createFile(plugin, MESSAGE_CONFIG)
         messageConfig = YamlConfiguration.loadConfiguration(File(plugin.dataFolder, MESSAGE_CONFIG))
 
@@ -136,6 +137,4 @@ class MessageManager(plugin: EternalReports) : Manager(plugin) {
         }
 
     }
-
-
 }

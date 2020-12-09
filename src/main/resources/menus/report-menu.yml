@@ -32,21 +32,15 @@ report-item:
     - ' '
     - ' &f» &cResolved: &e%resolved%'
     - ' '
-    - ' &7(Left Click to teleport to reported player)'
-    - ' &7(Right Click to teleport to reporter)'
-    - ' &7(Shift Left Click to Delete)'
-    - ' &7(Shift Right Click to Resolve)'
+    - ' &7(Left Click to Delete)'
+    - ' &7(Right Click to Resolve)'
 
 
   # Use %player% for the user who clicked the menu
   player-commands:
     left-click-commands:
-      - 'tp %reported%'
-    right-click-commands:
-      - 'tp %sender%'
-    shift-left-click-commands:
       - 'reports resolve %report_id%'
-    shift-right-click-commands:
+    right-click-commands:
       - 'reports delete %report_id%'
   console-commands:
     left-click-commands: []

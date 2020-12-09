@@ -20,11 +20,11 @@ import xyz.oribuin.eternalreports.EternalReports
 import xyz.oribuin.eternalreports.hook.PlaceholderAPIHook.apply
 import xyz.oribuin.eternalreports.manager.MessageManager
 import xyz.oribuin.eternalreports.manager.ReportManager
-import xyz.oribuin.eternalreports.util.FileUtils
 import xyz.oribuin.eternalreports.util.HexUtils.colorify
 import xyz.oribuin.eternalreports.util.PluginUtils
-import xyz.oribuin.eternalreports.util.StringPlaceholders
-import xyz.oribuin.eternalreports.util.StringPlaceholders.Companion.empty
+import xyz.oribuin.orilibrary.FileUtils
+import xyz.oribuin.orilibrary.StringPlaceholders
+import xyz.oribuin.orilibrary.StringPlaceholders.empty
 import java.util.*
 
 class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plugin, "report-menu") {
@@ -50,7 +50,7 @@ class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plu
 
         this.borderSlots().forEach { slot -> getItem("border-item")?.let { screen.addItemStackAt(slot, it) } }
 
-        val reports = plugin.getManager(ReportManager::class).reports
+        val reports = plugin.getManager(ReportManager::class.java).reports
 
         if (reports.size == 0) {
             getItem("no-reports")?.let { screen.addItemStackAt(menuConfig.getInt("no-reports.slot"), it) }
@@ -260,7 +260,7 @@ class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plu
     }
 
     private fun resolvedFormatted(resolved: Boolean): String? {
-        val msg = plugin.getManager(MessageManager::class)
+        val msg = plugin.getManager(MessageManager::class.java)
 
         return if (resolved) {
             msg.messageConfig.getString("resolve-formatting.is-resolved")?.let { apply(player, it) }?.let { colorify(it) }

@@ -3,6 +3,7 @@ package xyz.oribuin.eternalreports.manager
 import xyz.oribuin.eternalreports.EternalReports
 import xyz.oribuin.eternalreports.menu.Menu
 import xyz.oribuin.eternalreports.menu.ReportsMenu
+import xyz.oribuin.orilibrary.Manager
 import java.util.*
 import java.util.function.Consumer
 
@@ -13,7 +14,7 @@ class GuiManager(plugin: EternalReports) : Manager(plugin) {
         ReportsMenu.instance?.let { menus.add(it) }
     }
 
-    override fun reload() {
+    override fun enable() {
         this.registerMenus()
 
         menus.forEach(Consumer { menu -> menu.reload() })

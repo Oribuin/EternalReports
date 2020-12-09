@@ -21,6 +21,7 @@ repositories {
     jcenter()
 
     maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+    maven { url 'http://repo.oribuin.xyz:8081/repository/maven-public/' }
     maven { url 'http://repo.extendedclip.com/content/repositories/placeholderapi/' }
     maven { url 'https://repo.codemc.org/repository/maven-public' }
     maven { url 'https://repo.rosewooddev.io/repository/public/' }
@@ -30,12 +31,12 @@ repositories {
 dependencies {
     // Overlord language
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    implementation "org.jetbrains.kotlin:kotlin-reflect:1.4.0"
 
     // Spigot Stuff
-    shadow 'org.spigotmc:spigot:1.16.2'
+    shadow 'org.spigotmc:spigot:1.16.4'
     shadow 'me.clip:placeholderapi:2.10.9'
 
+    implementation 'xyz.oribuin:orilib:1.0.6'
     implementation 'dev.rosewood:guiframework:1.1.1'
     implementation 'com.zaxxer:HikariCP:3.4.5'
 }
@@ -55,16 +56,16 @@ compileKotlin {
 
 // Temporary replacement for PDM
 shadowJar {
-    mergeServiceFiles()
-    archiveFileName = 'EternalReports-' + project.property("version") + '.jar'
+    archiveClassifier.set(null)
 
     // Relocate so much shit
     relocate ('org.jetbrains', 'xyz.oribuin.eternalreports.libs.jetbrains')
     relocate ('org.intellij', 'xyz.oribuin.eternalreports.libs.intellij')
     relocate ('kotlin', 'xyz.oribuin.eternalreports.libs.kotlin')
     relocate ('dev.rosewood.guiframework', 'xyz.oribuin.eternalreports.libs.guiframework')
+    relocate ('xyz.oribuin.orilibrary', 'xyz.oribuin.eternalreports.library')
 }
 
 
 //jar.dependsOn project.tasks.getByName('pdm')
-jar.dependsOn project.tasks.getByName('shadowJar')
+build.dependsOn shadowJar

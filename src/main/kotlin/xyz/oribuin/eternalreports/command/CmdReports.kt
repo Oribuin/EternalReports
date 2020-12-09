@@ -7,12 +7,13 @@ import xyz.oribuin.eternalreports.EternalReports
 import xyz.oribuin.eternalreports.command.subcommand.*
 import xyz.oribuin.eternalreports.manager.MessageManager
 import xyz.oribuin.eternalreports.manager.ReportManager
-import xyz.oribuin.eternalreports.util.HexUtils
+import xyz.oribuin.orilibrary.OriCommand
+import xyz.oribuin.orilibrary.SubCommand
 
-class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "reports") {
+class CmdReports(val plugin: EternalReports) : OriCommand(plugin, "reports") {
     private val subcommands = mutableListOf<SubCommand>()
 
-    private val messageManager = plugin.getManager(MessageManager::class)
+    private val messageManager = plugin.getManager(MessageManager::class.java)
 
     override fun executeCommand(sender: CommandSender, args: Array<String>) {
 
@@ -72,7 +73,7 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
             } else if (args[0].toLowerCase() == "resolve" && sender.hasPermission("eternalreports.resolve") || deleteCmdList.contains(args[0].toLowerCase()) && sender.hasPermission("eternalreports.delete")) {
 
                 val ids: MutableList<String> = ArrayList()
-                plugin.getManager(ReportManager::class).reports.stream().forEach { t -> ids.add(t.id.toString()) }
+                plugin.getManager(ReportManager::class.java).reports.stream().forEach { t -> ids.add(t.id.toString()) }
 
                 StringUtil.copyPartialMatches(args[1].toLowerCase(), ids, suggestions)
             }
@@ -83,7 +84,7 @@ class CmdReports(override val plugin: EternalReports) : OriCommand(plugin, "repo
     }
 
     override fun addSubCommands() {
-        subcommands.addAll(listOf(CmdHelp(plugin, this), CmdMenu(plugin, this), CmdReload(plugin, this), CmdRemove(plugin, this), CmdResolve(plugin, this), CmdToggle(plugin, this)))
+        subcommands.addAll(listOf(CmdHelp(plugin as EternalReports, this), CmdMenu(plugin, this), CmdReload(plugin, this), CmdRemove(plugin, this), CmdResolve(plugin, this), CmdToggle(plugin, this)))
     }
 
 }

@@ -1,7 +1,7 @@
 name: EternalReports
 main: xyz.oribuin.eternalreports.EternalReports
 version: '@version@'
-authors: [Oribuin, Esophose]
+authors: [ Oribuin, Esophose ]
 api-version: "1.13"
 description: A simple report plugin created with functionality in mind.
 softdepend:

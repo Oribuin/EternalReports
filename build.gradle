@@ -59,11 +59,13 @@ shadowJar {
     archiveClassifier.set(null)
 
     // Relocate so much shit
-    relocate ('org.jetbrains', 'xyz.oribuin.eternalreports.libs.jetbrains')
-    relocate ('org.intellij', 'xyz.oribuin.eternalreports.libs.intellij')
-    relocate ('kotlin', 'xyz.oribuin.eternalreports.libs.kotlin')
-    relocate ('dev.rosewood.guiframework', 'xyz.oribuin.eternalreports.libs.guiframework')
-    relocate ('xyz.oribuin.orilibrary', 'xyz.oribuin.eternalreports.library')
+    relocate('org.jetbrains', 'xyz.oribuin.eternalreports.libs.jetbrains')
+    relocate('org.intellij', 'xyz.oribuin.eternalreports.libs.intellij')
+    relocate('kotlin', 'xyz.oribuin.eternalreports.libs.kotlin')
+    relocate('dev.rosewood.guiframework', 'xyz.oribuin.eternalreports.libs.guiframework')
+    relocate('xyz.oribuin.orilibrary', 'xyz.oribuin.eternalreports.libs.orilib')
+    relocate('org.slf4j', 'xyz.oribuin.eternalreports.libs.slf4j')
+    relocate('com.zaxxer', 'xyz.oribuin.eternalreports.libs.zaxxer')
 }
 
 

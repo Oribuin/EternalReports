@@ -1,6 +1,7 @@
 package xyz.oribuin.eternalreports.command
 
 import org.bukkit.Bukkit
+import org.bukkit.OfflinePlayer
 import org.bukkit.Sound
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -42,19 +43,30 @@ class CmdReport(plugin: EternalReports) : OriCommand(plugin, "report") {
 
 
         // Reported user
-        val reported = Bukkit.getPlayer(args[0])?.uniqueId?.let { Bukkit.getOfflinePlayer(it) }
+        var reported: OfflinePlayer? = null
+        for (pl in plugin.server.offlinePlayers) {
+            pl ?: return
+            if (pl.isBanned || !pl.hasPlayedBefore() || pl.name != args[0]) {
+                msg.sendMessage(sender, "invalid-player")
+                break
+            }
+
+            reported = pl
+        }
 
         // Check if reported user is null
-        if (reported == null) {
+        if (reported == null || reported.player == null) {
             msg.sendMessage(sender, "invalid-player")
             return
         }
 
+        val player = reported.player ?: return
+
         // Check if the player has permission to bypass report
-//        if ((reported.player ?: return).hasPermission("eternalreports.bypass")) {
-//            msg.sendMessage(sender, "has-bypass")
-//            return
-//        }
+        if (player.hasPermission("eternalreports.bypass")) {
+            msg.sendMessage(sender, "has-bypass")
+            return
+        }
 
         // Report reason
         val reason = java.lang.String.join(" ", *args).substring(args[0].length + 1)
@@ -99,7 +111,7 @@ class CmdReport(plugin: EternalReports) : OriCommand(plugin, "report") {
 
         Bukkit.getOnlinePlayers().stream()
             .filter { it.hasPermission("eternalreports.alerts") && plugin.toggleList.contains(it.uniqueId) }
-            .forEach { staffMember: Player ->
+            .forEach { staffMember ->
                 if (ConfigManager.Setting.ALERT_SETTINGS_SOUND_ENABLED.boolean) {
 
                     // Why such a long method kotlin?

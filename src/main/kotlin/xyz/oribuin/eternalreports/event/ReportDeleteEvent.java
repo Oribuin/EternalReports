@@ -1,10 +1,8 @@
 package xyz.oribuin.eternalreports.event;
 
-import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.player.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 import xyz.oribuin.eternalreports.data.Report;
 
@@ -16,6 +14,10 @@ public class ReportDeleteEvent extends Event implements Cancellable {
 
     public ReportDeleteEvent(Report report) {
         this.report = report;
+    }
+
+    public static HandlerList getHandlerList() {
+        return HANDLER_LIST;
     }
 
     @Override
@@ -31,10 +33,6 @@ public class ReportDeleteEvent extends Event implements Cancellable {
     @NotNull
     @Override
     public HandlerList getHandlers() {
-        return HANDLER_LIST;
-    }
-
-    public static HandlerList getHandlerList() {
         return HANDLER_LIST;
     }
 

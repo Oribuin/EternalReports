@@ -39,42 +39,42 @@ report-item:
   # Use %player% for the user who clicked the menu
   player-commands:
     left-click-commands:
-      - 'reports resolve %report_id%'
-    right-click-commands:
       - 'reports delete %report_id%'
+    right-click-commands:
+      - 'reports resolve %report_id%'
   console-commands:
-    left-click-commands: []
-    right-click-commands: []
-    shift-left-click-commands: []
-    shift-right-click-commands: []
+    left-click-commands: [ ]
+    right-click-commands: [ ]
+    shift-left-click-commands: [ ]
+    shift-right-click-commands: [ ]
 
 no-reports:
   name: '&cSorry! There are no reports here!'
   material: 'BARRIER'
   slot: 22
   glowing: false
-  lore: []
-  item-flags: []
+  lore: [ ]
+  item-flags: [ ]
 
 back-page:
   name: '&e« &bBack Page'
   material: 'PAPER'
   slot: 47
   glowing: false
-  lore: []
-  item-flags: []
+  lore: [ ]
+  item-flags: [ ]
 
 forward-page:
   name: '&bForward Page &e»'
   material: 'PAPER'
   slot: 51
   glowing: false
-  lore: []
-  item-flags: []
+  lore: [ ]
+  item-flags: [ ]
 
 border-item:
   name: ' '
   material: 'RED_STAINED_GLASS_PANE'
   glowing: false
-  lore: []
-  item-flags: []
+  lore: [ ]
+  item-flags: [ ]

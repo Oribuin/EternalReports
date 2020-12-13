@@ -12,8 +12,13 @@ public class ReportResolveEvent extends Event implements Cancellable {
     private boolean isCancelled;
     private Report report;
 
-    public ReportResolveEvent(Report report) { ;
+    public ReportResolveEvent(Report report) {
+        ;
         this.report = report;
+    }
+
+    public static HandlerList getHandlerList() {
+        return HANDLER_LIST;
     }
 
     @Override
@@ -29,10 +34,6 @@ public class ReportResolveEvent extends Event implements Cancellable {
     @NotNull
     @Override
     public HandlerList getHandlers() {
-        return HANDLER_LIST;
-    }
-
-    public static HandlerList getHandlerList() {
         return HANDLER_LIST;
     }
 

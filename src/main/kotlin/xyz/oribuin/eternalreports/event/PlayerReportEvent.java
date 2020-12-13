@@ -18,6 +18,10 @@ public class PlayerReportEvent extends PlayerEvent implements Cancellable {
         this.report = report;
     }
 
+    public static HandlerList getHandlerList() {
+        return HANDLER_LIST;
+    }
+
     @Override
     public boolean isCancelled() {
         return isCancelled;
@@ -31,10 +35,6 @@ public class PlayerReportEvent extends PlayerEvent implements Cancellable {
     @NotNull
     @Override
     public HandlerList getHandlers() {
-        return HANDLER_LIST;
-    }
-
-    public static HandlerList getHandlerList() {
         return HANDLER_LIST;
     }
 

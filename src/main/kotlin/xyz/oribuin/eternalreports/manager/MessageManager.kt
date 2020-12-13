@@ -7,8 +7,8 @@ import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
 import xyz.oribuin.eternalreports.EternalReports
 import xyz.oribuin.eternalreports.hook.PlaceholderAPIHook
-import xyz.oribuin.orilibrary.FileUtils.createFile
 import xyz.oribuin.eternalreports.util.HexUtils.colorify
+import xyz.oribuin.orilibrary.FileUtils.createFile
 import xyz.oribuin.orilibrary.Manager
 import xyz.oribuin.orilibrary.StringPlaceholders
 import xyz.oribuin.orilibrary.StringPlaceholders.empty
@@ -39,7 +39,7 @@ class MessageManager(plugin: EternalReports) : Manager(plugin) {
             return
         }
 
-        if ((messageConfig.getString(messageId)?: return).isNotEmpty()) {
+        if ((messageConfig.getString(messageId) ?: return).isNotEmpty()) {
             val msg = messageConfig.getString("prefix") + placeholders.apply(messageConfig.getString(messageId)!!)
             sender.spigot().sendMessage(*TextComponent.fromLegacyText(colorify(parsePlaceholders(sender, msg))))
         }
@@ -70,6 +70,7 @@ class MessageManager(plugin: EternalReports) : Manager(plugin) {
         CMD_REPORT_USER("commands.reported-user", "&bYou have reported &f%reported% &bfor &f&n%reason%&b!"),
         CMD_RESOLVED_REPORT("commands.resolved-report", "&bYou have resolved &f%sender%&b's&b report! (ID: &f%report_id%&b)"),
         CMD_UNRESOLVED_REPORT("commands.unresolved-report", "&bYou have unresolved &f%sender%&b's&b report! (ID: &f%report_id%&b)"),
+        CMD_REMOVE_CONFIRM("command.removed-confirm", "&bPlease type the command again to confirm removal"),
         CMD_REMOVED_REPORT("commands.removed-report", "&bYou have successfully removed &f%sender%'s&b report! (ID: &f%report_id%&b)"),
         CMD_ALERTS_ON("commands.alerts-on", "&bYou have &fenabled&b report alerts!"),
         CMD_ALERTS_OFF("commands.alerts-off", "&bYou have &fdisabled&b report alerts!"),
@@ -80,7 +81,8 @@ class MessageManager(plugin: EternalReports) : Manager(plugin) {
         ALERTS_REPORT_DELETED("alerts.report-deleted", "&f%sender% &bhas deleted &f%sender%'s&b report (ID: &f%report_id%&b)"),
 
         // Help Menu
-        HELP_MESSAGE("help-message", listOf(
+        HELP_MESSAGE(
+            "help-message", listOf(
                 " ",
                 " <rainbow:0.7>EternalReports &f» &bCommands",
                 " &f• &b/report&b &f<Player> <Reason> #8E54E9- &bReport a Player.",
@@ -91,7 +93,8 @@ class MessageManager(plugin: EternalReports) : Manager(plugin) {
                 " ",
                 " &f» &bPlugin created by <g:#4776E6:#8E54E9>Oribuin",
                 " "
-        )),
+            )
+        ),
 
         // Error Messages
         INVALID_PERMISSION("invalid-permission", "&cYou do not have permission for this command."),

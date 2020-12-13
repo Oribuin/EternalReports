@@ -46,7 +46,7 @@ class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plu
 
     private fun mainMenu(): GuiScreen {
         val screen = GuiFactory.createScreen(container, GuiSize.ROWS_SIX)
-                .setTitle(colorify(this.getValue("menu-name")))
+            .setTitle(colorify(this.getValue("menu-name")))
 
         this.borderSlots().forEach { slot -> getItem("border-item")?.let { screen.addItemStackAt(slot, it) } }
 
@@ -63,18 +63,19 @@ class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plu
                 lore.add(this.format(string, empty()))
 
             screen.addButtonAt(menuConfig.getInt("forward-page.slot"), GuiFactory.createButton()
-                    .setName(this.getValue("forward-page.name", empty()))
-                    .setLore(lore)
-                    .setIcon(Material.valueOf(this.getValue("forward-page.material")))
-                    .setGlowing(menuConfig.getBoolean("forward-page.glowing"))
-                    .setClickAction({ event: InventoryClickEvent ->
-                        val pplayer = event.whoClicked as Player
-                        if (menuConfig.getBoolean("use-sound")) {
-                            menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }
-                        }
+                .setName(this.getValue("forward-page.name", empty()))
+                .setLore(lore)
+                .setIcon(Material.valueOf(this.getValue("forward-page.material")))
+                .setGlowing(menuConfig.getBoolean("forward-page.glowing"))
+                .setClickAction({ event: InventoryClickEvent ->
+                    val pplayer = event.whoClicked as Player
+                    if (menuConfig.getBoolean("use-sound")) {
+                        menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }
+                    }
 
-                        ClickAction.PAGE_FORWARDS
-                    }))
+                    ClickAction.PAGE_FORWARDS
+                })
+            )
         }
 
         // Add back page
@@ -84,18 +85,19 @@ class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plu
                 lore.add(this.format(string, empty()))
 
             screen.addButtonAt(menuConfig.getInt("back-page.slot"), GuiFactory.createButton()
-                    .setName(this.getValue("back-page.name", empty()))
-                    .setLore(lore)
-                    .setIcon(Material.valueOf(this.getValue("back-page.material")))
-                    .setGlowing(menuConfig.getBoolean("back-page.glowing"))
-                    .setClickAction({ event: InventoryClickEvent ->
-                        val pplayer = event.whoClicked as Player
-                        if (menuConfig.getBoolean("use-sound")) {
-                            menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }
-                        }
+                .setName(this.getValue("back-page.name", empty()))
+                .setLore(lore)
+                .setIcon(Material.valueOf(this.getValue("back-page.material")))
+                .setGlowing(menuConfig.getBoolean("back-page.glowing"))
+                .setClickAction({ event: InventoryClickEvent ->
+                    val pplayer = event.whoClicked as Player
+                    if (menuConfig.getBoolean("use-sound")) {
+                        menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }
+                    }
 
-                        ClickAction.PAGE_BACKWARDS
-                    }))
+                    ClickAction.PAGE_BACKWARDS
+                })
+            )
         }
 
         screen.setPaginatedSection(GuiFactory.createScreenSection(reportSlots()), reports.size) { _: Int, startIndex: Int, endIndex: Int ->
@@ -105,70 +107,70 @@ class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plu
 
 
                 val placeholders = StringPlaceholders.builder()
-                        .addPlaceholder("report_id", report.id)
-                        .addPlaceholder("sender", report.sender.name)
-                        .addPlaceholder("reported", report.reported.name)
-                        .addPlaceholder("reason", report.reason)
-                        .addPlaceholder("resolved", resolvedFormatted(report.isResolved))
-                        .addPlaceholder("time", PluginUtils.formatTime(report.time))
+                    .addPlaceholder("report_id", report.id)
+                    .addPlaceholder("sender", report.sender.name)
+                    .addPlaceholder("reported", report.reported.name)
+                    .addPlaceholder("reason", report.reason)
+                    .addPlaceholder("resolved", resolvedFormatted(report.isResolved))
+                    .addPlaceholder("time", PluginUtils.formatTime(report.time))
 
                 val lore = mutableListOf<String>()
                 for (string in menuConfig.getStringList("report-item.lore"))
                     lore.add(this.format(string, placeholders.build()))
 
                 val guiButton = GuiFactory.createButton()
-                        .setName(this.getValue("report-item.name", placeholders.build()))
-                        .setLore(lore)
-                        .setIcon(Material.PLAYER_HEAD) { itemMeta: ItemMeta ->
-                            val meta = itemMeta as SkullMeta
-                            meta.owningPlayer = report.reported
+                    .setName(this.getValue("report-item.name", placeholders.build()))
+                    .setLore(lore)
+                    .setIcon(Material.PLAYER_HEAD) { itemMeta: ItemMeta ->
+                        val meta = itemMeta as SkullMeta
+                        meta.owningPlayer = report.reported
+                    }
+                    .setGlowing(menuConfig.getBoolean("report-item.glowing"))
+
+                    .setClickAction({ event: InventoryClickEvent ->
+                        val pplayer = event.whoClicked as Player
+                        if (menuConfig.getBoolean("use-sound")) {
+                            menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }
                         }
-                        .setGlowing(menuConfig.getBoolean("report-item.glowing"))
 
-                        .setClickAction({ event: InventoryClickEvent ->
-                            val pplayer = event.whoClicked as Player
-                            if (menuConfig.getBoolean("use-sound")) {
-                                menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }
-                            }
+                        this.executeCommands("left-click", placeholders, pplayer)
 
-                            this.executeCommands("left-click", placeholders, pplayer)
+                        ClickAction.CLOSE
 
-                            ClickAction.CLOSE
+                    }, ClickActionType.LEFT_CLICK)
+                    .setClickAction({ event: InventoryClickEvent ->
+                        val pplayer = event.whoClicked as Player
+                        if (menuConfig.getBoolean("use-sound")) {
+                            menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }
+                        }
 
-                        }, ClickActionType.LEFT_CLICK)
-                        .setClickAction({ event: InventoryClickEvent ->
-                            val pplayer = event.whoClicked as Player
-                            if (menuConfig.getBoolean("use-sound")) {
-                                menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }
-                            }
+                        this.executeCommands("right-click", placeholders, pplayer)
 
-                            this.executeCommands("right-click", placeholders, pplayer)
+                        ClickAction.CLOSE
 
-                            ClickAction.CLOSE
+                    }, ClickActionType.RIGHT_CLICK)
+                    .setClickAction({ event: InventoryClickEvent ->
+                        val pplayer = event.whoClicked as Player
+                        if (menuConfig.getBoolean("use-sound")) {
+                            menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }
+                        }
 
-                        }, ClickActionType.RIGHT_CLICK)
-                        .setClickAction({ event: InventoryClickEvent ->
-                            val pplayer = event.whoClicked as Player
-                            if (menuConfig.getBoolean("use-sound")) {
-                                menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }
-                            }
+                        this.executeCommands("shift-left-click", placeholders, pplayer)
 
-                            this.executeCommands("shift-left-click", placeholders, pplayer)
+                        ClickAction.CLOSE
 
-                            ClickAction.CLOSE
+                    }, ClickActionType.SHIFT_LEFT_CLICK)
+                    .setClickAction({ event: InventoryClickEvent ->
+                        val pplayer = event.whoClicked as Player
+                        if (menuConfig.getBoolean("use-sound")) {
+                            menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }
+                        }
 
-                        }, ClickActionType.SHIFT_LEFT_CLICK)
-                        .setClickAction({ event: InventoryClickEvent ->
-                            val pplayer = event.whoClicked as Player
-                            if (menuConfig.getBoolean("use-sound")) {
-                                menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }
-                            }
+                        this.executeCommands("shift-right-click", placeholders, pplayer)
 
-                            this.executeCommands("shift-right-click", placeholders, pplayer)
+                        ClickAction.CLOSE
 
-                            ClickAction.CLOSE
-
-                        }, ClickActionType.SHIFT_RIGHT_CLICK)
+                    }, ClickActionType.SHIFT_RIGHT_CLICK)
 
                 results.addPageContent(guiButton)
             }

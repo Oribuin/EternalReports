@@ -3,7 +3,7 @@ package xyz.oribuin.eternalreports.manager
 import xyz.oribuin.eternalreports.EternalReports
 import xyz.oribuin.eternalreports.menu.Menu
 import xyz.oribuin.eternalreports.menu.ReportsMenu
-import xyz.oribuin.orilibrary.Manager
+import xyz.oribuin.orilibrary.manager.Manager
 import java.util.*
 import java.util.function.Consumer
 

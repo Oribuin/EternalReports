@@ -3,7 +3,7 @@ package xyz.oribuin.eternalreports.manager
 import org.bukkit.Bukkit
 import xyz.oribuin.eternalreports.EternalReports
 import xyz.oribuin.eternalreports.data.Report
-import xyz.oribuin.orilibrary.Manager
+import xyz.oribuin.orilibrary.manager.Manager
 import java.util.*
 
 class ReportManager(plugin: EternalReports) : Manager(plugin) {

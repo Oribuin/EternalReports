@@ -7,8 +7,8 @@ import xyz.oribuin.eternalreports.hook.PlaceholderAPIHook
 import xyz.oribuin.eternalreports.hook.PlaceholderExp
 import xyz.oribuin.eternalreports.listener.PlayerJoin
 import xyz.oribuin.eternalreports.manager.*
-import xyz.oribuin.orilibrary.FileUtils
 import xyz.oribuin.orilibrary.OriPlugin
+import xyz.oribuin.orilibrary.util.FileUtils
 import java.util.*
 
 /**
@@ -30,6 +30,7 @@ class EternalReports : OriPlugin() {
         })
 
         FileUtils.createMenuFile(this, "report-menu")
+
         CmdReport(this).register()
         CmdReports(this).register()
 

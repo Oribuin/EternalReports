@@ -3,9 +3,9 @@ package xyz.oribuin.eternalreports.command.subcommand
 import org.bukkit.command.CommandSender
 import xyz.oribuin.eternalreports.EternalReports
 import xyz.oribuin.eternalreports.manager.MessageManager
-import xyz.oribuin.orilibrary.OriCommand
-import xyz.oribuin.orilibrary.StringPlaceholders
-import xyz.oribuin.orilibrary.SubCommand
+import xyz.oribuin.orilibrary.command.OriCommand
+import xyz.oribuin.orilibrary.command.SubCommand
+import xyz.oribuin.orilibrary.util.StringPlaceholders
 
 class CmdReload(private val plugin: EternalReports, command: OriCommand) : SubCommand(command, "reload") {
     override fun executeArgument(sender: CommandSender, args: Array<String>) {

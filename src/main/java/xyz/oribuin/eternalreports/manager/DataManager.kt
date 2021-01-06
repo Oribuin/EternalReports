@@ -8,8 +8,8 @@ import xyz.oribuin.eternalreports.data.Report
 import xyz.oribuin.eternalreports.database.DatabaseConnector
 import xyz.oribuin.eternalreports.database.MySQLConnector
 import xyz.oribuin.eternalreports.database.SQLiteConnector
-import xyz.oribuin.orilibrary.FileUtils.createFile
-import xyz.oribuin.orilibrary.Manager
+import xyz.oribuin.orilibrary.manager.Manager
+import xyz.oribuin.orilibrary.util.FileUtils.createFile
 import java.sql.Connection
 
 class DataManager(plugin: EternalReports) : Manager(plugin) {

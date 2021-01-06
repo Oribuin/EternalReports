@@ -36,8 +36,8 @@ dependencies {
     shadow 'org.spigotmc:spigot:1.16.4'
     shadow 'me.clip:placeholderapi:2.10.9'
 
-    implementation 'xyz.oribuin:orilib:1.0.6'
-    implementation 'dev.rosewood:guiframework:1.1.1'
+    implementation 'xyz.oribuin:orilib:1.1.0'
+    implementation 'dev.rosewood:guiframework:1.1.2-SNAPSHOT'
     implementation 'com.zaxxer:HikariCP:3.4.5'
 }
 

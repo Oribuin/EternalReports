@@ -4,8 +4,8 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import xyz.oribuin.eternalreports.EternalReports
 import xyz.oribuin.eternalreports.manager.MessageManager
-import xyz.oribuin.orilibrary.OriCommand
-import xyz.oribuin.orilibrary.SubCommand
+import xyz.oribuin.orilibrary.command.OriCommand
+import xyz.oribuin.orilibrary.command.SubCommand
 
 class CmdToggle(private val plugin: EternalReports, command: OriCommand) : SubCommand(command, "toggle", "alerts") {
     override fun executeArgument(sender: CommandSender, args: Array<String>) {

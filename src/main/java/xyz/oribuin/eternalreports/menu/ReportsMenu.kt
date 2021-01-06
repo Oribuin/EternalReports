@@ -3,7 +3,6 @@ package xyz.oribuin.eternalreports.menu
 import dev.rosewood.guiframework.GuiFactory
 import dev.rosewood.guiframework.GuiFramework
 import dev.rosewood.guiframework.gui.ClickAction
-import dev.rosewood.guiframework.gui.ClickActionType
 import dev.rosewood.guiframework.gui.GuiSize
 import dev.rosewood.guiframework.gui.screen.GuiScreen
 import org.bukkit.Bukkit
@@ -11,6 +10,7 @@ import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
+import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
@@ -22,9 +22,9 @@ import xyz.oribuin.eternalreports.manager.MessageManager
 import xyz.oribuin.eternalreports.manager.ReportManager
 import xyz.oribuin.eternalreports.util.HexUtils.colorify
 import xyz.oribuin.eternalreports.util.PluginUtils
-import xyz.oribuin.orilibrary.FileUtils
-import xyz.oribuin.orilibrary.StringPlaceholders
-import xyz.oribuin.orilibrary.StringPlaceholders.empty
+import xyz.oribuin.orilibrary.util.FileUtils
+import xyz.oribuin.orilibrary.util.StringPlaceholders
+import xyz.oribuin.orilibrary.util.StringPlaceholders.empty
 import java.util.*
 
 class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plugin, "report-menu") {
@@ -48,12 +48,12 @@ class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plu
         val screen = GuiFactory.createScreen(container, GuiSize.ROWS_SIX)
             .setTitle(colorify(this.getValue("menu-name")))
 
-        this.borderSlots().forEach { slot -> getItem("border-item")?.let { screen.addItemStackAt(slot, it) } }
+        this.borderSlots().forEach { slot -> getItem("border-item").let { screen.addItemStackAt(slot, it) } }
 
         val reports = plugin.getManager(ReportManager::class.java).reports
 
         if (reports.size == 0) {
-            getItem("no-reports")?.let { screen.addItemStackAt(menuConfig.getInt("no-reports.slot"), it) }
+            getItem("no-reports").let { screen.addItemStackAt(menuConfig.getInt("no-reports.slot"), it) }
         }
 
         // Add forward page
@@ -62,19 +62,16 @@ class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plu
             for (string in menuConfig.getStringList("forward-page.lore"))
                 lore.add(this.format(string, empty()))
 
-            screen.addButtonAt(menuConfig.getInt("forward-page.slot"), GuiFactory.createButton()
-                .setName(this.getValue("forward-page.name", empty()))
-                .setLore(lore)
-                .setIcon(Material.valueOf(this.getValue("forward-page.material")))
-                .setGlowing(menuConfig.getBoolean("forward-page.glowing"))
-                .setClickAction({ event: InventoryClickEvent ->
-                    val pplayer = event.whoClicked as Player
-                    if (menuConfig.getBoolean("use-sound")) {
-                        menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }
-                    }
+            screen.addButtonAt(
+                menuConfig.getInt("forward-page.slot"), GuiFactory.createButton(this.getItem("forward-page"))
+                    .setClickAction({ event ->
+                        val pplayer = event.whoClicked as Player
+                        if (menuConfig.getBoolean("use-sound")) {
+                            menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }
+                        }
 
-                    ClickAction.PAGE_FORWARDS
-                })
+                        ClickAction.PAGE_FORWARDS
+                    })
             )
         }
 
@@ -84,19 +81,20 @@ class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plu
             for (string in menuConfig.getStringList("back-page.lore"))
                 lore.add(this.format(string, empty()))
 
-            screen.addButtonAt(menuConfig.getInt("back-page.slot"), GuiFactory.createButton()
-                .setName(this.getValue("back-page.name", empty()))
-                .setLore(lore)
-                .setIcon(Material.valueOf(this.getValue("back-page.material")))
-                .setGlowing(menuConfig.getBoolean("back-page.glowing"))
-                .setClickAction({ event: InventoryClickEvent ->
-                    val pplayer = event.whoClicked as Player
-                    if (menuConfig.getBoolean("use-sound")) {
-                        menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }
-                    }
+            screen.addButtonAt(
+                menuConfig.getInt("back-page.slot"), GuiFactory.createButton()
+                    .setName(this.getValue("back-page.name", empty()))
+                    .setLore(lore)
+                    .setIcon(Material.valueOf(this.getValue("back-page.material")))
+                    .setGlowing(menuConfig.getBoolean("back-page.glowing"))
+                    .setClickAction({ event ->
+                        val pplayer = event.whoClicked as Player
+                        if (menuConfig.getBoolean("use-sound")) {
+                            menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }
+                        }
 
-                    ClickAction.PAGE_BACKWARDS
-                })
+                        ClickAction.PAGE_BACKWARDS
+                    })
             )
         }
 
@@ -109,6 +107,7 @@ class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plu
                 val placeholders = StringPlaceholders.builder()
                     .addPlaceholder("report_id", report.id)
                     .addPlaceholder("sender", report.sender.name)
+                    .addPlaceholder("reporter", report.sender.name)
                     .addPlaceholder("reported", report.reported.name)
                     .addPlaceholder("reason", report.reason)
                     .addPlaceholder("resolved", resolvedFormatted(report.isResolved))
@@ -126,51 +125,33 @@ class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plu
                         meta.owningPlayer = report.reported
                     }
                     .setGlowing(menuConfig.getBoolean("report-item.glowing"))
-
-                    .setClickAction({ event: InventoryClickEvent ->
-                        val pplayer = event.whoClicked as Player
+                    .setClickAction({
+                        val pplayer = it.whoClicked as Player
                         if (menuConfig.getBoolean("use-sound")) {
                             menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }
                         }
+                        when (it.click) {
+                            ClickType.LEFT -> {
+                                this.executeCommands("left-click", placeholders, pplayer)
+                            }
+                            ClickType.RIGHT -> {
+                                this.executeCommands("right-click", placeholders, pplayer)
+                            }
 
-                        this.executeCommands("left-click", placeholders, pplayer)
+                            ClickType.SHIFT_LEFT -> {
+                                this.executeCommands("shift-left-click", placeholders, pplayer)
+                            }
 
-                        ClickAction.CLOSE
-
-                    }, ClickActionType.LEFT_CLICK)
-                    .setClickAction({ event: InventoryClickEvent ->
-                        val pplayer = event.whoClicked as Player
-                        if (menuConfig.getBoolean("use-sound")) {
-                            menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }
+                            ClickType.SHIFT_RIGHT -> {
+                                this.executeCommands("shift-right-click", placeholders, pplayer)
+                            }
+                            else -> {
+                                // Unused
+                            }
                         }
 
-                        this.executeCommands("right-click", placeholders, pplayer)
-
                         ClickAction.CLOSE
-
-                    }, ClickActionType.RIGHT_CLICK)
-                    .setClickAction({ event: InventoryClickEvent ->
-                        val pplayer = event.whoClicked as Player
-                        if (menuConfig.getBoolean("use-sound")) {
-                            menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }
-                        }
-
-                        this.executeCommands("shift-left-click", placeholders, pplayer)
-
-                        ClickAction.CLOSE
-
-                    }, ClickActionType.SHIFT_LEFT_CLICK)
-                    .setClickAction({ event: InventoryClickEvent ->
-                        val pplayer = event.whoClicked as Player
-                        if (menuConfig.getBoolean("use-sound")) {
-                            menuConfig.getString("click-sound")?.let { Sound.valueOf(it) }?.let { pplayer.playSound(pplayer.location, it, 100f, 1f) }
-                        }
-
-                        this.executeCommands("shift-right-click", placeholders, pplayer)
-
-                        ClickAction.CLOSE
-
-                    }, ClickActionType.SHIFT_RIGHT_CLICK)
+                    })
 
                 results.addPageContent(guiButton)
             }
@@ -181,7 +162,7 @@ class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plu
     }
 
     private fun borderSlots(): List<Int> {
-        val slots: MutableList<Int> = ArrayList()
+        val slots = mutableListOf<Int>()
         for (i in 0..8) slots.add(i)
         slots.add(9)
         slots.add(17)
@@ -196,7 +177,7 @@ class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plu
     }
 
     private fun reportSlots(): List<Int> {
-        val slots: MutableList<Int> = ArrayList()
+        val slots = mutableListOf<Int>()
         for (i in 10..16) slots.add(i)
         for (i in 19..25) slots.add(i)
         for (i in 28..34) slots.add(i)
@@ -226,7 +207,7 @@ class ReportsMenu(plugin: EternalReports, private val player: Player) : Menu(plu
         return colorify(placeholders.apply(apply(player, value)))
     }
 
-    private fun getItem(path: String): ItemStack? {
+    private fun getItem(path: String): ItemStack {
         val itemStack = menuConfig.getString("$path.material")?.let { Material.valueOf(it) }?.let { ItemStack(it) }
 
         val itemMeta = itemStack?.itemMeta ?: return ItemStack(Material.STRUCTURE_VOID)

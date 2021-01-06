@@ -6,8 +6,8 @@ import org.bukkit.entity.Player
 import xyz.oribuin.eternalreports.EternalReports
 import xyz.oribuin.eternalreports.manager.MessageManager
 import xyz.oribuin.eternalreports.menu.ReportsMenu
-import xyz.oribuin.orilibrary.OriCommand
-import xyz.oribuin.orilibrary.SubCommand
+import xyz.oribuin.orilibrary.command.OriCommand
+import xyz.oribuin.orilibrary.command.SubCommand
 
 class CmdMenu(private val plugin: EternalReports, command: OriCommand) : SubCommand(command, "menu") {
     override fun executeArgument(sender: CommandSender, args: Array<String>) {

@@ -10,9 +10,9 @@ import xyz.oribuin.eternalreports.manager.DataManager
 import xyz.oribuin.eternalreports.manager.MessageManager
 import xyz.oribuin.eternalreports.manager.ReportManager
 import xyz.oribuin.eternalreports.util.HexUtils
-import xyz.oribuin.orilibrary.OriCommand
-import xyz.oribuin.orilibrary.StringPlaceholders
-import xyz.oribuin.orilibrary.SubCommand
+import xyz.oribuin.orilibrary.command.OriCommand
+import xyz.oribuin.orilibrary.command.SubCommand
+import xyz.oribuin.orilibrary.util.StringPlaceholders
 
 class CmdResolve(private val plugin: EternalReports, command: OriCommand) : SubCommand(command, "resolve") {
     override fun executeArgument(sender: CommandSender, args: Array<String>) {

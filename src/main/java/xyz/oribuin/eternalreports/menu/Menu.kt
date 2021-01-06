@@ -3,7 +3,7 @@ package xyz.oribuin.eternalreports.menu
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.configuration.file.YamlConfiguration
 import xyz.oribuin.eternalreports.EternalReports
-import xyz.oribuin.orilibrary.FileUtils.createMenuFile
+import xyz.oribuin.orilibrary.util.FileUtils.createMenuFile
 import java.io.File
 
 abstract class Menu(val plugin: EternalReports, private val guiName: String) {

@@ -14,15 +14,15 @@ import xyz.oribuin.eternalreports.manager.DataManager
 import xyz.oribuin.eternalreports.manager.MessageManager
 import xyz.oribuin.eternalreports.manager.ReportManager
 import xyz.oribuin.eternalreports.util.PluginUtils
-import xyz.oribuin.orilibrary.OriCommand
-import xyz.oribuin.orilibrary.StringPlaceholders
+import xyz.oribuin.orilibrary.command.OriCommand
+import xyz.oribuin.orilibrary.util.StringPlaceholders
 import java.util.*
 
 class CmdReport(plugin: EternalReports) : OriCommand(plugin, "report") {
 
     private val cooldowns = mutableMapOf<UUID, Long>()
 
-    override fun executeCommand(sender: CommandSender, args: Array<String>) {
+    override fun executeCommand(sender: CommandSender, args: Array<String>, label: String) {
         plugin as EternalReports
 
         val msg = plugin.getManager(MessageManager::class.java)

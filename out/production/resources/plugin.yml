@@ -1,0 +1,29 @@
+name: EternalReports
+main: xyz.oribuin.eternalreports.EternalReports
+version: '@version@'
+authors: [ Oribuin, Esophose ]
+api-version: "1.13"
+description: A simple report plugin created with functionality in mind.
+softdepend:
+  - PlaceholderAPI
+commands:
+  report:
+    description: Report a user
+    usage: /report <user> <reason>
+  reports:
+    description: Manage reports
+    usage: /reports help
+
+permissions:
+  eternalreports.*:
+    default: op
+    description: All permissions for the plugin
+    children:
+      - eternalreports.report
+      - eternalreports.delete
+      - eternalreports.menu
+      - eternalreports.menu.other
+      - eternalreports.resolve
+      - eternalreports.reload
+      - eternalreports.alerts
+      - eternalreports.toggle

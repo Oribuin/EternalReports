@@ -2,7 +2,7 @@ package xyz.oribuin.eternalreports.manager
 
 import org.bukkit.configuration.file.FileConfiguration
 import xyz.oribuin.eternalreports.EternalReports
-import xyz.oribuin.orilibrary.Manager
+import xyz.oribuin.orilibrary.manager.Manager
 import java.io.File
 
 class ConfigManager(plugin: EternalReports) : Manager(plugin) {

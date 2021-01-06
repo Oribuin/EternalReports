@@ -8,10 +8,10 @@ import org.bukkit.entity.Player
 import xyz.oribuin.eternalreports.EternalReports
 import xyz.oribuin.eternalreports.hook.PlaceholderAPIHook
 import xyz.oribuin.eternalreports.util.HexUtils.colorify
-import xyz.oribuin.orilibrary.FileUtils.createFile
-import xyz.oribuin.orilibrary.Manager
-import xyz.oribuin.orilibrary.StringPlaceholders
-import xyz.oribuin.orilibrary.StringPlaceholders.empty
+import xyz.oribuin.orilibrary.manager.Manager
+import xyz.oribuin.orilibrary.util.FileUtils.createFile
+import xyz.oribuin.orilibrary.util.StringPlaceholders
+import xyz.oribuin.orilibrary.util.StringPlaceholders.empty
 import java.io.File
 
 class MessageManager(plugin: EternalReports) : Manager(plugin) {

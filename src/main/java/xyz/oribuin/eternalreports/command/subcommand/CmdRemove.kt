@@ -10,9 +10,9 @@ import xyz.oribuin.eternalreports.manager.ConfigManager
 import xyz.oribuin.eternalreports.manager.DataManager
 import xyz.oribuin.eternalreports.manager.MessageManager
 import xyz.oribuin.eternalreports.manager.ReportManager
-import xyz.oribuin.orilibrary.OriCommand
-import xyz.oribuin.orilibrary.StringPlaceholders
-import xyz.oribuin.orilibrary.SubCommand
+import xyz.oribuin.orilibrary.command.OriCommand
+import xyz.oribuin.orilibrary.command.SubCommand
+import xyz.oribuin.orilibrary.util.StringPlaceholders
 
 class CmdRemove(val plugin: EternalReports, command: OriCommand) : SubCommand(command, "remove", "delete") {
     private val messageManager = plugin.getManager(MessageManager::class.java)

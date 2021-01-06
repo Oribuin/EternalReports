@@ -7,15 +7,15 @@ import xyz.oribuin.eternalreports.EternalReports
 import xyz.oribuin.eternalreports.command.subcommand.*
 import xyz.oribuin.eternalreports.manager.MessageManager
 import xyz.oribuin.eternalreports.manager.ReportManager
-import xyz.oribuin.orilibrary.OriCommand
-import xyz.oribuin.orilibrary.SubCommand
+import xyz.oribuin.orilibrary.command.OriCommand
+import xyz.oribuin.orilibrary.command.SubCommand
 
 class CmdReports(val plugin: EternalReports) : OriCommand(plugin, "reports") {
     private val subcommands = mutableListOf<SubCommand>()
 
     private val messageManager = plugin.getManager(MessageManager::class.java)
 
-    override fun executeCommand(sender: CommandSender, args: Array<String>) {
+    override fun executeCommand(sender: CommandSender, args: Array<String>, label: String) {
 
         for (cmd in subcommands) {
             if (args.isEmpty()) {

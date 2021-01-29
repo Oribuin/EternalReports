@@ -24,7 +24,6 @@ class EternalReports : OriPlugin() {
         Bukkit.getScheduler().runTaskAsynchronously(this, Runnable {
             this.getManager(ConfigManager::class.java)
             this.getManager(DataManager::class.java)
-            this.getManager(GuiManager::class.java)
             this.getManager(MessageManager::class.java)
             this.getManager(ReportManager::class.java)
         })

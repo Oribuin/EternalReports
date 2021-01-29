@@ -1,86 +1,42 @@
-menu-name: 'EternalReports | Total: %eternalreports_total%'
-# Should there be click sounds?
-use-sound: true
-# https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
-click-sound: 'ENTITY_ARROW_HIT_PLAYER'
+gui-name: "Reports"
+# Don't go lower than 1
+update-in-ticks: 1
 
-# The rate this gui will update at.
-tick-update-rate: 2
-
-resolved-formatting:
-  is-resolved: '&fResolved'
-  isnt-resolved: '&fUnresolved'
-
-# The spelling is colours, anything different is wrong
-
-filter-names:
-  global: 'Global Reports'
-  resolved: 'Resolved Reports'
-  unresolved: 'Unresolved Reports'
-  my-resolved: 'My Resolved Reports'
-  my-unresolved: 'My Unresolved Reports'
-
-report-item:
-  name: '&cReported User: &f%reported%'
-  glowing: true
-  lore:
-    - ' &f» &cID: &f%report_id%'
-    -
-    - ' &f» &cReported By: &f%sender%'
-    - ' &f» &cReason: &f%reason%'
-    - ' &f» &cTime: &f%time%'
-    - ' '
-    - ' &f» &cResolved: &e%resolved%'
-    - ' '
-    - ' &7(Left Click to teleport to the reported player)'
-    - ' &7(Right Click to teleport to the reporter)'
-    - ' &7(Shift Left Click to resolve report)'
-    - ' &7(Shift Right Click to delete report'
-
-
-  # Use %player% for the user who clicked the menu
-  player-commands:
-    left-click-commands:
-      - 'reports teleprot %reported%'
-    right-click-commands:
-      - 'reports resolve %reporter%'
-    shift-left-click-commands:
-      - 'reports delete %report_id%'
-    shift-right-click-commands:
-      - 'reports resolve %report_id%'
-  console-commands:
-    left-click-commands: [ ]
-    right-click-commands: [ ]
-    shift-left-click-commands: [ ]
-    shift-right-click-commands: [ ]
-
-no-reports:
-  name: '&cSorry! There are no reports here!'
-  material: 'BARRIER'
-  slot: 22
-  glowing: false
-  lore: [ ]
-  item-flags: [ ]
-
-back-page:
-  name: '&e« &bBack Page'
-  material: 'PAPER'
-  slot: 47
-  glowing: false
-  lore: [ ]
-  item-flags: [ ]
-
-forward-page:
-  name: '&bForward Page &e»'
-  material: 'PAPER'
-  slot: 51
-  glowing: false
-  lore: [ ]
-  item-flags: [ ]
-
+border-type: "BORDER"
 border-item:
   name: ' '
   material: 'RED_STAINED_GLASS_PANE'
   glowing: false
   lore: [ ]
-  item-flags: [ ]
+  sound-enabled: false
+  sound: "UI_TOAST_CHALLENGE_COMPLETE"
+
+switch-filter:
+  name: '&cCurrent Filter: &f%filter%'
+  material: 'SUNFLOWER'
+  glowing: true
+  lore:
+    - '&7Click to change the current'
+    - '&7Filter for the menu!'
+    - ' '
+    - '  &cNext &f» &l%next%'
+    - '  &cCurrent &f» &l%filter%'
+
+back-page:
+  name: '&c« &f&lGo Back'
+  material: 'PAPER'
+  glowing: false
+  lore: [ ]
+  sound-enabled: false
+  sound: ""
+  slot: 47
+
+forward-page:
+  name: '&f&lNext Page &c»'
+  material: 'PAPER'
+  glowing: false
+  lore: [ ]
+  sound-enabled: false
+  sound: ""
+  slot: 51
+

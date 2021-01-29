@@ -11,24 +11,17 @@ import java.util.concurrent.locks.ReentrantLock
 
 class MySQLConnector(private val plugin: Plugin, hostname: String, port: Int, database: String, username: String, password: String, useSSL: Boolean) : DatabaseConnector {
     private var hikari: HikariDataSource? = null
-    private val openConnections: AtomicInteger = AtomicInteger()
-    private val lock: ReentrantLock = ReentrantLock()
+
     override fun closeConnection() {
         hikari?.close()
     }
 
     override fun connect(callback: (Connection) -> Unit) {
-        openConnections.incrementAndGet()
         try {
-            hikari?.connection?.let { callback(it) }
+            hikari?.connection?.use(callback)
         } catch (ex: SQLException) {
-            plugin.logger.severe("An error occurred executing a MySQL query: " + ex.message)
+            plugin.logger.severe("An error occurred executing a MySQL query: ${ex.message}")
             ex.printStackTrace()
-        } finally {
-            val open = openConnections.decrementAndGet()
-            synchronized(lock) {
-                if (open == 0) lock.newCondition().signal()
-            }
         }
     }
 

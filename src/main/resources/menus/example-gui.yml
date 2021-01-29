@@ -1,0 +1,13 @@
+gui-name: "Example Gui"
+# Available Options: ROWS_ONE, ROWS_TWO, ROWS_THREE, ROWS_FOUR, ROWS_SIX
+gui-size: "ROWS_FIVE"
+# Don't go lower than 1
+update-in-ticks: 1
+
+border-item:
+  name: ' '
+  material: 'RED_STAINED_GLASS_PANE'
+  glowing: false
+  lore: [ ]
+  sound-enabled: false
+  sound: "UI_TOAST_CHALLENGE_COMPLETE"

@@ -29,7 +29,7 @@ class CmdMenu(private val plugin: EternalReports, command: OriCommand) : SubComm
             }
 
             // Open Menu
-            ReportsMenu(plugin, mentioned).openMenu()
+//            ReportsMenu(plugin, mentioned).openMenu()
             return
         }
 
@@ -46,8 +46,8 @@ class CmdMenu(private val plugin: EternalReports, command: OriCommand) : SubComm
             return
         }
 
-        // Open Menu
-        ReportsMenu(plugin, sender).openMenu()
+//        // Open Menu
+//        ReportsMenu(plugin, sender).openMenu()
     }
 
 }

@@ -127,22 +127,13 @@ class CmdReport(plugin: EternalReports) : OriCommand(plugin, "report") {
 
     override fun tabComplete(sender: CommandSender, args: Array<String>): MutableList<String>? {
 
-        val suggestions: MutableList<String> = ArrayList()
-        if (args.isEmpty() || args.size == 1) {
-            val subCommand = if (args.isEmpty()) "" else args[0]
+        val suggestions = mutableListOf<String>()
 
-            val players = mutableListOf<String>()
-            Bukkit.getOnlinePlayers().stream().filter { player -> !player.hasMetadata("vanished") }.forEachOrdered { player -> players.add(player.name) }
-            players.sortBy { s -> s }
-
-            StringUtil.copyPartialMatches(subCommand, players, suggestions)
-            return null
-        } else if (args.size == 2) {
+        return if (args.size == 2) {
             StringUtil.copyPartialMatches(args[1].toLowerCase(), setOf("<reason>"), suggestions)
         } else {
-            return null
+            return suggestions
         }
-        return suggestions
     }
 
     override fun addSubCommands() {

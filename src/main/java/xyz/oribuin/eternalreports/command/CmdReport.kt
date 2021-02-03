@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.util.StringUtil
 import xyz.oribuin.eternalreports.EternalReports
-import xyz.oribuin.eternalreports.data.Report
+import xyz.oribuin.eternalreports.obj.Report
 import xyz.oribuin.eternalreports.event.PlayerReportEvent
 import xyz.oribuin.eternalreports.manager.ConfigManager
 import xyz.oribuin.eternalreports.manager.DataManager
@@ -45,10 +45,8 @@ class CmdReport(plugin: EternalReports) : OriCommand(plugin, "report") {
         // Reported user
         var reported: OfflinePlayer? = null
         for (pl in plugin.server.offlinePlayers) {
-            pl ?: return
             if (pl.isBanned || !pl.hasPlayedBefore() || pl.name != args[0]) {
-                msg.sendMessage(sender, "invalid-player")
-                break
+                continue
             }
 
             reported = pl
@@ -63,10 +61,10 @@ class CmdReport(plugin: EternalReports) : OriCommand(plugin, "report") {
         val player = reported.player ?: return
 
         // Check if the player has permission to bypass report
-        if (player.hasPermission("eternalreports.bypass")) {
-            msg.sendMessage(sender, "has-bypass")
-            return
-        }
+//        if (player.hasPermission("eternalreports.bypass")) {
+//            msg.sendMessage(sender, "has-bypass")
+//            return
+//        }
 
         // Report reason
         val reason = java.lang.String.join(" ", *args).substring(args[0].length + 1)
@@ -128,6 +126,10 @@ class CmdReport(plugin: EternalReports) : OriCommand(plugin, "report") {
     override fun tabComplete(sender: CommandSender, args: Array<String>): MutableList<String>? {
 
         val suggestions = mutableListOf<String>()
+
+        if (args.size == 1) {
+            return null
+        }
 
         return if (args.size == 2) {
             StringUtil.copyPartialMatches(args[1].toLowerCase(), setOf("<reason>"), suggestions)

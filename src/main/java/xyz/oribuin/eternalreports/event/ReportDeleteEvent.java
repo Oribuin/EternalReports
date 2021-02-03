@@ -4,7 +4,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
-import xyz.oribuin.eternalreports.data.Report;
+import xyz.oribuin.eternalreports.obj.Report;
 
 public class ReportDeleteEvent extends Event implements Cancellable {
 

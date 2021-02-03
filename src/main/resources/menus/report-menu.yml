@@ -2,6 +2,35 @@ gui-name: "Reports"
 # Don't go lower than 1
 update-in-ticks: 1
 
+report-item:
+  name: '&cReported: &f%reported%'
+  material: 'NAME_TAG'
+  glowing: true
+  lore:
+    - ' &f» &cID: &f%report_id%'
+    -
+    - ' &f» &cReported By: &f%sender%'
+    - ' &f» &cReason: &f%reason%'
+    - ' &f» &cTime: &f%time%'
+    - ' '
+    - ' &f» &cResolved: &e%resolved%'
+    - ' '
+    - ' &7(Left Click to teleport to the reported player)'
+    - ' &7(Right Click to teleport to the reporter)'
+    - ' &7(Shift Left Click to resolve report)'
+    - ' &7(Shift Right Click to delete report'
+  sound-enabled: true
+  sound: "UI_TOAST_CHALLENGE_COMPLETE"
+  # Use %player% for the user who clicked the menu
+  player-commands:
+    left-click-commands:
+      - 'tp %reported%'
+    right-click-commands:
+      - 'tp %sender%'
+  console-commands:
+    left-click-commands: [ ]
+    right-click-commands: [ ]
+
 border-type: "BORDER"
 border-item:
   name: ' '
@@ -10,17 +39,6 @@ border-item:
   lore: [ ]
   sound-enabled: false
   sound: "UI_TOAST_CHALLENGE_COMPLETE"
-
-switch-filter:
-  name: '&cCurrent Filter: &f%filter%'
-  material: 'SUNFLOWER'
-  glowing: true
-  lore:
-    - '&7Click to change the current'
-    - '&7Filter for the menu!'
-    - ' '
-    - '  &cNext &f» &l%next%'
-    - '  &cCurrent &f» &l%filter%'
 
 back-page:
   name: '&c« &f&lGo Back'

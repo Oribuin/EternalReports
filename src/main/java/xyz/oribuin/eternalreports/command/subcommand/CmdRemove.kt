@@ -4,7 +4,7 @@ import org.bukkit.Bukkit
 import org.bukkit.Sound
 import org.bukkit.command.CommandSender
 import xyz.oribuin.eternalreports.EternalReports
-import xyz.oribuin.eternalreports.data.Report
+import xyz.oribuin.eternalreports.obj.Report
 import xyz.oribuin.eternalreports.event.ReportDeleteEvent
 import xyz.oribuin.eternalreports.manager.ConfigManager
 import xyz.oribuin.eternalreports.manager.DataManager

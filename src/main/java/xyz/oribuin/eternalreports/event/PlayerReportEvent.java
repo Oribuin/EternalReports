@@ -5,7 +5,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
-import xyz.oribuin.eternalreports.data.Report;
+import xyz.oribuin.eternalreports.obj.Report;
 
 public class PlayerReportEvent extends PlayerEvent implements Cancellable {
 

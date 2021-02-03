@@ -4,12 +4,10 @@ import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.util.StringUtil
-import org.jetbrains.annotations.NotNull
 import xyz.oribuin.eternalreports.EternalReports
 import xyz.oribuin.eternalreports.command.subcommand.*
 import xyz.oribuin.eternalreports.manager.MessageManager
 import xyz.oribuin.eternalreports.manager.ReportManager
-import xyz.oribuin.eternalreports.menu.ExampleMenu
 import xyz.oribuin.orilibrary.command.OriCommand
 import xyz.oribuin.orilibrary.command.SubCommand
 
@@ -19,19 +17,17 @@ class CmdReports(val plugin: EternalReports) : OriCommand(plugin, "reports") {
     private val messageManager = plugin.getManager(MessageManager::class.java)
 
     override fun executeCommand(sender: CommandSender, args: Array<String>, label: String) {
-        ExampleMenu(plugin as @NotNull EternalReports).openGui(listOf(sender as Player))
+        for (cmd in subcommands) {
+            if (args.isEmpty()) {
+                messageManager.sendMessage(sender, "unknown-command")
+                break
+            }
 
-//        for (cmd in subcommands) {
-//            if (args.isEmpty()) {
-//                messageManager.sendMessage(sender, "unknown-command")
-//                break
-//            }
-//
-//            if (args.isNotEmpty() && cmd.names.contains(args[0].toLowerCase())) {
-//                cmd.executeArgument(sender, args)
-//                break
-//            }
-//        }
+            if (args.isNotEmpty() && cmd.names.contains(args[0].toLowerCase())) {
+                cmd.executeArgument(sender, args)
+                break
+            }
+        }
     }
 
     override fun tabComplete(sender: CommandSender, args: Array<String>): MutableList<String>? {

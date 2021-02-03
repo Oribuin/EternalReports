@@ -1,4 +1,4 @@
-package xyz.oribuin.eternalreports.data
+package xyz.oribuin.eternalreports.obj
 
 import org.bukkit.OfflinePlayer
 

@@ -44,38 +44,33 @@ abstract class Menu(val plugin: EternalReports, private val guiName: String) {
         get() = File("${plugin.dataFolder}${File.separator}menus", "$guiName.yml")
 
     open fun buildGui() {
-        this.buttons.forEach { screen.addButtonAt(it.key, it.value); println("Added button (${it.value} to slot ${it.key})}}") }
-    }
-
-    private fun registerGui() {
-        this.buttons = mutableMapOf()
-        // Rebuild GUI
-        this.buildGui()
-
-        container.addScreen(screen)
-        framework.guiManager.registerGui(container)
+        this.buttons.forEach { screen.addButtonAt(it.key, it.value) }
+        this.buttons.clear()
     }
 
     fun openGui(players: List<Player>, screen: Int = 0) {
-        if (isInvalid)
-            registerGui()
+        this.buildGui()
+
+        container.addScreen(this.screen)
+        framework.guiManager.registerGui(container)
 
         players.forEach { container.openFor(it, screen) }
     }
 
-    fun createButton(path: String, placeholders: StringPlaceholders = StringPlaceholders.empty(), function: BiFunction<InventoryClickEvent, GuiButton, ClickAction>): GuiButton {
+    fun createButton(path: String, placeholders: StringPlaceholders = StringPlaceholders.empty(), addButton: Boolean = true, function: BiFunction<InventoryClickEvent, GuiButton, ClickAction>): GuiButton {
         val icon = GuiFactory.createButton()
             .setIconSupplier { GuiFactory.createIcon(Material.matchMaterial(menuConfig.getString("$path.material") ?: "BARRIER") ?: Material.BARRIER) }
             .setNameSupplier { formatString(menuConfig.getString("$path.name") ?: "&cInvalid Name", placeholders) }
             .setLoreSupplier { menuConfig.getStringList("$path.lore").map { formatString(it, placeholders) } }
             .setAmountSupplier { max(1, menuConfig.getInt("$path.amount")) }
 
-        icon.setClickAction({ function.apply(it, icon) })
+        icon.setClickAction({ function.apply(it, icon) }, *ClickActionType.values())
 
         if (menuConfig.getBoolean("$path.sound-enabled")) {
             icon.setClickSoundSupplier { Sound.valueOf(menuConfig.getString("$path.sound") ?: Sound.ENTITY_ARROW_HIT_PLAYER.name) }
         }
 
+        if (addButton) screen.addButtonAt(menuConfig.getInt("$path.slot"), icon)
         return icon
     }
 

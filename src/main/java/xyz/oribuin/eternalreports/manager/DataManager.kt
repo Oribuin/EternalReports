@@ -4,7 +4,7 @@ import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 import xyz.oribuin.eternalreports.EternalReports
-import xyz.oribuin.eternalreports.data.Report
+import xyz.oribuin.eternalreports.obj.Report
 import xyz.oribuin.eternalreports.database.DatabaseConnector
 import xyz.oribuin.eternalreports.database.MySQLConnector
 import xyz.oribuin.eternalreports.database.SQLiteConnector

@@ -13,7 +13,6 @@ public class ReportResolveEvent extends Event implements Cancellable {
     private Report report;
 
     public ReportResolveEvent(Report report) {
-        ;
         this.report = report;
     }
 

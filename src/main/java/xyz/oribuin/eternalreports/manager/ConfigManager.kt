@@ -27,13 +27,13 @@ class ConfigManager(plugin: EternalReports) : Manager(plugin) {
         ALERT_SETTINGS_SOUND_ENABLED("alert-settings.sound.enabled", true),
         ALERT_SETTINGS_SOUND("alert-settings.sound.sound", "ENTITY_ARROW_HIT_PLAYER"),
         ALERT_SETTINGS_SOUND_VOLUME("alert-settings.sound.volume", 50),
-        SQL_ENABLED("my-sql.enabled", false),
-        SQL_HOSTNAME("my-sql.hostname", " "),
-        SQL_PORT("my-sql.port", 3310),
-        SQL_DATABASENAME("my-sql.database-name", " "),
-        SQL_USERNAME("my-sql.user-name", " "),
-        SQL_PASSWORD("my-sql.password", " "),
-        SQL_USE_SSL("my-sql.use-ssl", false);
+        SQL_ENABLED("mysql.enabled", false),
+        SQL_HOSTNAME("mysql.host", "localhost"),
+        SQL_PORT("mysql.port", 3306),
+        SQL_DATABASENAME("mysql.dbname", "database"),
+        SQL_USERNAME("mysql.username", "username"),
+        SQL_PASSWORD("mysql.password", "password"),
+        SQL_USE_SSL("mysql.use-ssl", true);
 
 
         private var value: Any? = null

@@ -4,10 +4,10 @@ import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 import xyz.oribuin.eternalreports.EternalReports
-import xyz.oribuin.eternalreports.obj.Report
 import xyz.oribuin.eternalreports.database.DatabaseConnector
 import xyz.oribuin.eternalreports.database.MySQLConnector
 import xyz.oribuin.eternalreports.database.SQLiteConnector
+import xyz.oribuin.eternalreports.obj.Report
 import xyz.oribuin.orilibrary.manager.Manager
 import xyz.oribuin.orilibrary.util.FileUtils.createFile
 import java.sql.Connection
@@ -20,13 +20,13 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
     override fun enable() {
 
         try {
-            if (ConfigManager.Setting.SQL_ENABLED.boolean) {
-                val hostname = ConfigManager.Setting.SQL_HOSTNAME.string
-                val port = ConfigManager.Setting.SQL_PORT.int
-                val database = ConfigManager.Setting.SQL_DATABASENAME.string
-                val username = ConfigManager.Setting.SQL_USERNAME.string
-                val password = ConfigManager.Setting.SQL_PASSWORD.string
-                val useSSL = ConfigManager.Setting.SQL_USE_SSL.boolean
+            if (plugin.config.getBoolean("mysql.enabled")) {
+                val hostname = plugin.config.getString("mysql.host") ?: return
+                val port = plugin.config.getInt("mysql.port")
+                val database = plugin.config.getString("mysql.dbname") ?: return
+                val username = plugin.config.getString("mysql.username") ?: return
+                val password = plugin.config.getString("mysql.password") ?: return
+                val useSSL = plugin.config.getBoolean("mysql.ssl")
 
                 this.connector = MySQLConnector(this.plugin, hostname, port, database, username, password, useSSL)
                 this.plugin.logger.info("Now using MySQL for the plugin Database.")
@@ -49,16 +49,11 @@ class DataManager(plugin: EternalReports) : Manager(plugin) {
 
     private fun createTables() {
         val queries = arrayOf(
-            "CREATE TABLE IF NOT EXISTS ${tablePrefix}reports (id INTEGER, sender VARCHAR(36), reported VARCHAR(36), reason VARCHAR(100), resolved BOOLEAN, time LONG, PRIMARY KEY(sender, reported, reason, time))",
+            "CREATE TABLE IF NOT EXISTS ${tablePrefix}reports (id INTEGER, sender VARCHAR(36), reported VARCHAR(36), reason VARCHAR(100), resolved BOOLEAN, time LONG, PRIMARY KEY(sender, reported, reason))",
             "CREATE TABLE IF NOT EXISTS ${tablePrefix}users (user VARCHAR(36), reports INTEGER, reported INTEGER, PRIMARY KEY(user))"
         )
-        async {
-            connector?.connect { connection: Connection ->
-                for (string in queries) {
-                    connection.prepareStatement(string).use { statement -> statement.executeUpdate() }
-                }
-            }
-        }
+
+        async { connector?.connect { con -> queries.forEach { con.prepareStatement(it).use { x -> x.executeUpdate() } } } }
     }
 
     fun createReport(sender: Player, reported: OfflinePlayer, reason: String) {

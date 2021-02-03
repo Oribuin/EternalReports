@@ -6,7 +6,10 @@ import xyz.oribuin.eternalreports.command.CmdReports
 import xyz.oribuin.eternalreports.hook.PlaceholderAPIHook
 import xyz.oribuin.eternalreports.hook.PlaceholderExp
 import xyz.oribuin.eternalreports.listener.PlayerJoin
-import xyz.oribuin.eternalreports.manager.*
+import xyz.oribuin.eternalreports.manager.ConfigManager
+import xyz.oribuin.eternalreports.manager.DataManager
+import xyz.oribuin.eternalreports.manager.MessageManager
+import xyz.oribuin.eternalreports.manager.ReportManager
 import xyz.oribuin.orilibrary.OriPlugin
 import xyz.oribuin.orilibrary.util.FileUtils
 import java.util.*

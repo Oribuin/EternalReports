@@ -7,12 +7,12 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.util.StringUtil
 import xyz.oribuin.eternalreports.EternalReports
-import xyz.oribuin.eternalreports.obj.Report
 import xyz.oribuin.eternalreports.event.PlayerReportEvent
 import xyz.oribuin.eternalreports.manager.ConfigManager
 import xyz.oribuin.eternalreports.manager.DataManager
 import xyz.oribuin.eternalreports.manager.MessageManager
 import xyz.oribuin.eternalreports.manager.ReportManager
+import xyz.oribuin.eternalreports.obj.Report
 import xyz.oribuin.eternalreports.util.PluginUtils
 import xyz.oribuin.orilibrary.command.OriCommand
 import xyz.oribuin.orilibrary.util.StringPlaceholders

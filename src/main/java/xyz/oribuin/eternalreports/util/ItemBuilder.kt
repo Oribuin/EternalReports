@@ -1,8 +1,6 @@
 package xyz.oribuin.eternalreports.util
 
 import com.google.common.collect.Multimap
-import com.mojang.authlib.GameProfile
-import com.mojang.authlib.properties.Property
 import org.bukkit.*
 import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeModifier
@@ -15,7 +13,6 @@ import org.bukkit.map.MapView
 import org.bukkit.potion.PotionData
 import org.bukkit.potion.PotionEffect
 import xyz.oribuin.eternalreports.util.HexUtils.colorify
-import java.util.*
 
 /**
  * @author Oribuin

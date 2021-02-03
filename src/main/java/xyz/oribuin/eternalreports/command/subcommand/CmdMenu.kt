@@ -5,7 +5,6 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import xyz.oribuin.eternalreports.EternalReports
 import xyz.oribuin.eternalreports.manager.MessageManager
-import xyz.oribuin.eternalreports.menu.OldReportsMenu
 import xyz.oribuin.eternalreports.menu.ReportsMenu
 import xyz.oribuin.orilibrary.command.OriCommand
 import xyz.oribuin.orilibrary.command.SubCommand

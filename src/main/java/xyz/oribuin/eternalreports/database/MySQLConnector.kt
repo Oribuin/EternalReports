@@ -6,8 +6,6 @@ import org.bukkit.Bukkit
 import org.bukkit.plugin.Plugin
 import java.sql.Connection
 import java.sql.SQLException
-import java.util.concurrent.atomic.AtomicInteger
-import java.util.concurrent.locks.ReentrantLock
 
 class MySQLConnector(private val plugin: Plugin, hostname: String, port: Int, database: String, username: String, password: String, useSSL: Boolean) : DatabaseConnector {
     private var hikari: HikariDataSource? = null

@@ -2,7 +2,6 @@ package xyz.oribuin.eternalreports.command
 
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
-import org.bukkit.entity.Player
 import org.bukkit.util.StringUtil
 import xyz.oribuin.eternalreports.EternalReports
 import xyz.oribuin.eternalreports.command.subcommand.*

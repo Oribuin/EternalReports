@@ -4,12 +4,12 @@ import org.bukkit.Bukkit
 import org.bukkit.Sound
 import org.bukkit.command.CommandSender
 import xyz.oribuin.eternalreports.EternalReports
-import xyz.oribuin.eternalreports.obj.Report
 import xyz.oribuin.eternalreports.event.ReportDeleteEvent
 import xyz.oribuin.eternalreports.manager.ConfigManager
 import xyz.oribuin.eternalreports.manager.DataManager
 import xyz.oribuin.eternalreports.manager.MessageManager
 import xyz.oribuin.eternalreports.manager.ReportManager
+import xyz.oribuin.eternalreports.obj.Report
 import xyz.oribuin.orilibrary.command.OriCommand
 import xyz.oribuin.orilibrary.command.SubCommand
 import xyz.oribuin.orilibrary.util.StringPlaceholders

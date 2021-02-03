@@ -9,10 +9,10 @@ import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.inventory.ItemStack
 import xyz.oribuin.eternalreports.EternalReports
-import xyz.oribuin.eternalreports.obj.Report
 import xyz.oribuin.eternalreports.hook.PlaceholderAPIHook
 import xyz.oribuin.eternalreports.manager.MessageManager
 import xyz.oribuin.eternalreports.manager.ReportManager
+import xyz.oribuin.eternalreports.obj.Report
 import xyz.oribuin.eternalreports.util.HexUtils.colorify
 import xyz.oribuin.eternalreports.util.PluginUtils
 import xyz.oribuin.orilibrary.util.StringPlaceholders
